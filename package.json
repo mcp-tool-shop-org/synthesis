@@ -3,6 +3,26 @@
   "version": "0.1.0",
   "description": "Deterministic evaluations for empathy, trust, and care in AI systems",
   "type": "module",
+  "keywords": [
+    "ai",
+    "empathy",
+    "evaluation",
+    "testing",
+    "ethics",
+    "trust",
+    "safety",
+    "deterministic"
+  ],
+  "homepage": "https://github.com/mcp-tool-shop/synthesis#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mcp-tool-shop/synthesis.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mcp-tool-shop/synthesis/issues"
+  },
+  "author": "mcp-tool-shop",
+  "license": "MIT",
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "eval": "node dist/index.js --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
