@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "love_eval_case.schema.json",
+  "title": "Love Eval Case",
+  "description": "Schema for empathy evaluation test cases",
+  "type": "object",
+  "required": ["id", "user", "assistant", "checks"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique identifier for the test case",
+      "pattern": "^[A-Z]+-[0-9]+$"
+    },
+    "user": {
+      "type": "string",
+      "description": "The user's message/input",
+      "minLength": 1
+    },
+    "assistant": {
+      "type": "string",
+      "description": "The assistant's response to evaluate",
+      "minLength": 1
+    },
+    "checks": {
+      "type": "array",
+      "description": "List of checks to run on this case",
+      "items": {
+        "type": "string",
+        "enum": ["agency_language", "unverifiable_reassurance", "topic_pivot"]
+      },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "expected": {
+      "type": "object",
+      "description": "Expected results for each check (optional, for test validation)",
+      "properties": {
+        "agency_language": { "type": "boolean" },
+        "unverifiable_reassurance": { "type": "boolean" },
+        "topic_pivot": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "tags": {
+      "type": "array",
+      "description": "Optional tags for categorization",
+      "items": { "type": "string" }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Optional notes about the test case"
+    }
+  },
+  "additionalProperties": false
+}
