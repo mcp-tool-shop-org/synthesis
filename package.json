@@ -4,6 +4,7 @@
   "description": "Deterministic evaluations for empathy, trust, and care in AI systems",
   "type": "module",
   "scripts": {
+    "test": "vitest run",
     "build": "tsc -p tsconfig.json",
     "eval": "node dist/index.js --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
     "dev": "node --import tsx src/index.ts --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json"
@@ -14,8 +15,10 @@
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "@vitest/ui": "^3.0.9",
     "tsx": "^4.19.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "vitest": "^3.0.9"
   },
   "engines": {
     "node": ">=18.0.0"
