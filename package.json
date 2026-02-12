@@ -1,5 +1,5 @@
 {
-  "name": "synthesis",
+  "name": "@mcptoolshop/synthesis",
   "version": "0.1.0",
   "description": "Deterministic evaluations for empathy, trust, and care in AI systems",
   "type": "module",
@@ -39,5 +39,9 @@
   },
   "engines": {
     "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
   }
 }
