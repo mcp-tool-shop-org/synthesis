@@ -13,13 +13,13 @@
     "safety",
     "deterministic"
   ],
-  "homepage": "https://github.com/mcp-tool-shop/synthesis#readme",
+  "homepage": "https://github.com/mcp-tool-shop-org/synthesis#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mcp-tool-shop/synthesis.git"
+    "url": "git+https://github.com/mcp-tool-shop-org/synthesis.git"
   },
   "bugs": {
-    "url": "https://github.com/mcp-tool-shop/synthesis/issues"
+    "url": "https://github.com/mcp-tool-shop-org/synthesis/issues"
   },
   "author": "mcp-tool-shop",
   "license": "MIT",
