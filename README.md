@@ -1,5 +1,8 @@
 # Synthesis
 
+> Part of [MCP Tool Shop](https://mcptoolshop.com)
+
+
 Deterministic evaluations for empathy, trust, and care in AI systems.
 
 ## Quick Start
