@@ -3,8 +3,29 @@ name: CI
 on:
   push:
     branches: [ main ]
+    paths:
+      - "src/**"
+      - "data/**"
+      - "schemas/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+      - ".github/workflows/**"
   pull_request:
     branches: [ main ]
+    paths:
+      - "src/**"
+      - "data/**"
+      - "schemas/**"
+      - "package.json"
+      - "package-lock.json"
+      - "tsconfig.json"
+      - ".github/workflows/**"
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -12,7 +33,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x, 22.x]
 
     steps:
     - uses: actions/checkout@v4
