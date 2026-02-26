@@ -1,20 +1,16 @@
-<p align="center"><img src="logo.png" alt="Synthesis" width="200"></p>
-
-<h1 align="center">Synthesis</h1>
-
 <p align="center">
-  Deterministic evaluations for empathy, trust, and care in AI systems.
+  <a href="README.ja.md">日本語</a> | <a href="README.zh.md">中文</a> | <a href="README.es.md">Español</a> | <a href="README.fr.md">Français</a> | <a href="README.hi.md">हिन्दी</a> | <a href="README.it.md">Italiano</a> | <a href="README.pt-BR.md">Português (BR)</a>
 </p>
 
 <p align="center">
-  Part of <a href="https://mcptoolshop.com">MCP Tool Shop</a>
+  <img src="https://raw.githubusercontent.com/mcp-tool-shop-org/synthesis/main/assets/logo-synthesis.png" alt="Synthesis" width="400">
 </p>
 
 <p align="center">
   <a href="https://github.com/mcp-tool-shop-org/synthesis/actions/workflows/ci.yml"><img src="https://github.com/mcp-tool-shop-org/synthesis/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://www.npmjs.com/package/@mcptoolshop/synthesis"><img src="https://img.shields.io/npm/v/@mcptoolshop/synthesis" alt="npm version"></a>
-  <a href="https://github.com/mcp-tool-shop-org/synthesis/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
-  <img src="https://img.shields.io/badge/node-%3E%3D18-brightgreen" alt="Node 18+">
+  <a href="https://www.npmjs.com/package/@mcptoolshop/synthesis"><img src="https://img.shields.io/npm/v/@mcptoolshop/synthesis" alt="npm"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow" alt="MIT License"></a>
+  <a href="https://mcp-tool-shop-org.github.io/synthesis/"><img src="https://img.shields.io/badge/Landing_Page-live-blue" alt="Landing Page"></a>
 </p>
 
 ---
