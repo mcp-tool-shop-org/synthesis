@@ -3,9 +3,7 @@
 </p>
 
 <p align="center">
-  
-            <img src="https://raw.githubusercontent.com/mcp-tool-shop-org/brand/main/logos/synthesis/readme.png"
-           alt="Synthesis" width="400">
+  <img src="https://raw.githubusercontent.com/mcp-tool-shop-org/synthesis/main/assets/logo-synthesis.png" alt="Synthesis" width="400">
 </p>
 
 <p align="center">
