@@ -1,6 +1,6 @@
 {
   "name": "@mcptoolshop/synthesis",
-  "version": "0.2.2",
+  "version": "1.0.0",
   "description": "Deterministic evaluations for empathy, trust, and care in AI systems",
   "type": "module",
   "keywords": [

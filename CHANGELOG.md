@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.0] - 2026-02-27
+
+### Overview
+
+**First stable release.** Deterministic evaluation framework for AI safety patterns.
+
+### Added
+
+- Shipcheck audit — SHIP_GATE.md, SCORECARD.md, SECURITY.md
+- Security & Data Scope section in README
+
+### Changed
+
+- Version promoted from 0.2.2 to 1.0.0
+
 ## [0.2.0] - 2026-02-17
 
 ### Added
