@@ -15,7 +15,7 @@ export const config: SiteConfig = {
     headlineAccent: 'deterministic evals for care in AI.',
     description: 'Rule-based pattern matching that catches relational failure modes in AI responses. No LLM judge, no probabilistic scoring \u2014 just auditable evidence for agency, presence, and trust.',
     primaryCta: { href: '#quick-start', label: 'Get started' },
-    secondaryCta: { href: '#features', label: 'Learn more' },
+    secondaryCta: { href: 'handbook/', label: 'Read the Handbook' },
     previews: [
       { label: 'Install', code: 'npm install @mcptoolshop/synthesis' },
       { label: 'Eval', code: 'npm run build && npm run eval' },
