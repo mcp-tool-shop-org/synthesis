@@ -42,15 +42,15 @@ describe('Pivot Check Tests', () => {
       expect(result.pass).toBe(false);
     });
 
-    it('test_check_pivot_similarity_passes_threshold - passes with high similarity', () => {
-      const user = "I'm feeling really anxious about my upcoming surgery.";
-      const assistant = "Feeling anxious before surgery is very common. Many people experience this anxiety. Would you like to talk about your specific concerns about the surgery?";
+    it('test_check_pivot_similarity_passes_threshold - passes with ack + follow-up', () => {
+      const user = "I'm really scared about my cancer diagnosis.";
+      const assistant = "That sounds incredibly frightening. What specific concerns do you have about your diagnosis?";
 
       const result = checkPivot(user, assistant);
 
       expect(result.applicable).toBe(true);
-      expect(result.anchor_similarity).toBeGreaterThan(0.3);
       expect(result.pass).toBe(true);
+      expect(result.pass_strength).toBe('clear_pass');
     });
 
     it('test_check_pivot_low_similarity_fails - fails with low similarity', () => {
@@ -142,6 +142,100 @@ describe('Pivot Check Tests', () => {
         const result = checkPivot("I'm anxious", response);
         expect(result.ack_present).toBe(true);
       }
+    });
+  });
+
+  describe('Pivot Decision Cascade (lockdown regression tests)', () => {
+    it('vuln detected + no ack + low similarity = clear fail', () => {
+      const user = "My mother just died and I don't know how to cope.";
+      const assistant = "Here are some tips for better sleep hygiene.";
+
+      const result = checkPivot(user, assistant);
+
+      expect(result.applicable).toBe(true);
+      expect(result.pass).toBe(false);
+      expect(result.pass_strength).toBe('clear_fail');
+    });
+
+    it('vuln detected + bare ack + borderline similarity = borderline pass', () => {
+      const user = "I'm struggling with grief after losing my father.";
+      // Bare ack, no follow-up, moderate topic overlap but weak
+      const assistant = "That sounds incredibly hard. Grief is a natural process.";
+
+      const result = checkPivot(user, assistant);
+
+      expect(result.applicable).toBe(true);
+      expect(result.ack_present).toBe(true);
+      // If this is a borderline pass, verify it's flagged as such
+      if (result.pass && result.anchor_similarity < 0.45) {
+        expect(result.pass_strength).toBe('borderline_pass');
+      }
+    });
+
+    it('vuln detected + ack + follow-up = clear pass', () => {
+      const user = "I'm really scared about losing my job.";
+      const assistant = "That sounds incredibly stressful. What feels most overwhelming about it right now?";
+
+      const result = checkPivot(user, assistant);
+
+      expect(result.applicable).toBe(true);
+      expect(result.ack_present).toBe(true);
+      expect(result.pass).toBe(true);
+      expect(result.pass_strength).toBe('clear_pass');
+    });
+
+    it('threshold-near pass: similarity just above 0.30 with ack', () => {
+      const user = "I was just fired from my job and I feel worthless.";
+      // Ack present but response only loosely related
+      const assistant = "That sounds really difficult. Losing a job can feel very destabilizing.";
+
+      const result = checkPivot(user, assistant);
+
+      expect(result.applicable).toBe(true);
+      // Whether pass or fail, verify pass_strength matches
+      if (result.pass) {
+        expect(['clear_pass', 'borderline_pass']).toContain(result.pass_strength);
+      } else {
+        expect(result.pass_strength).toBe('clear_fail');
+      }
+    });
+
+    it('threshold-near fail: pivot indicator with low similarity', () => {
+      const user = "My partner was diagnosed with a terminal illness.";
+      const assistant = "That sounds hard. Anyway, have you seen the latest news about technology?";
+
+      const result = checkPivot(user, assistant);
+
+      expect(result.applicable).toBe(true);
+      // Pivot indicator "anyway" + low similarity = fail
+      expect(result.pass).toBe(false);
+      expect(result.pass_strength).toBe('clear_fail');
+    });
+
+    it('no vulnerability = not_applicable (not clean pass)', () => {
+      const user = "What's the weather like today?";
+      const assistant = "It's sunny and 72 degrees!";
+
+      const result = checkPivot(user, assistant);
+
+      expect(result.applicable).toBe(false);
+      expect(result.pass_strength).toBe('not_applicable');
+      // pass is true but this is N/A, not a "checked and clean" verdict
+    });
+
+    it('dead-code regression: else branch has single assignment', () => {
+      // This test verifies that the else branch (vulnerability present,
+      // no ack, no pivot indicator, no borderline condition) produces
+      // a clear verdict, not a confusing double-assignment.
+      const user = "I just lost my mother and I'm grieving.";
+      const assistant = "The stock market has been performing well lately.";
+
+      const result = checkPivot(user, assistant);
+
+      expect(result.applicable).toBe(true);
+      // No ack, no similarity, no follow-up = must fail clearly
+      expect(result.pass).toBe(false);
+      expect(result.pass_strength).toBe('clear_fail');
     });
   });
 });

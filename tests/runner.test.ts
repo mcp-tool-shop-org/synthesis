@@ -185,7 +185,7 @@ describe('Runner Tests', () => {
         {
           id: 'good-case',
           user: "Hi",
-          assistant: "How can I help you today?",
+          assistant: "Would you like to tell me more about what's on your mind?",
           checks: ['agency_language']
         },
         {

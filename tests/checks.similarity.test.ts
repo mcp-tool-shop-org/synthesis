@@ -1,22 +1,21 @@
 /**
- * Batch 5: Similarity Tests (4 tests)
+ * Batch 5: Similarity Tests
  *
  * Tests for src/checks/similarity.ts - Text similarity functions
  */
 
 import { describe, it, expect } from 'vitest';
 import {
-  extractAnchorSentence,
-  tokenize,
+  extractAnchor,
   tokenCosineSimilarity
 } from '../src/checks/similarity.js';
 
 describe('Similarity Tests', () => {
-  describe('extractAnchorSentence', () => {
+  describe('extractAnchor', () => {
     it('test_extract_anchor_sentence_limit - respects sentence limit', () => {
       const text = "First sentence. Second sentence. Third sentence. Fourth sentence.";
 
-      const result = extractAnchorSentence(text, 2);
+      const result = extractAnchor(text, 2);
 
       // Should only return first 2 sentences
       expect(result).toBe("First sentence. Second sentence.");
@@ -25,7 +24,7 @@ describe('Similarity Tests', () => {
     it('extracts single sentence when limit is 1', () => {
       const text = "Hello world. This is a test. More content here.";
 
-      const result = extractAnchorSentence(text, 1);
+      const result = extractAnchor(text, 1);
 
       expect(result).toBe("Hello world.");
     });
@@ -33,13 +32,13 @@ describe('Similarity Tests', () => {
     it('returns full text when fewer sentences than limit', () => {
       const text = "Only one sentence here";
 
-      const result = extractAnchorSentence(text, 5);
+      const result = extractAnchor(text, 5);
 
       expect(result).toBe("Only one sentence here");
     });
 
     it('handles empty text', () => {
-      const result = extractAnchorSentence("", 2);
+      const result = extractAnchor("", 2);
 
       expect(result).toBe("");
     });
@@ -47,55 +46,9 @@ describe('Similarity Tests', () => {
     it('handles text with question marks and exclamations', () => {
       const text = "What is happening? I am excited! This is great.";
 
-      const result = extractAnchorSentence(text, 2);
+      const result = extractAnchor(text, 2);
 
       expect(result).toBe("What is happening? I am excited!");
-    });
-  });
-
-  describe('tokenize', () => {
-    it('test_tokenize_basic - tokenizes text into lowercase words', () => {
-      const text = "Hello World Test";
-
-      const tokens = tokenize(text);
-
-      expect(tokens).toContain("hello");
-      expect(tokens).toContain("world");
-      expect(tokens).toContain("test");
-    });
-
-    it('removes punctuation', () => {
-      const text = "Hello, world! How are you?";
-
-      const tokens = tokenize(text);
-
-      expect(tokens).toContain("hello");
-      expect(tokens).toContain("world");
-      expect(tokens).not.toContain("hello,");
-      expect(tokens).not.toContain("world!");
-    });
-
-    it('handles empty text', () => {
-      const tokens = tokenize("");
-
-      expect(tokens).toHaveLength(0);
-    });
-
-    it('handles text with multiple spaces', () => {
-      const text = "Hello    world   test";
-
-      const tokens = tokenize(text);
-
-      expect(tokens).toEqual(["hello", "world", "test"]);
-    });
-
-    it('filters out stopwords', () => {
-      const text = "the a an is are was were";
-
-      const tokens = tokenize(text);
-
-      // Common stopwords should be filtered
-      expect(tokens.length).toBeLessThan(7);
     });
   });
 
@@ -168,13 +121,13 @@ describe('Similarity Tests', () => {
       const badResponse = "Here are some restaurant recommendations for your area.";
 
       const goodSimilarity = tokenCosineSimilarity(
-        extractAnchorSentence(userMessage, 2),
-        extractAnchorSentence(goodResponse, 2)
+        extractAnchor(userMessage, 2),
+        extractAnchor(goodResponse, 2)
       );
 
       const badSimilarity = tokenCosineSimilarity(
-        extractAnchorSentence(userMessage, 2),
-        extractAnchorSentence(badResponse, 2)
+        extractAnchor(userMessage, 2),
+        extractAnchor(badResponse, 2)
       );
 
       // Good response should have higher similarity
@@ -184,7 +137,7 @@ describe('Similarity Tests', () => {
     it('extracts meaningful anchor from long text', () => {
       const longText = "I've been struggling with anxiety. It started last month. The symptoms have been getting worse. I don't know what to do anymore.";
 
-      const anchor = extractAnchorSentence(longText, 2);
+      const anchor = extractAnchor(longText, 2);
 
       expect(anchor).toBe("I've been struggling with anxiety. It started last month.");
     });

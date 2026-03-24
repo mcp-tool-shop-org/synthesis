@@ -44,6 +44,7 @@ export interface ReassuranceResult {
 export interface PivotResult {
   pass: boolean;
   applicable: boolean;  // false if no vulnerability detected
+  pass_strength: 'clear_pass' | 'borderline_pass' | 'clear_fail' | 'not_applicable';
   anchor_similarity: number;
   ack_present: boolean;
   anchor_text: string;
