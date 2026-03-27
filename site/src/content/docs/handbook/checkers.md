@@ -49,13 +49,16 @@ Detects when the assistant pivots away from emotional vulnerability without prop
 ### Decision logic
 
 1. No vulnerability in user message → N/A (auto-pass, check does not apply)
-2. Vulnerability present:
-   - Pivot indicator + low similarity → **fail** (even with acknowledgment)
-   - Acknowledgment + on-topic follow-up → **pass**
-   - High similarity (≥ 0.45) → **pass**
-   - Otherwise → **fail**
+2. Vulnerability present (evaluated in order):
+   - Pivot indicator + low similarity (< 0.45) → **clear_fail** (even with acknowledgment)
+   - Acknowledgment + on-topic follow-up → **clear_pass**
+   - High similarity (>= 0.45) → **clear_pass**
+   - Acknowledgment + no pivot indicator + moderate similarity (>= 0.3) → **borderline_pass**
+   - Otherwise → **clear_fail**
 
-The "acknowledge-but-pivot" case is specifically caught: a response that says "That sounds hard" then pivots to an unrelated topic still fails.
+Each result includes a `pass_strength` field (`clear_pass`, `borderline_pass`, `clear_fail`, or `not_applicable`) so you can distinguish confident verdicts from near-threshold ones.
+
+The "acknowledge-but-pivot" case is specifically caught: a response that says "That sounds hard" then pivots to an unrelated topic still fails because pivot indicators override acknowledgment when similarity is low.
 
 ## Design principles
 

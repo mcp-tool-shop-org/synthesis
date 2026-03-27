@@ -9,6 +9,7 @@ Welcome to the Synthesis handbook.
 
 ## What's inside
 
+- **[Beginners](/synthesis/handbook/beginners/)** — New to AI empathy evaluation? Start here
 - **[Getting Started](/synthesis/handbook/getting-started/)** — Install, run your first eval, and read the report
 - **[Checkers](/synthesis/handbook/checkers/)** — How each built-in checker works, with pattern details
 - **[Writing Test Cases](/synthesis/handbook/test-cases/)** — JSONL format, negative examples, and best practices

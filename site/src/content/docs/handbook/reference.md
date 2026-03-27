@@ -36,9 +36,26 @@ Every run produces a structured JSON report at the configured output path.
 | `label_accuracy` | How well computed results match ground-truth `expected` labels |
 | `by_check` | Per-checker pass/fail/N/A breakdown |
 
+### Additional summary fields
+
+| Field | What It Means |
+|-------|---------------|
+| `label_accuracy_by_check` | Per-checker label accuracy breakdown (total, matched, accuracy percentage) |
+
 ### Failure entries
 
 Each failure includes the case ID, which checks failed, the evidence that triggered the failure, and whether the failure was expected (negative example).
+
+### Pass strength (topic_pivot only)
+
+The `topic_pivot` checker includes a `pass_strength` field on every result:
+
+| Value | Meaning |
+|-------|---------|
+| `clear_pass` | Strong engagement signals (acknowledgment + follow-up, or high similarity) |
+| `borderline_pass` | Acknowledgment present with moderate similarity but no explicit follow-up |
+| `clear_fail` | Insufficient engagement with the user's vulnerability |
+| `not_applicable` | No vulnerability detected in the user message |
 
 ## Exit codes
 
@@ -49,6 +66,12 @@ Each failure includes the case ID, which checks failed, the evidence that trigge
 | `2` | Unexpected failures exceed `--fail-on` threshold |
 
 Expected failures (negative examples) never affect the exit code.
+
+## Environment variables
+
+| Variable | Effect |
+|----------|--------|
+| `MCP_OUTPUT=json` | Prints an MCP-style artifact object to stdout after the summary. Useful for tool integrations that consume structured output. |
 
 ## Project structure
 
