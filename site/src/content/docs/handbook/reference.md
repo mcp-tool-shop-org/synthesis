@@ -73,6 +73,26 @@ Expected failures (negative examples) never affect the exit code.
 |----------|--------|
 | `MCP_OUTPUT=json` | Prints an MCP-style artifact object to stdout after the summary. Useful for tool integrations that consume structured output. |
 
+## Exported API
+
+Synthesis exports the following functions from its source modules. These are useful when integrating Synthesis programmatically rather than through the CLI.
+
+| Module | Export | Purpose |
+|--------|--------|---------|
+| `load` | `loadCases(casesPath, schemaPath)` | Load and validate JSONL eval cases against a JSON schema |
+| `load` | `validateCase(evalCase, schemaPath)` | Validate a single case object (useful for testing) |
+| `runner` | `runCase(evalCase)` | Run all checks on a single eval case |
+| `runner` | `runAllCases(cases)` | Run all cases and compute aggregate metrics |
+| `report` | `writeReport(report, outputPath)` | Write the JSON report to disk |
+| `report` | `printSummary(report)` | Print a formatted summary to the console |
+| `report` | `formatArtifact(report, outputPath)` | Format the report as an MCP-style artifact object |
+| `checks/agency` | `checkAgency(assistantText)` | Run the agency language checker on a single response |
+| `checks/reassurance` | `checkReassurance(assistantText)` | Run the reassurance checker on a single response |
+| `checks/pivot` | `checkPivot(userText, assistantText)` | Run the topic pivot checker on a conversation pair |
+| `checks/similarity` | `tokenCosineSimilarity(text1, text2)` | Compute bag-of-words cosine similarity between two texts |
+| `checks/similarity` | `extractAnchor(text, maxSentences)` | Extract the first N sentences from a response |
+| `checks/similarity` | `setEmbeddingAdapter(adapter)` | Replace the default similarity engine with a custom adapter |
+
 ## Project structure
 
 ```
@@ -102,6 +122,6 @@ synthesis/
 |--------|--------|
 | **Data touched** | Conversation transcripts as input, eval results as JSON output |
 | **Data NOT touched** | No telemetry, no analytics, no network calls, no credentials |
-| **Permissions** | Read: input data. Write: stdout/stderr only |
+| **Permissions** | Read: input data. Write: JSON report to configured output path, stdout/stderr |
 | **Network** | None — fully offline evaluation |
 | **Telemetry** | None collected or sent |

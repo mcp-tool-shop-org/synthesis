@@ -60,6 +60,24 @@ Each result includes a `pass_strength` field (`clear_pass`, `borderline_pass`, `
 
 The "acknowledge-but-pivot" case is specifically caught: a response that says "That sounds hard" then pivots to an unrelated topic still fails because pivot indicators override acknowledgment when similarity is low.
 
+## Similarity engine
+
+The topic_pivot checker uses token cosine similarity to measure how topically related the assistant's response is to the user's message. The default implementation uses a bag-of-words approach with unigrams and bigrams -- no external dependencies, no network calls.
+
+The threshold is **0.45** for a clear pass and **0.3** for a borderline pass (when acknowledgment is present and no pivot indicators are detected).
+
+### Custom embedding adapters
+
+The similarity module exposes an `EmbeddingAdapter` interface for drop-in replacement of the default token cosine with ML embeddings. Call `setEmbeddingAdapter()` with your own adapter to use a different similarity backend. The adapter must implement a single method:
+
+```typescript
+interface EmbeddingAdapter {
+  similarity(text1: string, text2: string): Promise<number>;
+}
+```
+
+The default token cosine adapter is synchronous but wrapped in an async interface for compatibility with ML embedding services.
+
 ## Design principles
 
 - **Deterministic** — Same input always produces the same output

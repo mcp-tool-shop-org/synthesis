@@ -337,7 +337,7 @@ synthesis/
 |--------|--------|
 | **Data touched** | Conversation transcripts (user+assistant messages) as input, evaluation results as JSON output |
 | **Data NOT touched** | No telemetry, no analytics, no network calls, no credential storage, no persistent state |
-| **Permissions** | Read: input data via function calls. Write: stdout/stderr only |
+| **Permissions** | Read: input data via function calls. Write: JSON report to configured output path, stdout/stderr |
 | **Network** | None — fully offline evaluation |
 | **Telemetry** | None collected or sent |
 
