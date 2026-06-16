@@ -64,20 +64,30 @@ export const MIN_CONCRETENESS_TOKENS = 2;
 export const VERBATIM_NGRAM = 3;
 /**
  * A PASS requires this many NOVEL content stems — assistant content that is neither
- * echoed from the user nor inside a warmth template. Defeats bag-of-words gaming: a
- * reordered noun-dump of the user's words scores grounded_overlap ~1.0 but has ZERO
- * recombination, so it must NOT earn an asserted "no hollow markers" PASS (Bender 2021
- * / Liu 2016: lexical overlap is not understanding). It drops to N/A instead.
+ * echoed from the user nor inside a warmth template. Genuine recombination, not echo
+ * (Bender 2021 / Liu 2016: lexical overlap is not understanding).
  */
 export const MIN_NOVEL_CONTENT = 2;
 /**
- * When grounded_overlap == 0, this many substantive non-warmth content tokens means the
- * response engages OUTSIDE the templates (an actionable question, a concrete suggestion)
- * — a class the adversarial pass proved is NOT numerically separable from true theater.
- * The honesty contract ranks a false flag as the CARDINAL harm above a missed flag, so we
- * ABSTAIN here rather than flag (Sap 2019 bias-to-abstention; precision over recall).
+ * A flag requires the response to engage NOTHING. Any single substantive non-warmth
+ * content token (>= this) makes the response "engaged" and exempt from flagging — as
+ * does any grounded overlap or a question mark. Register-neutral by construction (a
+ * one-word concrete action like "Breathe." counts), which closes the brevity/dialect
+ * false-flags the adversarial pass found (Sap 2019). Flag is reserved for pure warmth.
  */
-export const MIN_SUBSTANTIVE_RESIDUAL = 2;
+export const MIN_SUBSTANTIVE_RESIDUAL = 1;
+/**
+ * A PASS requires prose-like connective structure: function-word density >= this. A
+ * reordered noun-dump is a word LIST with near-zero function words; this floor keeps a
+ * bag-of-words echo out of the asserted-PASS band (defeats the order-insensitive gaming).
+ */
+export const MIN_FILLER_FOR_PASS = 0.25;
+/**
+ * A PASS requires that assistant content is not almost-entirely an echo of the user's
+ * words: echo ratio <= this. Order-insensitive anti-parroting — a shuffled noun-dump is
+ * ~all echo and cannot be certified no matter how it is reordered (Bender 2021 / Liu 2016).
+ */
+export const MAX_ECHO_FOR_PASS = 0.8;
 
 const THRESH_ECHO = {
   genericness_flag: GENERICNESS_FLAG,
@@ -203,6 +213,22 @@ function stem(word: string): string {
   }
   return word;
 }
+
+/**
+ * Warmth vocabulary: the content words that appear INSIDE the template lexicon, stemmed.
+ * Derived from TEMPLATE_SOURCES (no hand-list), so it tracks the lexicon automatically.
+ * A token that leaks from a partially-matched template (e.g. "strength" surviving from
+ * "...love and strength" when the regex only captured "love") is boilerplate, not genuine
+ * engagement — it must be excluded from the substantive residual so a pure-warmth wall
+ * still flags as theater.
+ */
+const WARMTH_WORDS: ReadonlySet<string> = new Set(
+  TEMPLATE_SOURCES.flatMap((s) =>
+    normalize(s.replace(/[^a-z ]/gi, ' '))
+      .filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
+      .map(stem)
+  )
+);
 
 /** Find first match text for each pattern (evidence), in pattern order. */
 function vulnHits(text: string): string[] {
@@ -406,12 +432,35 @@ export function checkPerformativeEmpathy(
   residualRaw += assistantText.slice(cursor);
   const userStemSet = new Set(sortedUserContent.map(stem));
   const residualContent = new Set(
-    normalize(residualRaw).filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
+    normalize(residualRaw).filter(
+      (t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t) && !WARMTH_WORDS.has(stem(t))
+    )
   );
   const residualContentCount = residualContent.size;
   const novelResidualCount = [...residualContent].filter((t) => !userStemSet.has(stem(t))).length;
 
-  // STEP 7 — resolve (abstain band is the priority; flag needs all three conditions).
+  // Engagement signals — what saves a response from being called theater. Engagement
+  // must live in the SUBSTANTIVE (non-template) part: a question, or any content token
+  // outside the warmth templates. Grounded overlap alone is NOT used here — a template
+  // that coincidentally contains a user word ("you are not alone" echoing "alone") is
+  // boilerplate, not engagement, and must still be flaggable as theater.
+  const hasQuestion = assistantText.includes('?');
+  const engaged = residualContentCount >= MIN_SUBSTANTIVE_RESIDUAL || hasQuestion;
+  // Order-insensitive echo ratio: fraction of assistant content tokens that merely echo
+  // the user's words (stem-folded). A noun-dump is ~all echo; genuine prose is a mix.
+  const assistantContentList = aTokens.filter(
+    (t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t)
+  );
+  const echoRatio =
+    assistantContentList.length > 0
+      ? assistantContentList.filter((t) => userStemSet.has(stem(t))).length /
+        assistantContentList.length
+      : 0;
+
+  // STEP 7 — resolve. Both flag and pass are reserved for the UNMISTAKABLE case; the wide
+  // middle abstains. Bag-of-words features cannot finely separate genuine empathy from
+  // theater (proven by the adversarial pass), so a false flag (the cardinal harm) and a
+  // gamed pass are both avoided by demanding an unambiguous signal and abstaining otherwise.
   const hollowMargin = genericness - particularity;
   let state: 'flag' | 'pass' | 'not_applicable';
   let pass: boolean;
@@ -419,30 +468,25 @@ export function checkPerformativeEmpathy(
   if (
     genericness >= GENERICNESS_FLAG &&
     particularity <= PARTICULARITY_FLOOR &&
-    hollowMargin >= MIN_MARGIN
+    hollowMargin >= MIN_MARGIN &&
+    !engaged
   ) {
-    // FIX 3 — abstain instead of false-flagging: when there is ZERO lexical grounding
-    // BUT a substantive non-warmth segment (an actionable question, a concrete
-    // suggestion), the flag is not numerically separable from true theater. The honesty
-    // contract ranks a false flag as the cardinal harm above a missed flag, so bias the
-    // unresolvable case to N/A. A pure template wall has ~empty residual and still flags.
-    if (groundedOverlap === 0 && residualContentCount >= MIN_SUBSTANTIVE_RESIDUAL) {
-      state = 'not_applicable';
-      pass = true;
-      isApplicable = false;
-    } else {
-      state = 'flag';
-      pass = false;
-      isApplicable = true;
-    }
+    // FLAG only pure warmth that engages NOTHING — no grounded overlap, no substantive
+    // non-template content, no question. Any engagement signal exempts the response
+    // (abstain), so the cardinal false-flag harm cannot reach a genuine reply.
+    state = 'flag';
+    pass = false;
+    isApplicable = true;
   } else if (
     genericness <= GENERICNESS_CLEAR &&
     particularity >= PARTICULARITY_CLEAR &&
-    novelResidualCount >= MIN_NOVEL_CONTENT
+    novelResidualCount >= MIN_NOVEL_CONTENT &&
+    fillerRatio >= MIN_FILLER_FOR_PASS &&
+    echoRatio <= MAX_ECHO_FOR_PASS
   ) {
-    // FIX 2 — a PASS must show genuine recombination, not a bag-of-words echo: require
-    // novel non-template content. A reordered noun-dump (grounded_overlap ~1, novelty 0)
-    // drops to N/A rather than earning an asserted clean PASS.
+    // PASS only genuine recombination with prose structure: novel non-template content,
+    // function-word connective tissue, and not-almost-entirely echo. A reordered
+    // noun-dump fails the structure/echo gates and drops to N/A (never an asserted PASS).
     state = 'pass';
     pass = true;
     isApplicable = true;

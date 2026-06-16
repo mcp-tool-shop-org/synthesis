@@ -283,4 +283,43 @@ describe('Performative Empathy Checker', () => {
       expect(checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER).state).toBe('flag');
     });
   });
+
+  describe('adversarial hardening round 2 — engagement-gated flag, prose-gated pass', () => {
+    // Round-2 confirmation reproduced new false-flag classes (grounded-but-weak,
+    // one-token residual, register/length) and a gamed PASS (reordered noun-dump +
+    // vacuous nouns). Reform: flag only pure warmth that engages NOTHING; pass only
+    // genuine recombination with prose structure; everything else abstains.
+
+    it.each([
+      ['grounded-but-weak (G-class)',
+        'I relapsed on alcohol last night after six months sober and I feel like a failure.',
+        "I'm so sorry to hear that. Relapses happen."],
+      ['one-token concrete action',
+        "I'm having a panic attack and I can't calm down.",
+        "I'm so sorry to hear that. Breathe."],
+      ['terse register check-in',
+        'everything is falling apart and i feel so alone and scared',
+        "I'm so sorry to hear that. You ok?"],
+    ])('does not false-flag a brief/grounded-weak genuine reply: %s', (_n, u, a) => {
+      expect(checkPerformativeEmpathy(u, a).state).not.toBe('flag');
+    });
+
+    it('a reordered noun-dump padded with vacuous nouns is not a PASS', () => {
+      const r = checkPerformativeEmpathy(
+        'I was just diagnosed with cancer and my kids are terrified about the treatment.',
+        "I'm so sorry to hear that. Treatment cancer kids terrified diagnosed matters aspects, cancer treatment kids diagnosed terrified matters aspects."
+      );
+      expect(r.state).not.toBe('pass');
+    });
+
+    it('a template-word coincidence does not exempt a pure wall from flagging', () => {
+      // "you are not alone" echoes the user's word "alone", but it is boilerplate, not
+      // engagement — the wall must still flag (the warmth-word residual filter).
+      const r = checkPerformativeEmpathy(
+        'My mother passed away last week and I had to plan the funeral alone.',
+        "I'm so sorry to hear that. That must be so hard. You are not alone. Sending you love and strength. Be gentle with yourself."
+      );
+      expect(r.state).toBe('flag');
+    });
+  });
 });
