@@ -5,21 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
+## [1.1.0] - 2026-06-16
 
-Dogfood-swarm health pass — code and docs made honest. No version bump (release
-versioning is handled separately).
-
-### Fixed
-- Grounded the regex patterns to remove false positives and false negatives in the
-  three checkers.
-- Vulnerability lexicon now catches past-tense disclosures (e.g. "I was assaulted")
-  and recovery-context milestones, so they are no longer missed.
-- Label accuracy is now honest: N/A checks (where a checker does not apply to a case)
-  are excluded from the denominator instead of being counted as passes.
-- Fixed production dependency advisories flagged by audit.
+The dogfood-swarm release: a new fourth checker, plus a health pass that made the
+existing code and docs honest.
 
 ### Added
+- **`performative_empathy` checker** — a fourth deterministic checker that DETECTS
+  empathy-theater: pure warmth-template padding deployed over a vulnerable disclosure
+  that engages nothing of the user's specific content. It is a pure **detector with two
+  states only**: `flag` (high-confidence theater, `pass: false`) and `not_applicable`
+  (abstain, `pass: true`). It has **no positive verdict** — it never certifies a response
+  as genuine, sincere, or good. Five adversarial rounds plus a concreteness measurement
+  established that no deterministic, zero-LLM feature can separate genuine engagement from
+  gamed content-free padding, so the tool refuses to make the positive claim and instead
+  flags the unmistakable case or abstains. It is **precision-favoring**: it deliberately
+  misses some theater rather than risk false-flagging a genuine reply, and an
+  engagement gate (any single substantive non-template word, or a `?`) exempts brief,
+  non-native, or dialect replies from flagging (register-neutral by construction).
+  Fully deterministic — no LLM, no network, no clock, no randomness.
+- **New `performative_empathy` member of the `CheckType` API** — added to the exported
+  `CheckType` union, the per-case `checks`/`expected` fields, the `by_check` report block,
+  and the `PerformativeEmpathyResult` result shape (`state`, `genericness`,
+  `template_density`, `particularity`, `grounded_overlap`, `verbatim_ratio`,
+  `hollow_margin`, `template_hits`, `missing_user_content`, `echoed_spans`, and more).
+- Bundled `performative_empathy` eval cases added to `data/evals.jsonl` (theater cases that
+  flag plus genuine-disclosure cases that abstain), covering both detector states.
 - `--fail-on` value validation: rejects non-integer, negative, and trailing-garbage
   inputs so an invalid threshold can no longer silently pass regressions.
 - Functional npm packaging: `main`, `types`, `bin` (the `synthesis` CLI), a `files`
@@ -27,8 +38,19 @@ versioning is handled separately).
   is exposed.
 
 ### Changed
+- The bundled eval corpus now exercises all four checkers; the README and CHANGELOG describe
+  the detector-honesty design (flags theater or abstains; never certifies sincerity).
 - Deterministic `by_check` ordering in the report output.
 - Removed dead code paths in the topic-pivot checker.
+
+### Fixed
+- Grounded the regex patterns to remove false positives and false negatives in the
+  three (now four) checkers.
+- Vulnerability lexicon now catches past-tense disclosures (e.g. "I was assaulted")
+  and recovery-context milestones, so they are no longer missed.
+- Label accuracy is now honest: N/A checks (where a checker does not apply to a case)
+  are excluded from the denominator instead of being counted as passes.
+- Fixed production dependency advisories flagged by audit.
 
 ## [1.0.2] - 2026-03-25
 
@@ -102,7 +124,8 @@ versioning is handled separately).
 - Embedding adapter interface for future extensibility
 - JSON Schema for test case validation (`schemas/eval_case.schema.json`)
 
-[Unreleased]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/mcp-tool-shop-org/synthesis/compare/v0.2.2...v1.0.0

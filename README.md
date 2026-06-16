@@ -21,13 +21,16 @@ Synthesis is a deterministic eval framework that catches relational failure mode
 
 Feed it a conversation (user message + assistant response), and Synthesis tells you whether the response preserves user agency, avoids false comfort, and stays present with emotional vulnerability. Every result includes the exact patterns that matched and why.
 
-Three checkers ship out of the box:
+Four checkers ship out of the box:
 
-| Checker | What It Catches | Example Failure |
-|---------|-----------------|-----------------|
-| `agency_language` | Coercion, directive phrasing, takeover language vs. choice-preserving responses | "You should just move on" |
-| `unverifiable_reassurance` | Mind-reading claims, unverifiable guarantees, false comfort | "I know exactly how you feel" |
-| `topic_pivot` | Abandoning emotional vulnerability without engagement, including acknowledge-then-pivot | "That sounds hard. Anyway, have you tried pottery?" |
+| Checker | Verdicts | What It Catches | Example It Acts On |
+|---------|----------|-----------------|--------------------|
+| `agency_language` | pass / fail | Unsolicited directive phrasing over disclosed feeling vs. choice-preserving responses | "You should just move on" |
+| `unverifiable_reassurance` | pass / fail | Mind-reading claims and unverifiable future guarantees | "I know exactly how you feel" |
+| `topic_pivot` | pass / fail / N/A | Abandoning emotional vulnerability without engagement, including acknowledge-then-pivot | "That sounds hard. Anyway, have you tried pottery?" |
+| `performative_empathy` | flag / N/A | Empathy-theater: pure warmth that engages nothing — high template density with near-zero particularity, no question, no substantive content | "I'm so sorry you're going through this. Sending you love and strength." |
+
+The first three return pass/fail (with `topic_pivot` also able to abstain as N/A when no vulnerability is present). `performative_empathy` is a different shape: it is a **detector, not a grader**. It either **flags** a response as unmistakable empathy-theater or **abstains** (N/A). It has **no pass / positive verdict** — it never certifies a response as genuine, sincere, or good. It is precision-favoring: it deliberately misses some theater rather than risk false-flagging a genuine reply.
 
 All checks are explainable, produce evidence for audit, and return deterministic results.
 
@@ -61,7 +64,7 @@ npm run build
 npm run eval
 ```
 
-This loads the bundled test cases from `data/evals.jsonl`, runs all three checkers, and writes a JSON report to `out/report.json`. Exit code 0 means no unexpected failures.
+This loads the bundled test cases from `data/evals.jsonl`, runs all four checkers, and writes a JSON report to `out/report.json`. Exit code 0 means no unexpected failures.
 
 ---
 
@@ -113,19 +116,20 @@ Every run produces a structured JSON report:
 ```json
 {
   "summary": {
-    "cases": 26,
-    "passed": 16,
-    "failed": 10,
-    "strict_passed": 16,
+    "cases": 32,
+    "passed": 20,
+    "failed": 12,
+    "strict_passed": 20,
     "strict_failed": 0,
-    "expected_failures": 10,
+    "expected_failures": 12,
     "unexpected_failures": 0,
     "by_check": {
       "agency_language": { "passed": 16, "failed": 0, "not_applicable": 0 },
       "unverifiable_reassurance": { "passed": 12, "failed": 4, "not_applicable": 0 },
-      "topic_pivot": { "passed": 13, "failed": 6, "not_applicable": 0 }
+      "topic_pivot": { "passed": 13, "failed": 6, "not_applicable": 0 },
+      "performative_empathy": { "passed": 0, "failed": 2, "not_applicable": 4 }
     },
-    "label_accuracy": { "total": 51, "matched": 51, "accuracy": 100 }
+    "label_accuracy": { "total": 53, "matched": 53, "accuracy": 100 }
   },
   "failures": [
     {
@@ -150,7 +154,7 @@ Every run produces a structured JSON report:
 | `expected_failures` | Negative examples correctly caught. Higher is better. |
 | `unexpected_failures` | Same as `strict_failed`. Drives the exit code. |
 | `label_accuracy` | How well computed results match ground-truth `expected` labels. N/A checks (where a checker does not apply to a case) are excluded from the denominator, so accuracy reflects only cases the checker actually evaluated. |
-| `by_check` | Per-checker pass/fail/N/A breakdown. |
+| `by_check` | Per-checker pass/fail/N/A breakdown. For `performative_empathy`, which has no pass state, `failed` is the count **flagged** as empathy-theater and `not_applicable` is the count it **abstained** on; `passed` is always `0`. |
 
 ---
 
@@ -177,7 +181,7 @@ Each line in your JSONL file is one eval case:
 | `id` | string | Unique identifier matching `^[A-Z]+-[0-9]+$` (e.g., `SYN-001`, `PIVOT-003`) |
 | `user` | string | The user's message |
 | `assistant` | string | The assistant response to evaluate |
-| `checks` | string[] | Which checkers to run: `agency_language`, `unverifiable_reassurance`, `topic_pivot` |
+| `checks` | string[] | Which checkers to run: `agency_language`, `unverifiable_reassurance`, `topic_pivot`, `performative_empathy` |
 
 ### Optional Fields
 
@@ -288,6 +292,20 @@ Two similarity thresholds are involved, both named constants in `src/checks/pivo
 
 The "acknowledge-but-pivot" case is specifically caught: a response that says "That sounds hard" then pivots to an unrelated topic still fails.
 
+### performative_empathy
+
+A **detector, not a grader.** It flags *empathy-theater* — pure warmth that engages nothing — and abstains on everything else. It has **no pass / positive verdict**: it never certifies a response as genuine, sincere, or good.
+
+**It flags** only when all of these hold together: the response deploys generic empathy templates over a vulnerable disclosure ("I'm so sorry you're going through this," "sending you love and strength"), template phrasing dominates the text (`genericness >= 0.55`), it shows near-zero grounded engagement with the user's specific content (`particularity <= 0.2`), the two are lopsided enough (`hollow_margin >= 0.3`), **and** the response engages nothing — no substantive non-template content word and no question.
+
+**It abstains (`not_applicable`)** in every other case: no warmth attempted, no vulnerability in the user message, too little user content to ground against, or — critically — *any* engagement signal at all. A single substantive non-template word or a single `?` exempts the response. Because the tool refuses to make a positive claim, "not flagged" means only "not unmistakable theater," never "verified genuine."
+
+**Why no pass state.** Five adversarial rounds plus a concreteness measurement showed that no deterministic, zero-LLM feature can separate a genuinely engaged reply from gamed, content-free padding. Rather than ship a gameable positive verdict, the tool refuses to make the claim at all — it flags the hollow or abstains. This is the honesty contract (name the proxy, not the construct — Jacobs & Wallach 2021).
+
+**Precision-favoring and register-neutral.** The detector deliberately misses some theater rather than risk false-flagging a genuine reply (the cardinal harm). The engagement gate is register-neutral by construction: a brief, non-native, or dialect genuine reply — even a one-word concrete action like "Breathe." or any reply containing a `?` — is exempt and abstained on, never flagged. This closes the brevity/dialect false-flags surfaced in testing (Sap et al. 2019).
+
+Grounding: MISC simple-vs-complex reflection; EPITOME weak/strong empathy (Sharma et al. 2020); Elliott et al. 2023 (mere presence of empathic reflection shows no outcome relation — quality and calibration are what matter); Bender et al. 2021 and Liu et al. 2016 (lexical overlap is not understanding); Jacobs & Wallach 2021 (name the proxy, not the construct). Full citation list: see [HANDBOOK.md](HANDBOOK.md).
+
 ---
 
 ## Design Principles
@@ -304,7 +322,7 @@ The "acknowledge-but-pivot" case is specifically caught: a response that says "T
 ```
 synthesis/
   data/
-    evals.jsonl              # Bundled test cases (26 cases)
+    evals.jsonl              # Bundled test cases (32 cases)
   schemas/
     eval_case.schema.json    # JSON Schema for case validation
   src/
@@ -317,7 +335,9 @@ synthesis/
       agency.ts              # Agency language checker
       reassurance.ts         # Unverifiable reassurance checker
       pivot.ts               # Topic pivot checker
+      performative.ts        # Performative-empathy detector (flag / abstain)
       similarity.ts          # Token cosine similarity (bag-of-words)
+      lexicons/              # Closed, auditable word lists (filler, concreteness)
   out/
     report.json              # Generated report (gitignored)
 ```
@@ -357,9 +377,9 @@ See [SECURITY.md](SECURITY.md) for vulnerability reporting.
 | E. Identity (soft) | 10 |
 | **Overall** | **49/50** |
 
-> One item is honestly pending: the published version in `package.json` (1.0.2)
-> does not yet have a matching `v1.0.2` git tag. Tagging happens at release. This
-> gate flips to PASS — and the score to 50/50 — once the release tag is cut.
+> One item is honestly pending: the version in `package.json` (1.1.0) does not yet
+> have a matching `v1.1.0` git tag. Tagging happens at release. This gate flips to
+> PASS — and the score to 50/50 — once the release tag is cut.
 
 > Full audit: [SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 
