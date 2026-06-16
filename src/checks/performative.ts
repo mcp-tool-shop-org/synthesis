@@ -89,6 +89,21 @@ export const MIN_FILLER_FOR_PASS = 0.25;
  */
 export const MAX_ECHO_FOR_PASS = 0.8;
 
+/**
+ * Content-free abstract nouns that satisfy the novelty count without genuine engagement
+ * (base/stem forms; matched via stem). Excluded ONLY from a PASS's novel-content count —
+ * NOT from the flag's engagement check, where any substantive token correctly exempts a
+ * reply (precision over recall). Round-3 confirmation gamed a PASS with echoed user nouns
+ * + 2 vacuous abstracts (matter/aspect/reality/circumstance); this is the lever that
+ * separates that from a genuine reflection (PE-003/PE-004 novelty is meaningful). A closed,
+ * auditable set — the residual gaming surface the round-4 pass probes.
+ */
+const VACUOUS_ABSTRACTS: ReadonlySet<string> = new Set([
+  'matter', 'aspect', 'reality', 'circumstance', 'factor', 'issue', 'element',
+  'point', 'area', 'regard', 'respect', 'notion', 'concept', 'idea', 'detail',
+  'part', 'side', 'deal', 'bit', 'thing', 'stuff', 'situation', 'valid',
+]);
+
 const THRESH_ECHO = {
   genericness_flag: GENERICNESS_FLAG,
   particularity_floor: PARTICULARITY_FLOOR,
@@ -419,7 +434,9 @@ export function checkPerformativeEmpathy(
     normalize(residualRaw).filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
   );
   const residualContentCount = residualContent.size;
-  const novelResidualCount = [...residualContent].filter((t) => !userStemSet.has(stem(t))).length;
+  const novelResidualCount = [...residualContent].filter(
+    (t) => !userStemSet.has(stem(t)) && !VACUOUS_ABSTRACTS.has(stem(t))
+  ).length;
 
   // Engagement signals — what saves a response from being called theater. Engagement
   // must live in the SUBSTANTIVE (non-template) part: a question, or any content token

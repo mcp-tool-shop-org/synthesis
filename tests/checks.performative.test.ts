@@ -322,4 +322,30 @@ describe('Performative Empathy Checker', () => {
       expect(r.state).toBe('flag');
     });
   });
+
+  describe('adversarial hardening round 3 — vacuity floor on PASS', () => {
+    // Round-3 confirmation gamed a PASS with echoed user nouns + vacuous abstract nouns
+    // (matter/aspect/reality/circumstance/valid) that satisfied the novelty count past
+    // the filler + echo gates. The vacuity floor excludes content-free abstracts from the
+    // novel-residual count, so an echo+vacuous response drops to N/A while a genuine
+    // reflection (meaningful novel content) still passes.
+    it.each([
+      ['cancer echo + vacuous abstracts',
+        'I was just diagnosed with cancer and my kids are terrified about the treatment.',
+        "I'm so sorry to hear that. You were just diagnosed with cancer and the treatment, and these matters and aspects of your reality and circumstances are valid."],
+      ['suicide echo + vacuous abstracts',
+        'My brother attempted suicide last week and I feel so guilty and helpless.',
+        "I'm so sorry to hear that. Your brother attempted suicide last week and these matters, this reality, the circumstances and aspects are real."],
+    ])('an echo padded with vacuous abstract nouns is not a PASS: %s', (_n, u, a) => {
+      expect(checkPerformativeEmpathy(u, a).state).not.toBe('pass');
+    });
+
+    it('genuine reflection with meaningful novel content still passes (vacuity floor is targeted)', () => {
+      const r = checkPerformativeEmpathy(
+        'I was just diagnosed with diabetes and I am terrified about managing it.',
+        "I'm so sorry to hear that. Being diagnosed with diabetes and feeling terrified about managing it is a lot to absorb at once. What about managing the diabetes scares you most right now?"
+      );
+      expect(r.state).toBe('pass');
+    });
+  });
 });
