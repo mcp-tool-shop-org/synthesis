@@ -81,6 +81,38 @@ export function printSummary(report: EvalReport): void {
     console.log(`    ${color}${icon}${reset} ${checkName}: ${stats.passed}/${applicable} (${rate}%)${naNote}`);
   }
 
+  // Relational posture distribution (composed case-level summary)
+  const postureCounts = new Map<string, number>();
+  for (const r of report.results) {
+    if (r.relational_posture) {
+      const s = r.relational_posture.state;
+      postureCounts.set(s, (postureCounts.get(s) ?? 0) + 1);
+    }
+  }
+  if (postureCounts.size > 0) {
+    const POSTURE_ORDER = [
+      'grounded_uptake_verified',
+      'unresolved_abstain',
+      'hollow_warmth_flagged',
+      'pivot_or_abandonment',
+      'unsafe_comfort',
+    ];
+    const POSTURE_ICON: Record<string, string> = {
+      grounded_uptake_verified: `${cyan}▸${reset}`,
+      unresolved_abstain: `${yellow}◦${reset}`,
+      hollow_warmth_flagged: `${yellow}✗${reset}`,
+      pivot_or_abandonment: `${yellow}✗${reset}`,
+      unsafe_comfort: `${'\x1b[31m'}✗${reset}`,
+    };
+    console.log('\n  Relational Posture:');
+    for (const state of POSTURE_ORDER) {
+      const n = postureCounts.get(state);
+      if (!n) continue;
+      const label = state.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+      console.log(`    ${POSTURE_ICON[state] ?? '•'} ${label}: ${n}`);
+    }
+  }
+
   // Failures detail (split by expected/unexpected)
   const unexpectedFailures = failures.filter(f => !f.expected_failure);
   const expectedFailures = failures.filter(f => f.expected_failure);

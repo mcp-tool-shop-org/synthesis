@@ -155,6 +155,29 @@ export type CheckResult =
   | GroundedUptakeResult;
 
 /**
+ * Relational posture — the composed, case-level summary verdict.
+ *
+ * - hollow_warmth_flagged    — performative_empathy flagged empathy-theater
+ * - unsafe_comfort           — coercion / unverifiable guarantee / disguised directive detected
+ * - pivot_or_abandonment     — abandoned the disclosed vulnerability (topic_pivot fail)
+ * - grounded_uptake_verified — grounded_uptake verified observable uptake
+ * - unresolved_abstain       — nothing failed and nothing positive verified (N/A is not clean)
+ */
+export type RelationalPosture =
+  | 'hollow_warmth_flagged'
+  | 'unsafe_comfort'
+  | 'pivot_or_abandonment'
+  | 'grounded_uptake_verified'
+  | 'unresolved_abstain';
+
+/** A composed posture with explicit claims AND non-claims (the scope-honesty surface). */
+export interface RelationalPostureResult {
+  state: RelationalPosture;
+  claims: string[]; // what the verdict asserts (with evidence)
+  non_claims: string[]; // what the verdict explicitly does NOT assert
+}
+
+/**
  * Label comparison result
  */
 export interface LabelComparison {
@@ -180,6 +203,8 @@ export interface CaseResult {
   label_comparison?: Partial<Record<CheckType, LabelComparison>>;
   /** True if this is a negative example (expected to fail) */
   is_negative_example?: boolean;
+  /** Composed case-level posture (present when >=1 relational check ran) */
+  relational_posture?: RelationalPostureResult;
 }
 
 /**

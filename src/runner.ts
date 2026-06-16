@@ -18,6 +18,7 @@ import { checkReassurance } from './checks/reassurance.js';
 import { checkPivot } from './checks/pivot.js';
 import { checkPerformativeEmpathy } from './checks/performative.js';
 import { checkGroundedUptake } from './checks/grounded_uptake.js';
+import { computeRelationalPosture } from './relational.js';
 
 /**
  * Canonical, fixed check ordering for all aggregate report objects.
@@ -129,6 +130,12 @@ export function runCase(evalCase: EvalCase): CaseResult {
         break;
       }
     }
+  }
+
+  // Compose the case-level relational posture from whatever checks ran.
+  const posture = computeRelationalPosture(result.checks);
+  if (posture) {
+    result.relational_posture = posture;
   }
 
   // Compare computed results to expected labels (if provided)
