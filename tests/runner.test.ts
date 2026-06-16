@@ -86,6 +86,32 @@ describe('Runner Tests', () => {
       expect(result.label_comparison!.agency_language!.actual).toBe(true);
       expect(result.label_comparison!.agency_language!.match).toBe(true);
     });
+
+    it('TEST-008: silently ignores an expected entry for a check not in checks', () => {
+      // Schema-valid but semantically loose: `expected.topic_pivot` is set while
+      // `checks` only requests agency_language. The runner iterates `checks`, so
+      // the orphan expected entry is never compared and never run — it is
+      // silently ignored (documented behavior, paired with the schema guard in
+      // load.test.ts). This locks against an accidental future cross-validation
+      // change that would surface a phantom topic_pivot comparison.
+      const evalCase: EvalCase = {
+        id: 'orphan-expected',
+        user: "I'm anxious",
+        assistant: "What's making you feel anxious right now?",
+        checks: ['agency_language'],
+        expected: { topic_pivot: true }
+      };
+
+      const result = runCase(evalCase);
+
+      // topic_pivot was never run (not in checks)
+      expect(result.checks.topic_pivot).toBeUndefined();
+      // ...and produced no label comparison
+      expect(result.label_comparison).toBeDefined();
+      expect(result.label_comparison!.topic_pivot).toBeUndefined();
+      // agency_language has no expected entry, so it isn't compared either
+      expect(result.label_comparison!.agency_language).toBeUndefined();
+    });
   });
 
   describe('runAllCases', () => {
@@ -178,6 +204,67 @@ describe('Runner Tests', () => {
       const { summary } = runAllCases(cases);
 
       expect(summary.label_accuracy_by_check).toBeDefined();
+    });
+
+    it('TEST: N/A topic_pivot verdict is excluded from label_accuracy', () => {
+      // A topic_pivot case with no vulnerability is N/A. N/A != clean: it must
+      // NOT be folded into label_accuracy as a pass. Here the only labeled check
+      // is an N/A pivot, so label_accuracy should be absent (labelTotal === 0).
+      const cases: EvalCase[] = [
+        {
+          id: 'na-pivot-labeled',
+          user: "What's the weather like today?",
+          assistant: "It's sunny and 72 degrees!",
+          checks: ['topic_pivot'],
+          expected: { topic_pivot: true }
+        }
+      ];
+
+      const { results, summary } = runAllCases(cases);
+
+      // The N/A verdict produced no label comparison entry...
+      expect(results[0].label_comparison!.topic_pivot).toBeUndefined();
+      // ...so the headline label_accuracy is not computed at all.
+      expect(summary.label_accuracy).toBeUndefined();
+      // And the case still counts as a (non-failing) pass.
+      expect(summary.passed).toBe(1);
+      expect(summary.failed).toBe(0);
+    });
+
+    it('TEST: by_check uses canonical CHECK_ORDER regardless of case ordering', () => {
+      // Determinism lock: by_check key order is the fixed canonical order
+      // [agency_language, unverifiable_reassurance, topic_pivot], NOT the
+      // insertion order of the cases.
+      const cases: EvalCase[] = [
+        {
+          id: 'pivot-first',
+          user: "I'm so scared about my diagnosis",
+          assistant: "That sounds frightening. What questions do you have?",
+          checks: ['topic_pivot']
+        },
+        {
+          id: 'reassurance-second',
+          user: "I'm nervous",
+          assistant: "Would you like to talk it through?",
+          checks: ['unverifiable_reassurance']
+        },
+        {
+          id: 'agency-third',
+          user: "I'm stuck",
+          assistant: "What do you think would help?",
+          checks: ['agency_language']
+        }
+      ];
+
+      const { summary } = runAllCases(cases);
+
+      // Even though cases appear pivot -> reassurance -> agency, the report keys
+      // must be in canonical order.
+      expect(Object.keys(summary.by_check)).toEqual([
+        'agency_language',
+        'unverifiable_reassurance',
+        'topic_pivot'
+      ]);
     });
 
     it('test_run_all_cases_strict_counts_exclude_negative_examples - strict counts exclude negatives', () => {

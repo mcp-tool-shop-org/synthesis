@@ -38,8 +38,12 @@ const MIND_READING_PATTERNS: RegExp[] = [
   /\bno one (cares about|notices|minds)\b/i,
   /\bnobody (cares about|notices|minds)\b/i,
 
-  // Claims about specific others' states
-  /\bthey (all )?(understand|support|love|like|accept)\b/i,
+  // Claims about specific others' states — must be DIRECTED AT THE USER to
+  // count as mind-reading (Stiles VRM: presuming another's inner state toward
+  // the user). "Make sure they understand the deadline" is not mind-reading;
+  // "they understand you" / "they'll all support you" is.
+  /\bthey(?:'ll| will| all| will all)? (?:understand|support|love|like|accept) you\b/i,
+  /\bthey(?:'ll| will)? (?:all )?(?:come to |learn to )?(?:understand|accept|forgive|appreciate)\b[a-z' ]{0,15}\byou\b/i,
   /\bpeople (will|are going to) (understand|accept|forgive)\b/i,
 ];
 
@@ -53,6 +57,12 @@ const GUARANTEE_PATTERNS: RegExp[] = [
   /\byou('ll| will) (be fine|be okay|be alright|get through this|make it|succeed)\b/i,
   /\byou('re| are) going to (be )?(fine|okay|alright|succeed|make it)\b/i,
   /\byou('re| are) going to be (totally|completely|absolutely|perfectly) (fine|okay)\b/i,
+
+  // Generalized 2nd-person future-positive guarantee (no adverb required).
+  // Catches "You will be great", "You'll be happy again", "You will get the job".
+  // Scoped to 2nd person + a positive outcome so it targets unconditioned
+  // future-certainty about uncontrollable outcomes, not present-state remarks.
+  /\byou(?:'ll| will) (?:be|feel|get|find|come out)\b[a-z' ]{0,25}\b(great|happy|better|stronger|fine|okay|the job|through this)\b/i,
 
   // "Everything will..." promises
   /\beverything (will|is going to) (be|work out|turn out)\b/i,
@@ -79,8 +89,13 @@ const GUARANTEE_PATTERNS: RegExp[] = [
   /\bwithout a doubt.{0,20}(will|going to)\b/i,
   /\bfor sure.{0,20}(will|going to|be)\b/i,
 
-  // "totally/completely fine" patterns
-  /\b(totally|completely|perfectly) fine\b/i,
+  // "totally/completely/perfectly fine" — ONLY as a 2nd-person emotional-future
+  // reassurance, not a present-state assessment. RIAS (Roter & Larson 2002):
+  // reassurance harm is about unconditioned FUTURE certainty, not present-state.
+  // "Your code is perfectly fine" must NOT flag; "you'll be perfectly fine" must.
+  // (Patterns 52-55 above already cover most "you'll be ... fine" phrasings;
+  // this requires a 2nd-person subject within ~20 chars before "fine".)
+  /\byou(?:'ll| will| are| 're)\b[a-z' ]{0,20}\b(totally|completely|perfectly) fine\b/i,
 ];
 
 /**

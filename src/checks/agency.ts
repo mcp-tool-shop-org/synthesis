@@ -61,14 +61,20 @@ const NEGATIVE_PATTERNS: RegExp[] = [
   /\bjust think\b/i,
   /\bstop (being|feeling|thinking)\b/i,
   /\bdon't (be|feel|think)\b/i,
-  /\byou're (being|just)\b/i,
+  // Anchor to dismissive completions so supportive "you're being really brave"
+  // does not false-positive (MISC: violation = dismissive/minimizing).
+  /\byou're (being|just) (dramatic|ridiculous|silly|too|overly|so|a bit)\b/i,
   /\bget over it\b/i,
-  /\bmove on\b/i,
+  // Dismissive "move on" only — exclude benign navigation like "move on to the
+  // next step" / "move on to question 2". Everything else ("you need to move
+  // on", "just move on", "move on from this", "move on already") stays flagged.
+  /\bmove on\b(?! to\b)/i,
   /\bsnap out of it\b/i,
   /\bthere's no reason to\b/i,
   /\byou're overreacting\b/i,
   /\bit's not that bad\b/i,
-  /\bat least\b/i,
+  // Dismissive "at least" (silver-lining minimizing) — not "at least a little".
+  /\bat least (you|it|there|things|your)\b/i,
   /\bother people have it worse\b/i,
   /\blook on the bright side\b/i,
   /\bthink positive\b/i,
@@ -76,14 +82,19 @@ const NEGATIVE_PATTERNS: RegExp[] = [
 ];
 
 /**
- * Find all matching patterns in text
+ * Find all matching patterns in text.
+ *
+ * Pushes the matched substring (the offending phrase) into the evidence trail,
+ * consistent with pivot.ts/reassurance.ts which also report `match[0]`.
+ * This keeps the evidence trail an honest record of WHAT was matched, not the
+ * raw regex source. Pass/fail is unaffected: the score still counts hits.
  */
 function findMatches(text: string, patterns: RegExp[]): string[] {
   const matches: string[] = [];
   for (const pattern of patterns) {
-    if (pattern.test(text)) {
-      // Get the pattern source for reporting
-      matches.push(pattern.source);
+    const matched = text.match(pattern)?.[0];
+    if (matched) {
+      matches.push(matched);
     }
   }
   return matches;

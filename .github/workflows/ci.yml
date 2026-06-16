@@ -53,13 +53,6 @@ jobs:
     - name: Run evaluations
       run: npm run eval
 
-    - name: Check for unexpected failures
-      run: |
-        if [ $? -eq 2 ]; then
-          echo "Evaluation failed with unexpected failures"
-          exit 1
-        fi
-
   lint:
     runs-on: ubuntu-latest
 

@@ -18,12 +18,48 @@ import { checkReassurance } from './checks/reassurance.js';
 import { checkPivot } from './checks/pivot.js';
 
 /**
+ * Canonical, fixed check ordering for all aggregate report objects.
+ *
+ * Determinism (locked invariant): iterating a Set built from case-data
+ * insertion order would make report.json byte-different across case-file
+ * orderings. This fixed order guarantees stable, replayable output.
+ */
+const CHECK_ORDER: CheckType[] = [
+  'agency_language',
+  'unverifiable_reassurance',
+  'topic_pivot'
+];
+
+/**
  * Check if a case is tagged as a negative example
  */
 function isNegativeExample(evalCase: EvalCase): boolean {
   return evalCase.tags?.includes('negative_example') ||
          evalCase.tags?.some(t => t.endsWith('-fail')) ||
          false;
+}
+
+/**
+ * Compute the canonical list of checks that count as failures for a case.
+ *
+ * This is the SINGLE source of truth for "which checks failed" — it applies the
+ * N/A skip (an N/A topic_pivot is never a failure) exactly once. Both the
+ * exit-code counters and the failures-detail array are derived from this list,
+ * so an exit-2 can never be raised without a matching evidence record.
+ */
+function computeFailedChecks(evalCase: EvalCase, result: CaseResult): CheckType[] {
+  const failedChecks: CheckType[] = [];
+  for (const check of evalCase.checks) {
+    const checkResult = result.checks[check];
+    if (checkResult && !checkResult.pass) {
+      // For pivot, an N/A verdict (no vulnerability detected) is not a failure.
+      if (check === 'topic_pivot' && 'applicable' in checkResult && !checkResult.applicable) {
+        continue;
+      }
+      failedChecks.push(check);
+    }
+  }
+  return failedChecks;
 }
 
 /**
@@ -78,6 +114,20 @@ export function runCase(evalCase: EvalCase): CaseResult {
     for (const check of checks) {
       if (expected[check] !== undefined) {
         const checkResult = result.checks[check];
+
+        // N/A != clean: an N/A pivot verdict (no vulnerability detected) has no
+        // genuine pass/fail to compare. Excluding it entirely keeps it out of
+        // label_accuracy / label_accuracy_by_check — folding it in as a 'pass'
+        // would inflate the headline metric. Only topic_pivot can be N/A.
+        if (
+          check === 'topic_pivot' &&
+          checkResult &&
+          'applicable' in checkResult &&
+          !checkResult.applicable
+        ) {
+          continue;
+        }
+
         const actual = checkResult?.pass ?? true;
         result.label_comparison[check] = {
           expected: expected[check],
@@ -214,7 +264,9 @@ export function runAllCases(cases: EvalCase[]): {
       }
     }
 
-    // Track overall case pass/fail
+    // Track overall case pass/fail.
+    // Derive the failed-checks list ONCE; counters and the failures array both
+    // flow from it so a counted failure always has a matching evidence record.
     if (result.pass) {
       passedCases++;
     } else {
@@ -227,35 +279,34 @@ export function runAllCases(cases: EvalCase[]): {
         unexpectedFailures++;
       }
 
-      // Collect failed checks for this case
-      const failedChecks: CheckType[] = [];
-      for (const check of evalCase.checks) {
-        const checkResult = result.checks[check];
-        if (checkResult && !checkResult.pass) {
-          // For pivot, only count if applicable
-          if (check === 'topic_pivot' && 'applicable' in checkResult && !checkResult.applicable) {
-            continue;
-          }
-          failedChecks.push(check);
-        }
-      }
+      const failedChecks = computeFailedChecks(evalCase, result);
 
-      if (failedChecks.length > 0) {
-        failures.push({
-          id: result.id,
-          failed: failedChecks,
-          evidence: extractEvidence(result, failedChecks),
-          expected_failure: isNegative
-        });
-      }
+      failures.push({
+        id: result.id,
+        failed: failedChecks,
+        evidence: extractEvidence(result, failedChecks),
+        expected_failure: isNegative
+      });
     }
   }
 
-  // Build by_check summary (only include checks that were actually used)
+  // Invariant (evidence-trail completeness): every counted failure must have a
+  // failure record carrying its evidence. An exit-2 without a record would hide
+  // a regression.
+  if (failures.length !== failedCases) {
+    throw new Error(
+      `Evidence-trail invariant violated: ${failedCases} failed case(s) but ${failures.length} failure record(s)`
+    );
+  }
+
+  // Build by_check summary (only include checks that were actually used).
+  // Iterate CHECK_ORDER (not the Set) so key order is deterministic.
   const usedChecks = new Set(cases.flatMap(c => c.checks));
   const by_check: Partial<Record<CheckType, CheckSummary>> = {};
-  for (const check of usedChecks) {
-    by_check[check] = checkStats[check];
+  for (const check of CHECK_ORDER) {
+    if (usedChecks.has(check)) {
+      by_check[check] = checkStats[check];
+    }
   }
 
   // Compute strict stats (excluding negative examples)
@@ -282,9 +333,11 @@ export function runAllCases(cases: EvalCase[]): {
       accuracy: Math.round((labelMatched / labelTotal) * 1000) / 10
     };
 
-    // Add per-check label accuracy
+    // Add per-check label accuracy.
+    // Iterate CHECK_ORDER (not the Set) so key order is deterministic.
     const labelAccuracyByCheck: Partial<Record<CheckType, CheckLabelAccuracy>> = {};
-    for (const check of usedChecks) {
+    for (const check of CHECK_ORDER) {
+      if (!usedChecks.has(check)) continue;
       const checkLabel = labelByCheck[check];
       if (checkLabel.total > 0) {
         labelAccuracyByCheck[check] = {

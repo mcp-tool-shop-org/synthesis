@@ -2,7 +2,7 @@ import type { SiteConfig } from '@mcptoolshop/site-theme';
 
 export const config: SiteConfig = {
   title: 'Synthesis',
-  description: 'Deterministic evaluations for empathy, trust, and care in AI systems',
+  description: 'Deterministic detection of relational failure modes — agency, reassurance, topic-pivot — in AI responses. No LLM judge, no scoring; just auditable evidence.',
   logoBadge: 'S',
   brandName: 'Synthesis',
   repoUrl: 'https://github.com/mcp-tool-shop-org/synthesis',

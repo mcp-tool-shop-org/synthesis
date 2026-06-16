@@ -30,8 +30,10 @@ export function printSummary(report: EvalReport): void {
   console.log('  SYNTHESIS - Empathy Evaluation Report');
   console.log('═'.repeat(60));
 
-  // Overall stats
-  const passRate = ((summary.passed / summary.cases) * 100).toFixed(1);
+  // Overall stats (guard division-by-zero when there are no cases)
+  const passRate = summary.cases > 0
+    ? ((summary.passed / summary.cases) * 100).toFixed(1)
+    : '0.0';
   const hasUnexpectedFailures = summary.unexpected_failures > 0;
   const passIcon = hasUnexpectedFailures ? '✗' : '✓';
   const passColor = hasUnexpectedFailures ? '\x1b[31m' : '\x1b[32m';
@@ -61,7 +63,6 @@ export function printSummary(report: EvalReport): void {
     if (!stats) continue;
 
     const applicable = stats.passed + stats.failed;
-    const total = applicable + stats.not_applicable;
     const rate = applicable > 0 ? ((stats.passed / applicable) * 100).toFixed(0) : '100';
     const icon = stats.failed === 0 ? '✓' : '✗';
     const color = stats.failed === 0 ? '\x1b[32m' : '\x1b[33m';
@@ -145,7 +146,9 @@ export function formatArtifact(report: EvalReport, outputPath: string): {
       failed: report.summary.failed,
       expected_failures: report.summary.expected_failures,
       unexpected_failures: report.summary.unexpected_failures,
-      pass_rate: `${((report.summary.passed / report.summary.cases) * 100).toFixed(1)}%`,
+      pass_rate: `${report.summary.cases > 0
+        ? ((report.summary.passed / report.summary.cases) * 100).toFixed(1)
+        : '0.0'}%`,
       label_accuracy: report.summary.label_accuracy
         ? `${report.summary.label_accuracy.accuracy}%`
         : undefined

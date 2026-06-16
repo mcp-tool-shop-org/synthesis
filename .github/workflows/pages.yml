@@ -1,3 +1,9 @@
+# APPROVED EXCEPTION to the org "max 2 workflow files per repo" rule.
+# This is the 3rd workflow file (alongside ci.yml + publish.yml): a dedicated
+# GitHub Pages docs-site deploy. It is explicitly approved because the Pages
+# deploy requires its own `pages: write` + `id-token: write` permissions and a
+# `github-pages` environment that must not be merged into the CI or publish
+# workflows. Keep it separate; do not fold into ci.yml/publish.yml.
 name: Deploy site to GitHub Pages
 
 on:

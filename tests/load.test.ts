@@ -9,6 +9,11 @@ import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { join } from 'node:path';
 import { loadCases, validateCase } from '../src/load.js';
 
+// The real bundled schema (not the simplified testSchema below) is used for the
+// TEST-008 guard tests, which assert behavior specific to its
+// `additionalProperties: false` constraints on `expected`.
+const REAL_SCHEMA = join(process.cwd(), 'schemas', 'eval_case.schema.json');
+
 const TEST_DIR = join(process.cwd(), 'test-fixtures-load');
 const TEST_CASES = join(TEST_DIR, 'cases.jsonl');
 const TEST_SCHEMA = join(TEST_DIR, 'schema.json');
@@ -137,6 +142,73 @@ describe('JSONL Loader Tests', () => {
       expect(result.valid).toBe(false);
       expect(result.errors).toBeDefined();
       expect(result.errors!.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('TEST-008: expected-key guards (real bundled schema)', () => {
+    // The bundled schema constrains `expected` with `additionalProperties: false`
+    // over the three known check enums. These tests pin the two distinct cases:
+    // (1) an UNKNOWN expected key is REJECTED at the schema boundary; (2) a
+    // KNOWN expected key that simply isn't in `checks` is SCHEMA-VALID (the
+    // runner silently ignores it — see runner.test.ts for the runtime half).
+
+    it('rejects an expected key that is not a known check (additionalProperties: false)', () => {
+      const badCase = {
+        id: "AB-1",
+        user: "x",
+        assistant: "y",
+        checks: ["agency_language"],
+        expected: { bogus_check: true }
+      };
+
+      const result = validateCase(badCase, REAL_SCHEMA);
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toBeDefined();
+      expect(result.errors!.some(e => /additional/i.test(e))).toBe(true);
+    });
+
+    it('rejects an unknown top-level key (additionalProperties: false)', () => {
+      const badCase = {
+        id: "AB-2",
+        user: "x",
+        assistant: "y",
+        checks: ["agency_language"],
+        surprise: 1
+      };
+
+      const result = validateCase(badCase, REAL_SCHEMA);
+
+      expect(result.valid).toBe(false);
+    });
+
+    it('documents silently-ignored: a valid expected key NOT in checks is schema-valid', () => {
+      // `expected.topic_pivot` is a known enum, so the schema accepts it even
+      // though `checks` only requests agency_language. The runner does NOT cross-
+      // validate this — it iterates `checks`, so the extra expected entry is
+      // silently dropped (see runner.test.ts: "silently ignores expected entry
+      // for a check not in checks").
+      const looseCase = {
+        id: "AB-3",
+        user: "x",
+        assistant: "y",
+        checks: ["agency_language"],
+        expected: { topic_pivot: true }
+      };
+
+      const result = validateCase(looseCase, REAL_SCHEMA);
+
+      expect(result.valid).toBe(true);
+    });
+  });
+
+  describe('TEST-008 (runtime): empty cases file is a fatal error', () => {
+    it('throws on a whitespace-only cases file (N/A != clean)', () => {
+      // An empty/whitespace-only file must not be a vacuous exit-0; loadCases
+      // raises rather than returning [].
+      writeFileSync(TEST_CASES, "\n   \n\n");
+
+      expect(() => loadCases(TEST_CASES, TEST_SCHEMA)).toThrow(/No valid cases/);
     });
   });
 });

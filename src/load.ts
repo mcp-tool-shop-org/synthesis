@@ -11,7 +11,10 @@ import type { EvalCase } from './types.js';
  * Load and validate evaluation cases from a JSONL file
  */
 export function loadCases(casesPath: string, schemaPath: string): EvalCase[] {
-  // Load schema
+  // Load schema.
+  // NOTE: the schema's `additionalProperties: false` is load-bearing for safety:
+  // it rejects unexpected keys (e.g. `__proto__`, `constructor`) in untrusted JSONL
+  // input, providing prototype-pollution protection at the validation boundary.
   const schemaContent = readFileSync(schemaPath, 'utf-8');
   const schema = JSON.parse(schemaContent);
 
@@ -57,6 +60,12 @@ export function loadCases(casesPath: string, schemaPath: string): EvalCase[] {
       console.error(`  • ${err}`);
     }
     throw new Error(`Failed to load ${errors.length} case(s)`);
+  }
+
+  // An empty/whitespace-only cases file is not a vacuous pass — it is a fatal
+  // input error. Without this guard, zero cases would exit 0 (N/A != clean).
+  if (cases.length === 0 && errors.length === 0) {
+    throw new Error('No valid cases found in ' + casesPath);
   }
 
   return cases;

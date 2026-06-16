@@ -9,8 +9,9 @@
  *   node dist/index.js --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json
  *
  * Exit codes:
- *   0 - All cases passed
- *   2 - One or more failures
+ *   0 - All cases passed (or failures <= --fail-on threshold)
+ *   1 - Fatal load/runtime error (bad args, unreadable cases, unwritable output)
+ *   2 - One or more unexpected failures (exceed --fail-on threshold)
  */
 
 import { loadCases } from './load.js';
@@ -29,31 +30,61 @@ function parseArgs(args: string[]): CLIOptions {
     failOn: 0
   };
 
+  // Require a present, non-flag value for a value-taking flag. A missing value
+  // or one that starts with '--' (i.e. the next flag) is a usage error.
+  const requireValue = (flag: string, value: string | undefined): string => {
+    if (value === undefined || value.startsWith('--')) {
+      console.error(`${flag} requires a value`);
+      process.exit(1);
+    }
+    return value;
+  };
+
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     const next = args[i + 1];
 
     switch (arg) {
       case '--cases':
-        if (next) options.cases = next;
+        options.cases = requireValue('--cases', next);
         i++;
         break;
       case '--schema':
-        if (next) options.schema = next;
+        options.schema = requireValue('--schema', next);
         i++;
         break;
       case '--out':
-        if (next) options.out = next;
+        options.out = requireValue('--out', next);
         i++;
         break;
-      case '--fail-on':
-        if (next) options.failOn = parseInt(next, 10);
+      case '--fail-on': {
+        const value = requireValue('--fail-on', next);
+        // Strict: reject NaN, negative, fractional, and trailing-garbage like "2x".
+        // An invalid threshold would otherwise make the exit gate (`unexpected > NaN`)
+        // always false, silently passing regressions.
+        const n = Number(value);
+        if (!Number.isInteger(n) || n < 0) {
+          console.error('--fail-on must be a non-negative integer');
+          process.exit(1);
+        }
+        options.failOn = n;
         i++;
         break;
+      }
       case '--help':
       case '-h':
         printHelp();
         process.exit(0);
+        break;
+      default:
+        // Reject unknown flags so typos surface instead of silently using defaults.
+        if (arg.startsWith('-')) {
+          console.error(`Unknown option: ${arg}`);
+          process.exit(1);
+        }
+        // Bare positional args are not supported; flag them too.
+        console.error(`Unexpected argument: ${arg}`);
+        process.exit(1);
     }
   }
 
@@ -121,7 +152,12 @@ async function main(): Promise<void> {
   };
 
   // Write output
-  writeReport(report, options.out);
+  try {
+    writeReport(report, options.out);
+  } catch (e) {
+    console.error('\nFailed to write report:', (e as Error).message);
+    process.exit(1);
+  }
   console.log(`Report written to: ${options.out}`);
 
   // Print summary

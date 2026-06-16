@@ -23,7 +23,7 @@
 ## B. Error Handling
 
 - [x] `[all]` Errors follow the Structured Error Shape: `code`, `message`, `hint`, `cause?`, `retryable?` — TypeScript error types + JSON report
-- [x] `[cli]` Exit codes: 0 ok · 1 user error · 2 runtime error (unexpected failures) · 3 partial success
+- [x] `[cli]` Exit codes: 0 ok · 1 fatal error (bad args / unreadable cases / unwritable output) · 2 unexpected failures exceed `--fail-on`
 - [x] `[cli]` No raw stack traces without `--debug`
 - [ ] `[mcp]` SKIP: not an MCP server
 - [ ] `[mcp]` SKIP: not an MCP server
@@ -43,10 +43,10 @@
 ## D. Shipping Hygiene
 
 - [x] `[all]` `verify` script exists (test + build + smoke in one command) — npm test + npm run build
-- [x] `[all]` Version in manifest matches git tag
+- [ ] `[all]` Version in manifest matches git tag — PENDING: package.json is 1.0.2 but no `v1.0.2` git tag exists yet (latest tag is v1.0.0). Tagging happens at release; this flips to checked when the release tag is cut.
 - [x] `[all]` Dependency scanning runs in CI (ecosystem-appropriate)
 - [x] `[all]` Automated dependency update mechanism exists
-- [x] `[npm]` `npm pack --dry-run` includes: dist/, README.md, CHANGELOG.md, LICENSE
+- [x] `[npm]` `npm pack --dry-run` includes: dist/, README.md, CHANGELOG.md, LICENSE — package.json declares `main`, `types`, `bin` (synthesis CLI), and a `files` allowlist (dist, data, schemas, README, LICENSE, CHANGELOG); `prepublishOnly` builds dist before publish, so `npm install` works and the CLI is exposed
 - [x] `[npm]` `engines.node` set (>=18.0.0)
 - [x] `[npm]` Lockfile committed
 - [ ] `[pypi]` SKIP: not a Python project

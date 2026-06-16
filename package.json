@@ -23,9 +23,23 @@
   },
   "author": "mcp-tool-shop",
   "license": "MIT",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "synthesis": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "data",
+    "schemas",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
   "scripts": {
     "test": "vitest run",
     "build": "tsc -p tsconfig.json",
+    "prepublishOnly": "npm run build",
     "eval": "node dist/index.js --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
     "dev": "node --import tsx src/index.ts --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json"
   },

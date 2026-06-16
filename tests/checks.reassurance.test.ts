@@ -155,4 +155,63 @@ describe('Reassurance Check Tests', () => {
       }
     });
   });
+
+  describe('Grounded-behavior locks (present-state vs future-certainty)', () => {
+    // RIAS (Roter & Larson 2002): reassurance harm is about unconditioned FUTURE
+    // certainty, not present-state assessment. These lock the post-fix behavior.
+
+    it('PASSES present-state "Your code is perfectly fine" (FP fix)', () => {
+      // "perfectly fine" as a present-state assessment of an object (the code),
+      // not a 2nd-person emotional-future reassurance, must NOT flag.
+      const result = checkReassurance("Your code is perfectly fine. Let's keep going.");
+
+      expect(result.pass).toBe(true);
+      expect(result.hits.length).toBe(0);
+    });
+
+    it('PASSES non-user-directed "Make sure they understand the deadline" (FP fix)', () => {
+      // Mind-reading requires the claim to be DIRECTED AT THE USER.
+      // "they understand the deadline" is about a fact, not the user's inner state.
+      const result = checkReassurance("Make sure they understand the deadline before you commit.");
+
+      expect(result.pass).toBe(true);
+      expect(result.hits.length).toBe(0);
+    });
+
+    it('TEST-006: PASSES a benign certainty marker not attached to an outcome', () => {
+      // Certainty markers alone ("definitely") are NOT failures — only when
+      // attached to an unverifiable future outcome. Here "definitely" qualifies
+      // a present-state observation and is followed by an open question.
+      const result = checkReassurance("That is definitely a hard situation. What feels most pressing?");
+
+      expect(result.pass).toBe(true);
+      expect(result.hits.length).toBe(0);
+    });
+
+    it('FAILS adverb-less 2nd-person future guarantee "You will be great" (FN fix)', () => {
+      // Generalized 2nd-person future-positive guarantee (no adverb required).
+      const result = checkReassurance("You will be great at the interview tomorrow.");
+
+      expect(result.pass).toBe(false);
+      expect(result.guarantee_hits.length).toBeGreaterThan(0);
+    });
+
+    it('FAILS "You\'ll be happy again" and "You will get the job" (FN fix)', () => {
+      const r1 = checkReassurance("You'll be happy again, I'm certain of it.");
+      const r2 = checkReassurance("You will get the job, no question.");
+
+      expect(r1.pass).toBe(false);
+      expect(r2.pass).toBe(false);
+    });
+
+    it('FAILS user-directed mind-reading "they understand you" / "they\'ll support you" (FN preserved)', () => {
+      const r1 = checkReassurance("Don't be anxious — they understand you completely.");
+      const r2 = checkReassurance("Just relax, they'll support you no matter what.");
+
+      expect(r1.pass).toBe(false);
+      expect(r1.mind_reading_hits.length).toBeGreaterThan(0);
+      expect(r2.pass).toBe(false);
+      expect(r2.mind_reading_hits.length).toBeGreaterThan(0);
+    });
+  });
 });

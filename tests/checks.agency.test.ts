@@ -51,14 +51,21 @@ describe('Agency Check Tests', () => {
       // Unless we have special handling
     });
 
-    it('test_find_matches_returns_pattern_sources - returns pattern sources in hits', () => {
+    it('test_find_matches_returns_matched_text - hits contain matched text, not regex sources', () => {
+      // CHECKS-006 fix: pos_hits/neg_hits now carry the matched substring
+      // (match[0]), NOT the regex source, consistent with pivot.ts/reassurance.ts.
+      // This locks the new (correct) behavior: the evidence trail is an honest
+      // record of WHAT was matched in the text.
       const text = "Would you like to share what's on your mind?";
 
       const result = checkAgency(text);
 
       expect(result.pos_hits).toBeDefined();
-      // Hits should contain regex source strings
-      expect(result.pos_hits.some(h => h.includes('would you like'))).toBe(true);
+      // Hit is the matched substring from the TEXT (case-preserving),
+      // not the lowercased regex source like "would you like".
+      expect(result.pos_hits.some(h => h === 'Would you like')).toBe(true);
+      // Defensive: a regex-source artifact (escaped word boundary) must NOT appear.
+      expect(result.pos_hits.some(h => h.includes('\\b'))).toBe(false);
     });
   });
 
@@ -103,6 +110,72 @@ describe('Agency Check Tests', () => {
         const result = checkAgency(phrase);
         expect(result.neg_hits.length).toBeGreaterThan(0);
       }
+    });
+  });
+
+  describe('Grounded-behavior locks (false-positive / false-negative fixes)', () => {
+    // These lock the post-fix behavior: benign phrases that previously
+    // false-positived as negatives no longer do, while genuinely dismissive
+    // phrasings still do. Each assertion is unconditional with a deterministic
+    // fixture verified against the current NEGATIVE_PATTERNS.
+
+    it('does NOT count "at least a little" as a negative (FP fix)', () => {
+      // "at least a little" must not match the dismissive "at least you/it/..."
+      // silver-lining pattern. Fixture has no other negative phrasing.
+      const result = checkAgency("It might help at least a little to take a small step.");
+
+      expect(result.neg_hits.length).toBe(0);
+    });
+
+    it('does NOT count supportive "you\'re being really brave" as a negative (FP fix)', () => {
+      // The dismissive pattern is anchored to dismissive completions
+      // (dramatic/ridiculous/silly/too/overly/so/a bit), so "being really brave"
+      // must not flag.
+      const result = checkAgency("You're being really brave by sharing this.");
+
+      expect(result.neg_hits.length).toBe(0);
+    });
+
+    it('does NOT count benign navigation "move on to the next step" as a negative (FP fix)', () => {
+      // "move on" is flagged only when NOT followed by " to" — benign navigation
+      // like "move on to the next step" is excluded.
+      const result = checkAgency("Let's move on to the next step when you're ready.");
+
+      expect(result.neg_hits.length).toBe(0);
+    });
+
+    it('DOES count dismissive "at least you tried" as a negative (FN preserved)', () => {
+      const result = checkAgency("At least you tried, so it's not a total loss.");
+
+      expect(result.neg_hits.length).toBeGreaterThan(0);
+      expect(result.neg_hits.some(h => /at least you/i.test(h))).toBe(true);
+    });
+
+    it('DOES count dismissive "you need to move on" as a negative (FN preserved)', () => {
+      // "you need to" is a directive; "move on" (not followed by " to") also flags.
+      const result = checkAgency("You need to move on already.");
+
+      expect(result.neg_hits.length).toBeGreaterThan(0);
+    });
+
+    it('DOES count dismissive "you\'re being dramatic" as a negative (FN preserved)', () => {
+      const result = checkAgency("You're being dramatic about this.");
+
+      expect(result.neg_hits.length).toBeGreaterThan(0);
+      expect(result.neg_hits.some(h => /you're being dramatic/i.test(h))).toBe(true);
+    });
+
+    it('TEST-009 tie-break: score exactly 0 (1 positive + 1 negative) FAILS', () => {
+      // Documented pass rule: pass = score >= 1 || (pos >= 1 && neg == 0).
+      // A single positive cancelled by a single negative yields score 0 AND a
+      // present negative, so neither clause holds -> must FAIL. This guards the
+      // tie-break boundary: a clean 0 with a negative is not a pass.
+      const result = checkAgency("Would you like to share more? You should stop dwelling on it.");
+
+      expect(result.pos_hits.length).toBe(1);
+      expect(result.neg_hits.length).toBe(1);
+      expect(result.score).toBe(0);
+      expect(result.pass).toBe(false);
     });
   });
 });
