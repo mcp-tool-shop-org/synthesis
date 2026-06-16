@@ -118,7 +118,7 @@ const TEMPLATE_SOURCES: string[] = [
   "take all the time you need",
   "be (gentle|kind) (with|to) yourself",
   "you('ve| have) got this",
-  "sending (you )?(love|hugs|support|strength|positive (vibes|energy|thoughts)|good (vibes|thoughts))",
+  "sending (you )?(love|hugs|support|strength|positive (vibes|energy|thoughts)|good (vibes|thoughts))( and (love|hugs|support|strength|positive (vibes|energy|thoughts)|good (vibes|thoughts)))?",
   "thinking of you",
   "my heart goes out to you",
   "i feel for you",
@@ -213,22 +213,6 @@ function stem(word: string): string {
   }
   return word;
 }
-
-/**
- * Warmth vocabulary: the content words that appear INSIDE the template lexicon, stemmed.
- * Derived from TEMPLATE_SOURCES (no hand-list), so it tracks the lexicon automatically.
- * A token that leaks from a partially-matched template (e.g. "strength" surviving from
- * "...love and strength" when the regex only captured "love") is boilerplate, not genuine
- * engagement — it must be excluded from the substantive residual so a pure-warmth wall
- * still flags as theater.
- */
-const WARMTH_WORDS: ReadonlySet<string> = new Set(
-  TEMPLATE_SOURCES.flatMap((s) =>
-    normalize(s.replace(/[^a-z ]/gi, ' '))
-      .filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
-      .map(stem)
-  )
-);
 
 /** Find first match text for each pattern (evidence), in pattern order. */
 function vulnHits(text: string): string[] {
@@ -432,9 +416,7 @@ export function checkPerformativeEmpathy(
   residualRaw += assistantText.slice(cursor);
   const userStemSet = new Set(sortedUserContent.map(stem));
   const residualContent = new Set(
-    normalize(residualRaw).filter(
-      (t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t) && !WARMTH_WORDS.has(stem(t))
-    )
+    normalize(residualRaw).filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
   );
   const residualContentCount = residualContent.size;
   const novelResidualCount = [...residualContent].filter((t) => !userStemSet.has(stem(t))).length;
