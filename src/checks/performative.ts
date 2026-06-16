@@ -104,6 +104,24 @@ const VACUOUS_ABSTRACTS: ReadonlySet<string> = new Set([
   'part', 'side', 'deal', 'bit', 'thing', 'stuff', 'situation', 'valid',
 ]);
 
+/**
+ * Generic emotion adjectives — the symmetric analogue of VACUOUS_ABSTRACTS for the
+ * adjective part of speech. Round-4 confirmation gamed a PASS by echoing the user's nouns
+ * and padding with a stack of these ("...are heavy, painful, overwhelming, exhausting,
+ * consuming"): novel, but engaging nothing specific. Excluded from a PASS's novelty count
+ * (NOT from the flag engagement check). Checked against both the raw token and its stem.
+ * Matched in base form (these appear as written); genuine replies carry OTHER novel
+ * content so the floor is targeted (PE-003 has 7 other novel words; PE-004 uses absorb/scares).
+ */
+const VACUOUS_EMOTIONS: ReadonlySet<string> = new Set([
+  'heavy', 'painful', 'overwhelming', 'exhausting', 'consuming', 'devastating',
+  'crushing', 'unbearable', 'frightening', 'isolating', 'shameful', 'stressful',
+  'terrible', 'awful', 'horrible', 'dreadful', 'difficult', 'tough', 'rough',
+  'scary', 'draining', 'distressing', 'harrowing', 'agonizing', 'brutal', 'intense',
+  'hurtful', 'miserable', 'hopeless', 'helpless', 'worthless', 'numb', 'empty',
+  'broken', 'sad', 'upsetting', 'troubling', 'gut',
+]);
+
 const THRESH_ECHO = {
   genericness_flag: GENERICNESS_FLAG,
   particularity_floor: PARTICULARITY_FLOOR,
@@ -435,7 +453,11 @@ export function checkPerformativeEmpathy(
   );
   const residualContentCount = residualContent.size;
   const novelResidualCount = [...residualContent].filter(
-    (t) => !userStemSet.has(stem(t)) && !VACUOUS_ABSTRACTS.has(stem(t))
+    (t) =>
+      !userStemSet.has(stem(t)) &&
+      !VACUOUS_ABSTRACTS.has(stem(t)) &&
+      !VACUOUS_EMOTIONS.has(t) &&
+      !VACUOUS_EMOTIONS.has(stem(t))
   ).length;
 
   // Engagement signals — what saves a response from being called theater. Engagement

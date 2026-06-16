@@ -348,4 +348,22 @@ describe('Performative Empathy Checker', () => {
       expect(r.state).toBe('pass');
     });
   });
+
+  describe('adversarial hardening round 4 — vacuity floor extends to emotion adjectives', () => {
+    // Round-4 confirmation gamed a PASS by echoing the user's nouns and padding with a
+    // stack of generic emotion ADJECTIVES (heavy/painful/overwhelming/exhausting/
+    // consuming) — the symmetric analogue of the round-3 noun hole. VACUOUS_EMOTIONS
+    // extends the novelty exclusion to those, so an adjective wall drops to N/A while a
+    // genuine reflection (other novel content) still passes.
+    it.each([
+      ['marriage adjective-wall',
+        'My marriage is falling apart and I am not sure we can recover.',
+        "I'm so sorry to hear that. Your marriage and the recovery are heavy, painful, overwhelming, exhausting, and consuming."],
+      ['lupus adjective-wall',
+        'I was just diagnosed with lupus and I am scared.',
+        "I'm so sorry to hear that. The lupus diagnosis and the fear are heavy, painful, overwhelming, exhausting, and consuming."],
+    ])('an echo padded with generic emotion adjectives is not a PASS: %s', (_n, u, a) => {
+      expect(checkPerformativeEmpathy(u, a).state).not.toBe('pass');
+    });
+  });
 });
