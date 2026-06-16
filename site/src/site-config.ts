@@ -2,7 +2,7 @@ import type { SiteConfig } from '@mcptoolshop/site-theme';
 
 export const config: SiteConfig = {
   title: 'Synthesis',
-  description: 'Deterministic detection of relational failure modes — agency, reassurance, topic-pivot, performative empathy — in AI responses. No LLM judge, no scoring; just auditable evidence.',
+  description: 'Deterministic detection of relational failure modes — agency, reassurance, topic-pivot, performative empathy, grounded uptake — in AI responses. No LLM judge, no scoring; just auditable evidence.',
   logoBadge: 'S',
   brandName: 'Synthesis',
   repoUrl: 'https://github.com/mcp-tool-shop-org/synthesis',
@@ -13,7 +13,7 @@ export const config: SiteConfig = {
     badge: 'Node.js / CI',
     headline: 'Synthesis,',
     headlineAccent: 'deterministic evals for care in AI.',
-    description: 'Rule-based pattern matching that catches relational failure modes in AI responses. No LLM judge, no probabilistic scoring \u2014 just auditable, per-checker evidence. Four checkers covering agency, reassurance, topic-pivot, and empathy-theater.',
+    description: 'Rule-based pattern matching that catches relational failure modes in AI responses. No LLM judge, no probabilistic scoring \u2014 just auditable, per-checker evidence. Five checkers covering agency, reassurance, topic-pivot, empathy-theater, and grounded uptake.',
     primaryCta: { href: '#quick-start', label: 'Get started' },
     secondaryCta: { href: 'handbook/', label: 'Read the Handbook' },
     previews: [
@@ -36,6 +36,8 @@ export const config: SiteConfig = {
         { title: 'Presence Over Reassurance', desc: 'Detects mind-reading claims, unverifiable guarantees, and false comfort that papers over emotion.' },
         { title: 'Pivot Detection', desc: 'Catches acknowledge-then-pivot patterns where the assistant abandons emotional vulnerability.' },
         { title: 'Empathy-Theater Detector', desc: 'Flags hollow warmth — generic empathy templates that engage nothing — or abstains. A pure detector: it never certifies a reply as sincere, and favors precision (misses some theater rather than risk false-flagging a genuine reply).' },
+        { title: 'Grounded-Uptake Witness', desc: 'The positive companion to empathy-theater. Certifies the observable — that grounded uptake was performed — instead of the undecidable. Requires all five witnesses (grounded anchor, non-parroting, a support move, template containment, safety compatible). Honest by construction: measures behavior, not sincerity.' },
+        { title: 'Relational Posture', desc: 'A composed case-level summary that reads the other checks into one verdict — unsafe_comfort, hollow_warmth_flagged, pivot_or_abandonment, grounded_uptake_verified, or unresolved_abstain. Every posture states its non-claims, so a positive verdict is never over-read.' },
         { title: 'CI-Ready', desc: 'Exit codes, JSON reports, and --fail-on thresholds. Drop into any pipeline.' },
       ],
     },
@@ -58,13 +60,14 @@ export const config: SiteConfig = {
       kind: 'data-table',
       id: 'checkers',
       title: 'Built-in Checkers',
-      subtitle: 'Four checkers ship out of the box.',
-      columns: ['Checker', 'What It Catches', 'Example Failure'],
+      subtitle: 'Five checkers ship out of the box.',
+      columns: ['Checker', 'What It Catches', 'Example'],
       rows: [
         ['agency_language', 'Unsolicited directive phrasing over a disclosed feeling, takeover language', '"You should just move on"'],
         ['unverifiable_reassurance', 'Mind-reading claims and unverifiable future guarantees', '"I know exactly how you feel"'],
         ['topic_pivot', 'Abandoning emotional vulnerability, acknowledge-then-pivot', '"That sounds hard. Anyway, have you tried pottery?"'],
         ['performative_empathy', 'Hollow warmth that engages nothing — flags theater or abstains, never certifies sincerity', '"I hear you. Sending hugs. Take all the time you need."'],
+        ['grounded_uptake', 'Positive witness — certifies observable grounded uptake (anchor + non-parroting + support move + containment + safety). pass is always true; the verdict is in state', '"Losing a job you\'ve held for ten years is a real blow… Would you like to talk through what feels most urgent?"'],
       ],
     },
     {

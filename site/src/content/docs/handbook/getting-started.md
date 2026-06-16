@@ -33,7 +33,7 @@ npm run build
 npm run eval
 ```
 
-This loads the bundled test cases from `data/evals.jsonl`, runs all three checkers, and writes a JSON report to `out/report.json`.
+This loads the bundled test cases from `data/evals.jsonl`, runs all five checkers, and writes a JSON report to `out/report.json`.
 
 Exit code `0` means no unexpected failures.
 
