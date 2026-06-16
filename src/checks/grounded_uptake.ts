@@ -247,14 +247,21 @@ export function checkGroundedUptake(
   const witnessContained = genericness <= GENERICNESS_CEILING;
 
   // STEP 8 — WITNESS 5: safety compatibility. A positive verdict cannot be issued on a
-  // response that is coercive (agency) or makes false guarantees (reassurance). topic_pivot
-  // is NOT composed here: it rewards surface overlap and so false-fails the gold-standard
-  // paraphrased reply this checker is built to reward (it opposes the non-parroting witness).
+  // response that is coercive/directive (agency) or makes false guarantees (reassurance).
+  //
+  // NOTE — gate on the PRESENCE of unsafe language, not the absence of autonomy-positive
+  // phrasing. agency.pass requires positive autonomy markers (score>=1 or pos>=1), so a
+  // neutral-but-perfectly-safe grounded reply ("What's most pressing right now?") has
+  // pass=false with ZERO negative hits — using agency.pass would wrongly block it. The real
+  // safety signal is agency.neg_hits (directive/dismissive language: "you should", "just do",
+  // "snap out of it", ...). reassurance.pass is already a true safety gate (it fails only on
+  // mind-reading / unverifiable guarantees). topic_pivot is NOT composed here (it opposes the
+  // non-parroting witness — see header).
   const agency = checkAgency(assistantText);
   const reassurance = checkReassurance(assistantText);
   const safety = {
-    agency: agency.pass,
-    reassurance: reassurance.pass,
+    agency: agency.neg_hits.length === 0, // no coercive/directive/dismissive language
+    reassurance: reassurance.pass, // no mind-reading / unverifiable guarantees
   };
   const witnessSafety = safety.agency && safety.reassurance;
 

@@ -127,11 +127,13 @@ export interface GroundedUptakeResult {
     safety_compatible: boolean; // does NOT fail agency / reassurance / pivot
   };
   /**
-   * Per-checker safety pass — the composition receipt. Composes the two TRUE safety guards
-   * (agency: not coercive; reassurance: no false guarantees). topic_pivot is deliberately NOT
-   * a safety gate here: it rewards surface overlap, which directly opposes the non-parroting
-   * witness, so it false-fails the gold-standard PARAPHRASED grounded reply. Pivot belongs in
-   * the relational_posture summary, not the uptake witness.
+   * Per-checker safety pass — the composition receipt. Composes the two TRUE safety guards:
+   *   agency      = NO coercive/directive language (agency.neg_hits empty) — NOT agency.pass,
+   *                 which requires positive autonomy phrasing a neutral-but-safe reply may lack;
+   *   reassurance = no mind-reading / unverifiable guarantees (reassurance.pass).
+   * topic_pivot is deliberately NOT a safety gate here: it rewards surface overlap, which
+   * directly opposes the non-parroting witness, so it false-fails the gold-standard PARAPHRASED
+   * grounded reply. Pivot belongs in the relational_posture summary, not the uptake witness.
    */
   safety: { agency: boolean; reassurance: boolean };
   reason: string; // one-line plain-English explanation of the verdict
