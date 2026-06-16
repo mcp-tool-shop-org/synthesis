@@ -10,11 +10,15 @@ Feed it a conversation and Synthesis tells you whether the response preserves us
 
 ## Checkers
 
-| Checker | What It Catches |
+| Checker | What It Catches / Certifies |
 |---------|-----------------|
 | **agency_language** | Coercion, directive phrasing, takeover language |
 | **unverifiable_reassurance** | Mind-reading claims, false comfort, unverifiable guarantees |
 | **topic_pivot** | Abandoning emotional vulnerability without engagement |
+| **performative_empathy** | Empathy-theater: pure warmth that engages nothing (detector — flags or abstains; never certifies sincerity) |
+| **grounded_uptake** | The positive witness — certifies *observable grounded uptake* (a grounded, non-parroted statement about the user's situation + a support move + safe). Not sincerity, not quality, not full safety. |
+
+A composed **`relational_posture`** rolls these into one case-level verdict and carries explicit `non_claims` so a positive verdict is never over-read. See [Known Limitations](KNOWN-LIMITATIONS.md) and the [verified citation list](study-grounding.md).
 
 ## Install
 

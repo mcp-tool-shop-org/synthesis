@@ -5,6 +5,53 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.0] - 2026-06-16
+
+The positive-capability release: a fifth checker that certifies what `performative_empathy`
+refuses to — not sincerity, but the narrower, observable, auditable claim that *grounded uptake
+was performed* — plus a composed case-level summary.
+
+### Added
+- **`grounded_uptake` checker** — the fifth checker and the **positive witness**, companion to
+  `performative_empathy`. Where that checker detects the hollow and never certifies the sincere,
+  this one makes a strictly narrower claim that IS deterministically defensible: it certifies
+  **observable grounded uptake**. Three states: `verified_uptake` / `no_verified_uptake` /
+  `not_applicable`. `pass` is **always true** — a positive witness never fails a case or drives
+  the exit code; the verdict lives in `state`. `verified_uptake` requires ALL FIVE witnesses:
+  (1) a grounded anchor in a **declarative clause** (a statement about the user's situation, not a
+  topic word inside a question); (2) **non-parroting** (the anchor recombined, outside any verbatim
+  3-gram); (3) a **support move** (question / offer / interpretation); (4) **template containment**
+  (warmth does not dominate); (5) **safety compatibility** (composes `agency_language` +
+  `unverifiable_reassurance` plus a conservative directive/guarantee screen). It measures
+  observable behavior, not inner state, so it never certifies sincerity, quality, or full safety
+  (Jacobs & Wallach 2021). Fully deterministic — no LLM, no network, no clock, no randomness.
+- **`relational_posture`** — a composed, case-level summary (`results[].relational_posture`) that
+  rolls the checkers into one verdict (`unsafe_comfort` / `hollow_warmth_flagged` /
+  `pivot_or_abandonment` / `grounded_uptake_verified` / `unresolved_abstain`) and carries explicit
+  `claims` AND **`non_claims`** — the scope-honesty surface that stops `verified_uptake` being
+  read as "good/sincere/safe."
+- **New `grounded_uptake` member of the `CheckType` API** — added to the `CheckType` union, the
+  per-case `checks`/`expected` fields, the schema enum, the `by_check` block (where `passed` =
+  verified, `failed` = not-verified, `not_applicable` = abstained), and the `GroundedUptakeResult`
+  shape (`state`, `grounded_anchors`, `support_moves`, `witnesses`, `safety`, `directive_hits`,
+  `guarantee_hits`, and more). New `RelationalPostureResult` type.
+- Bundled `grounded_uptake` eval cases (`GU-001..009`) plus `grounded_uptake` wired into PE-003/004
+  to demonstrate the complementarity (`performative_empathy` abstains while `grounded_uptake`
+  verifies — same reply, both honest).
+- `docs/study-grounding.md` (the verified citation list, now shipped in-repo) and
+  `docs/KNOWN-LIMITATIONS.md` extended with the `grounded_uptake` scope and red-team-earned limits.
+
+### Verified
+- **Adversarial red-team of the positive verdict** — 54 candidate `(user, assistant)` pairs across
+  6 attack families, executed through the real checker. Produced the declarative-clause structural
+  fix and the conservative directive/guarantee safety screen (catches bare-imperative directives
+  and disguised guarantees), with **zero false-negatives** on the genuine corpus. Residual limits
+  (manipulation; subtle dismissive reframes) documented and pinned by regression tests.
+
+### Fixed
+- `docs/index.md` listed only three checkers (now lists all five + `relational_posture`); the
+  HANDBOOK's `study-grounding.md` reference now resolves (the file ships in-repo).
+
 ## [1.1.0] - 2026-06-16
 
 The dogfood-swarm release: a new fourth checker, plus a health pass that made the

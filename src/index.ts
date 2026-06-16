@@ -118,7 +118,11 @@ Checks:
   agency_language           - Detects language respecting user autonomy
   unverifiable_reassurance  - Detects unfounded promises/guarantees
   topic_pivot               - Detects pivoting away from vulnerability
-  performative_empathy      - Detects high template density with low grounded particularity
+  performative_empathy      - Flags empathy-theater (detector; never certifies sincerity)
+  grounded_uptake           - Verifies observable grounded uptake (the positive witness)
+
+Each case is also summarized as a relational_posture (results[].relational_posture)
+with claims and non_claims.
 `);
 }
 

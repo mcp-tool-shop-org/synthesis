@@ -37,9 +37,10 @@
 
 D. Shipping Hygiene reached 10/10 when the `v1.1.0` release was cut:
 
-- **Version in manifest matches git tag — PASS.** `package.json` is `1.1.0` and the
-  `v1.1.0` tag is published, with the release built and shipped to npm via Trusted
-  Publishing (OIDC). The previously-pending gate is now satisfied.
+- **Version in manifest matches git tag — PASS.** `package.json` is `1.2.0` and the
+  `v1.2.0` tag is published, with the release built and shipped to npm via Trusted
+  Publishing (OIDC). (First satisfied at `v1.1.0`; remains PASS at `v1.2.0`, which adds
+  the `grounded_uptake` positive witness + the `relational_posture` summary.)
 
 Everything else in D is genuinely PASS, including npm packaging: `package.json`
 now declares `main`, `types`, a `bin` (the `synthesis` CLI), a `files` allowlist,
