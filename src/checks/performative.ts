@@ -402,6 +402,14 @@ export function checkPerformativeEmpathy(
   const hasQuestion = assistantText.includes('?');
   const engaged = residualContentCount >= MIN_SUBSTANTIVE_RESIDUAL || hasQuestion;
 
+  // MAINTAINER NOTE (accepted false-negatives — do NOT "fix" by weakening this gate):
+  // the final adversarial certification found a few pure-warmth walls that happen to carry
+  // a stray substantive token (so `engaged` is true) and therefore ABSTAIN instead of
+  // flagging. These missed flags are the deliberate precision-favoring trade. Lowering
+  // MIN_SUBSTANTIVE_RESIDUAL or loosening `engaged` to chase them re-opens the CARDINAL
+  // harm (false-flagging genuine, brief, or non-native replies). A missed flag is
+  // acceptable; a false flag is not.
+  //
   // STEP 7 — resolve. TWO states: this is a DETECTOR. It flags the unmistakable case
   // (pure warmth that engages nothing) and abstains on everything else. There is no
   // positive "pass" verdict — five adversarial rounds + a concreteness measurement proved
