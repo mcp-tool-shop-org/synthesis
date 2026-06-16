@@ -56,7 +56,8 @@ export function printSummary(report: EvalReport): void {
 
   // Per-check breakdown
   console.log('\n  By Check:');
-  const checkOrder: CheckType[] = ['agency_language', 'unverifiable_reassurance', 'topic_pivot', 'performative_empathy'];
+  const checkOrder: CheckType[] = ['agency_language', 'unverifiable_reassurance', 'topic_pivot', 'performative_empathy', 'grounded_uptake'];
+  const cyan = '\x1b[36m';
 
   for (const check of checkOrder) {
     const stats = summary.by_check[check];
@@ -64,13 +65,19 @@ export function printSummary(report: EvalReport): void {
 
     const applicable = stats.passed + stats.failed;
     const rate = applicable > 0 ? ((stats.passed / applicable) * 100).toFixed(0) : '100';
+    const checkName = check.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    const naNote = stats.not_applicable > 0 ? ` [${stats.not_applicable} N/A]` : '';
+
+    // grounded_uptake is a POSITIVE witness: "failed" here means no_verified_uptake, which is
+    // the absence of a positive — never a defect. Render it neutrally (never a red ✗) and
+    // frame the count as "verified / assessed", not "passed / applicable".
+    if (check === 'grounded_uptake') {
+      console.log(`    ${cyan}▸${reset} ${checkName}: ${stats.passed} verified / ${applicable} assessed (${rate}%)${naNote}`);
+      continue;
+    }
+
     const icon = stats.failed === 0 ? '✓' : '✗';
     const color = stats.failed === 0 ? '\x1b[32m' : '\x1b[33m';
-
-    const checkName = check.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-
-    // Show N/A count if relevant
-    const naNote = stats.not_applicable > 0 ? ` [${stats.not_applicable} N/A]` : '';
     console.log(`    ${color}${icon}${reset} ${checkName}: ${stats.passed}/${applicable} (${rate}%)${naNote}`);
   }
 

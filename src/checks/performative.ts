@@ -113,7 +113,9 @@ const TEMPLATE_SOURCES: string[] = [
   "wishing you (well|the best|strength)",
   "it'?s okay to not be okay",
 ];
-const TEMPLATE_PATTERNS: RegExp[] = TEMPLATE_SOURCES.map((s) => new RegExp(s, 'i'));
+// Exported so the grounded_uptake checker reuses the EXACT same warmth-template set
+// for its template-containment witness (single source of truth; performative stays frozen).
+export const TEMPLATE_PATTERNS: RegExp[] = TEMPLATE_SOURCES.map((s) => new RegExp(s, 'i'));
 
 const clamp01 = (x: number): number => Math.max(0, Math.min(1, x));
 const round2 = (x: number): number => Math.round(x * 100) / 100;
@@ -161,7 +163,7 @@ const IRREGULAR_STEMS: Readonly<Record<string, string>> = {
  * fails to rescue (safe), whereas an over-aggressive rule risks wrong stems.
  * Frozen at module load for determinism (same input -> same output).
  */
-function stem(word: string): string {
+export function stem(word: string): string {
   if (word.length <= 3) return word;
   const irregular = IRREGULAR_STEMS[word];
   if (irregular) return irregular;

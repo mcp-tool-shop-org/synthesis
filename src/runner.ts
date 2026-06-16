@@ -17,6 +17,7 @@ import { checkAgency } from './checks/agency.js';
 import { checkReassurance } from './checks/reassurance.js';
 import { checkPivot } from './checks/pivot.js';
 import { checkPerformativeEmpathy } from './checks/performative.js';
+import { checkGroundedUptake } from './checks/grounded_uptake.js';
 
 /**
  * Canonical, fixed check ordering for all aggregate report objects.
@@ -29,7 +30,8 @@ const CHECK_ORDER: CheckType[] = [
   'agency_language',
   'unverifiable_reassurance',
   'topic_pivot',
-  'performative_empathy'
+  'performative_empathy',
+  'grounded_uptake'
 ];
 
 /**
@@ -118,6 +120,14 @@ export function runCase(evalCase: EvalCase): CaseResult {
         }
         break;
       }
+
+      case 'grounded_uptake': {
+        // POSITIVE witness — never fails a case or drives the exit code (pass is always
+        // true). The verified/no_verified/abstain verdict lives in `state` and is surfaced
+        // via the by_check + label branches below; it is informational, not a defect.
+        result.checks.grounded_uptake = checkGroundedUptake(user, assistant);
+        break;
+      }
     }
   }
 
@@ -140,7 +150,13 @@ export function runCase(evalCase: EvalCase): CaseResult {
           continue;
         }
 
-        const actual = checkResult?.pass ?? true;
+        // grounded_uptake is a positive witness: its `pass` is always true, so the label
+        // truth is whether it VERIFIED uptake (state), not pass. (no_verified_uptake -> false;
+        // not_applicable was already excluded above as an abstain.)
+        const actual =
+          check === 'grounded_uptake' && checkResult && 'state' in checkResult
+            ? checkResult.state === 'verified_uptake'
+            : (checkResult?.pass ?? true);
         result.label_comparison[check] = {
           expected: expected[check],
           actual,
@@ -194,7 +210,9 @@ function extractEvidence(result: CaseResult, failedChecks: CheckType[]): Record<
         break;
 
       case 'performative_empathy':
-        if ('genericness' in checkResult) {
+        // Narrow on a performative-unique field: grounded_uptake also has `genericness`,
+        // but only performative_empathy has `hollow_margin`.
+        if ('hollow_margin' in checkResult) {
           evidence.genericness = checkResult.genericness;
           evidence.particularity = checkResult.particularity;
           evidence.hollow_margin = checkResult.hollow_margin;
@@ -227,7 +245,8 @@ export function runAllCases(cases: EvalCase[]): {
     agency_language: { passed: 0, failed: 0, not_applicable: 0 },
     unverifiable_reassurance: { passed: 0, failed: 0, not_applicable: 0 },
     topic_pivot: { passed: 0, failed: 0, not_applicable: 0 },
-    performative_empathy: { passed: 0, failed: 0, not_applicable: 0 }
+    performative_empathy: { passed: 0, failed: 0, not_applicable: 0 },
+    grounded_uptake: { passed: 0, failed: 0, not_applicable: 0 }
   };
 
   // Track per-check label accuracy
@@ -235,7 +254,8 @@ export function runAllCases(cases: EvalCase[]): {
     agency_language: { total: 0, matched: 0 },
     unverifiable_reassurance: { total: 0, matched: 0 },
     topic_pivot: { total: 0, matched: 0 },
-    performative_empathy: { total: 0, matched: 0 }
+    performative_empathy: { total: 0, matched: 0 },
+    grounded_uptake: { total: 0, matched: 0 }
   };
 
   let passedCases = 0;
@@ -265,8 +285,16 @@ export function runAllCases(cases: EvalCase[]): {
       if (checkResult) {
         const stats = checkStats[check];
 
-        // Handle N/A for any 3-state check (topic_pivot, performative_empathy)
-        if ('applicable' in checkResult && !checkResult.applicable) {
+        // grounded_uptake is a positive witness with pass=true always; its by_check
+        // semantics are keyed on `state`: passed = verified, "failed" = no_verified
+        // (NOT a defect — it never affects exit code), not_applicable = abstain.
+        if (check === 'grounded_uptake' && 'state' in checkResult) {
+          if (checkResult.state === 'verified_uptake') stats.passed++;
+          else if (checkResult.state === 'no_verified_uptake') stats.failed++;
+          else stats.not_applicable++;
+        }
+        // Handle N/A for any 3-state failure-mode check (topic_pivot, performative_empathy)
+        else if ('applicable' in checkResult && !checkResult.applicable) {
           stats.not_applicable++;
         } else if (checkResult.pass) {
           stats.passed++;
