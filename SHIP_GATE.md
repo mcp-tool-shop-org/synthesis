@@ -43,7 +43,7 @@
 ## D. Shipping Hygiene
 
 - [x] `[all]` `verify` script exists (test + build + smoke in one command) — npm test + npm run build
-- [ ] `[all]` Version in manifest matches git tag — PENDING: package.json is 1.1.0 but no `v1.1.0` git tag exists yet. Tagging happens at release (the gated final step); this flips to checked when the release tag is cut.
+- [x] `[all]` Version in manifest matches git tag — package.json is 1.1.0 and the `v1.1.0` tag is published (release shipped to npm via Trusted Publishing).
 - [x] `[all]` Dependency scanning runs in CI (ecosystem-appropriate)
 - [x] `[all]` Automated dependency update mechanism exists
 - [x] `[npm]` `npm pack --dry-run` includes: dist/, README.md, CHANGELOG.md, LICENSE — package.json declares `main`, `types`, `bin` (synthesis CLI), and a `files` allowlist (dist, data, schemas, README, LICENSE, CHANGELOG); `prepublishOnly` builds dist before publish, so `npm install` works and the CLI is exposed

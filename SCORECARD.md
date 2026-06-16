@@ -29,19 +29,17 @@
 | A. Security | 4/10 | 10/10 |
 | B. Error Handling | 8/10 | 10/10 |
 | C. Operator Docs | 9/10 | 10/10 |
-| D. Shipping Hygiene | 7/10 | 9/10 |
+| D. Shipping Hygiene | 7/10 | 10/10 |
 | E. Identity (soft) | 10/10 | 10/10 |
-| **Overall** | 38/50 | **49/50** |
+| **Overall** | 38/50 | **50/50** |
 
-### Why 49/50, not 50/50 (honesty over a pretty score)
+### 50/50 — version-tag gate now PASS
 
-D. Shipping Hygiene is 9/10, not 10/10, because of one genuinely-pending item:
+D. Shipping Hygiene reached 10/10 when the `v1.1.0` release was cut:
 
-- **Version in manifest matches git tag — PENDING.** `package.json` is at `1.0.2`,
-  but the latest git tag is `v1.0.0`; there is no `v1.0.2` tag yet. Release tagging
-  happens at publish time, not during this pass, so the gate is honestly unchecked.
-  It flips to PASS — and D to 10/10, overall to 50/50 — when the `v1.0.2` release
-  tag is cut.
+- **Version in manifest matches git tag — PASS.** `package.json` is `1.1.0` and the
+  `v1.1.0` tag is published, with the release built and shipped to npm via Trusted
+  Publishing (OIDC). The previously-pending gate is now satisfied.
 
 Everything else in D is genuinely PASS, including npm packaging: `package.json`
 now declares `main`, `types`, a `bin` (the `synthesis` CLI), a `files` allowlist,

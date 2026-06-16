@@ -373,13 +373,12 @@ See [SECURITY.md](SECURITY.md) for vulnerability reporting.
 | A. Security | 10 |
 | B. Error Handling | 10 |
 | C. Operator Docs | 10 |
-| D. Shipping Hygiene | 9 |
+| D. Shipping Hygiene | 10 |
 | E. Identity (soft) | 10 |
-| **Overall** | **49/50** |
+| **Overall** | **50/50** |
 
-> One item is honestly pending: the version in `package.json` (1.1.0) does not yet
-> have a matching `v1.1.0` git tag. Tagging happens at release. This gate flips to
-> PASS — and the score to 50/50 — once the release tag is cut.
+> All gates PASS: `package.json` is `1.1.0`, the `v1.1.0` tag is published, and the
+> release shipped to npm via Trusted Publishing (OIDC).
 
 > Full audit: [SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 
