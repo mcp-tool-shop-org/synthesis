@@ -45,14 +45,14 @@ describe('Performative Empathy Checker', () => {
     });
   });
 
-  describe('pass (no hollow markers — NOT a sincerity claim)', () => {
-    it('passes warmth + grounded recombined engagement', () => {
+  describe('abstains on genuine engagement (detector has no positive verdict)', () => {
+    it('a grounded, engaged reply abstains — the tool never certifies sincerity', () => {
       const user = "I got fired today and I don't know how I'll make rent next month.";
       const r = checkPerformativeEmpathy(user, GROUNDED);
-      expect(r.state).toBe('pass');
-      expect(r.pass).toBe(true);
-      expect(r.applicable).toBe(true);
-      expect(r.grounded_overlap).toBeGreaterThan(0);
+      expect(r.state).toBe('not_applicable');
+      expect(r.pass).toBe(true); // abstain is not a failure
+      expect(r.applicable).toBe(false);
+      expect(r.grounded_overlap).toBeGreaterThan(0); // it DID engage; we just don't certify it
     });
   });
 
@@ -119,7 +119,7 @@ describe('Performative Empathy Checker', () => {
       ];
       for (const [u, a] of inputs) {
         const r = checkPerformativeEmpathy(u, a);
-        expect(['flag', 'pass', 'not_applicable']).toContain(r.state);
+        expect(['flag', 'not_applicable']).toContain(r.state); // two-state detector
         expect(r.pass).toBe(r.state !== 'flag');
         expect(r.applicable).toBe(r.state !== 'not_applicable');
       }
@@ -309,7 +309,7 @@ describe('Performative Empathy Checker', () => {
         'I was just diagnosed with cancer and my kids are terrified about the treatment.',
         "I'm so sorry to hear that. Treatment cancer kids terrified diagnosed matters aspects, cancer treatment kids diagnosed terrified matters aspects."
       );
-      expect(r.state).not.toBe('pass');
+      expect(r.state).toBe('not_applicable');
     });
 
     it('a template-word coincidence does not exempt a pure wall from flagging', () => {
@@ -337,15 +337,15 @@ describe('Performative Empathy Checker', () => {
         'My brother attempted suicide last week and I feel so guilty and helpless.',
         "I'm so sorry to hear that. Your brother attempted suicide last week and these matters, this reality, the circumstances and aspects are real."],
     ])('an echo padded with vacuous abstract nouns is not a PASS: %s', (_n, u, a) => {
-      expect(checkPerformativeEmpathy(u, a).state).not.toBe('pass');
+      expect(checkPerformativeEmpathy(u, a).state).toBe('not_applicable');
     });
 
-    it('genuine reflection with meaningful novel content still passes (vacuity floor is targeted)', () => {
+    it('genuine reflection with meaningful novel content abstains, never flags', () => {
       const r = checkPerformativeEmpathy(
         'I was just diagnosed with diabetes and I am terrified about managing it.',
         "I'm so sorry to hear that. Being diagnosed with diabetes and feeling terrified about managing it is a lot to absorb at once. What about managing the diabetes scares you most right now?"
       );
-      expect(r.state).toBe('pass');
+      expect(r.state).toBe('not_applicable');
     });
   });
 
@@ -363,7 +363,7 @@ describe('Performative Empathy Checker', () => {
         'I was just diagnosed with lupus and I am scared.',
         "I'm so sorry to hear that. The lupus diagnosis and the fear are heavy, painful, overwhelming, exhausting, and consuming."],
     ])('an echo padded with generic emotion adjectives is not a PASS: %s', (_n, u, a) => {
-      expect(checkPerformativeEmpathy(u, a).state).not.toBe('pass');
+      expect(checkPerformativeEmpathy(u, a).state).toBe('not_applicable');
     });
   });
 });

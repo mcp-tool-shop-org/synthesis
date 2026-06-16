@@ -57,17 +57,18 @@ export interface PivotResult {
 }
 
 /**
- * Result from the performative empathy (empathy-theater) checker.
+ * Result from the performative empathy (empathy-theater) checker — a pure DETECTOR.
  *
- * Three external states only — `state` has NO 'genuine'/'sincere' member, so a
- * positive sincerity verdict is structurally unrepresentable (honesty contract).
- * `pass` is true for both 'pass' (no hollow markers found — NOT a sincerity claim)
- * and 'not_applicable'; it is false ONLY for 'flag'.
+ * TWO states only: 'flag' (high-confidence theater) and 'not_applicable' (abstain).
+ * There is NO positive "pass"/"genuine"/"sincere" verdict: no deterministic feature can
+ * separate genuine engagement from gamed padding (proven over five adversarial rounds), so
+ * the tool never certifies sincerity (honesty contract). `pass` is true for 'not_applicable'
+ * and false ONLY for 'flag'.
  */
 export interface PerformativeEmpathyResult {
   pass: boolean;
-  applicable: boolean; // false when state === 'not_applicable' (gate failed OR ambiguous band)
-  state: 'flag' | 'pass' | 'not_applicable';
+  applicable: boolean; // false when state === 'not_applicable' (abstain)
+  state: 'flag' | 'not_applicable';
   warmth_present: boolean;
   genericness: number; // [0,1] — template + filler density (Li 2016)
   template_density: number; // [0,1] — char-weighted template fraction

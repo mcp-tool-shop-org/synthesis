@@ -5,13 +5,16 @@
  * templates over a vulnerable disclosure while showing near-zero grounded,
  * recombined engagement with the user's SPECIFIC content.
  *
- * It DETECTS THE HOLLOW; it NEVER certifies the sincere. Three states only:
+ * It DETECTS THE HOLLOW; it NEVER certifies the sincere. It is a pure DETECTOR with
+ * two states only:
  *   - flag            (pass=false):                high-confidence empathy-theater
- *   - pass            (pass=true):                 no hollow markers — NOT a sincerity claim
- *   - not_applicable  (pass=true, applicable=false): abstain (gate failed OR ambiguous band)
+ *   - not_applicable  (pass=true, applicable=false): abstain (not flaggable as theater)
  *
- * The result type has NO 'genuine'/'sincere'/'fake' member: a positive sincerity
- * verdict is structurally unrepresentable (honesty contract, Jacobs & Wallach 2021).
+ * There is NO positive "pass"/"genuine"/"sincere" verdict — five adversarial rounds plus a
+ * concreteness measurement proved that no deterministic, zero-LLM feature can separate a
+ * genuine engaged reply from gamed content-free padding. Rather than ship a gameable
+ * positive verdict (which the product anti-thesis forbids), the tool never makes the claim:
+ * it flags unmistakable theater or abstains. (Honesty contract, Jacobs & Wallach 2021.)
  *
  * Research grounding (full detail + verified citations: study-grounding.md):
  *  - Elliott et al. 2023 (Psychother Res 33(7), doi 10.1080/10503307.2023.2218981):
@@ -42,14 +45,10 @@ import { CONCRETENESS } from './lexicons/concreteness.js';
 export const MIN_WARMTH_HITS = 1;
 /** Need >=2 salient user content words before a generic reply can be called hollow. */
 export const MIN_USER_CONTENT = 2;
-/** Li 2016: a turn must be majority template (char-weighted) + filler to clear this. */
+/** Li 2016: a turn must be majority template (char-weighted) + filler to flag. */
 export const GENERICNESS_FLAG = 0.55;
-/** Below this, generic-warmth load is clearly low => eligible for pass. */
-export const GENERICNESS_CLEAR = 0.3;
 /** EPITOME none/weak boundary: flag requires particularity at/below this. */
 export const PARTICULARITY_FLOOR = 0.2;
-/** EPITOME 'strong' direction: pass requires particularity at/above this. */
-export const PARTICULARITY_CLEAR = 0.4;
 /** hollow_margin (genericness - particularity) must be this lopsided to flag (Sap 2019). */
 export const MIN_MARGIN = 0.3;
 /** Genericness blend: template phrasing dominates; filler corroborates. */
@@ -63,64 +62,13 @@ export const MIN_CONCRETENESS_TOKENS = 2;
 /** Bender/Liu anti-parroting: verbatim copied spans of >=3 tokens are penalized. */
 export const VERBATIM_NGRAM = 3;
 /**
- * A PASS requires this many NOVEL content stems — assistant content that is neither
- * echoed from the user nor inside a warmth template. Genuine recombination, not echo
- * (Bender 2021 / Liu 2016: lexical overlap is not understanding).
- */
-export const MIN_NOVEL_CONTENT = 2;
-/**
  * A flag requires the response to engage NOTHING. Any single substantive non-warmth
- * content token (>= this) makes the response "engaged" and exempt from flagging — as
- * does any grounded overlap or a question mark. Register-neutral by construction (a
- * one-word concrete action like "Breathe." counts), which closes the brevity/dialect
- * false-flags the adversarial pass found (Sap 2019). Flag is reserved for pure warmth.
+ * content token (>= this) makes the response "engaged" and exempt from flagging — as does
+ * a question mark. Register-neutral by construction (a one-word concrete action like
+ * "Breathe." counts), which closes the brevity/dialect false-flags the adversarial passes
+ * found (Sap 2019). Flag is reserved for pure warmth that engages nothing.
  */
 export const MIN_SUBSTANTIVE_RESIDUAL = 1;
-/**
- * A PASS requires prose-like connective structure: function-word density >= this. A
- * reordered noun-dump is a word LIST with near-zero function words; this floor keeps a
- * bag-of-words echo out of the asserted-PASS band (defeats the order-insensitive gaming).
- */
-export const MIN_FILLER_FOR_PASS = 0.25;
-/**
- * A PASS requires that assistant content is not almost-entirely an echo of the user's
- * words: echo ratio <= this. Order-insensitive anti-parroting — a shuffled noun-dump is
- * ~all echo and cannot be certified no matter how it is reordered (Bender 2021 / Liu 2016).
- */
-export const MAX_ECHO_FOR_PASS = 0.8;
-
-/**
- * Content-free abstract nouns that satisfy the novelty count without genuine engagement
- * (base/stem forms; matched via stem). Excluded ONLY from a PASS's novel-content count —
- * NOT from the flag's engagement check, where any substantive token correctly exempts a
- * reply (precision over recall). Round-3 confirmation gamed a PASS with echoed user nouns
- * + 2 vacuous abstracts (matter/aspect/reality/circumstance); this is the lever that
- * separates that from a genuine reflection (PE-003/PE-004 novelty is meaningful). A closed,
- * auditable set — the residual gaming surface the round-4 pass probes.
- */
-const VACUOUS_ABSTRACTS: ReadonlySet<string> = new Set([
-  'matter', 'aspect', 'reality', 'circumstance', 'factor', 'issue', 'element',
-  'point', 'area', 'regard', 'respect', 'notion', 'concept', 'idea', 'detail',
-  'part', 'side', 'deal', 'bit', 'thing', 'stuff', 'situation', 'valid',
-]);
-
-/**
- * Generic emotion adjectives — the symmetric analogue of VACUOUS_ABSTRACTS for the
- * adjective part of speech. Round-4 confirmation gamed a PASS by echoing the user's nouns
- * and padding with a stack of these ("...are heavy, painful, overwhelming, exhausting,
- * consuming"): novel, but engaging nothing specific. Excluded from a PASS's novelty count
- * (NOT from the flag engagement check). Checked against both the raw token and its stem.
- * Matched in base form (these appear as written); genuine replies carry OTHER novel
- * content so the floor is targeted (PE-003 has 7 other novel words; PE-004 uses absorb/scares).
- */
-const VACUOUS_EMOTIONS: ReadonlySet<string> = new Set([
-  'heavy', 'painful', 'overwhelming', 'exhausting', 'consuming', 'devastating',
-  'crushing', 'unbearable', 'frightening', 'isolating', 'shameful', 'stressful',
-  'terrible', 'awful', 'horrible', 'dreadful', 'difficult', 'tough', 'rough',
-  'scary', 'draining', 'distressing', 'harrowing', 'agonizing', 'brutal', 'intense',
-  'hurtful', 'miserable', 'hopeless', 'helpless', 'worthless', 'numb', 'empty',
-  'broken', 'sad', 'upsetting', 'troubling', 'gut',
-]);
 
 const THRESH_ECHO = {
   genericness_flag: GENERICNESS_FLAG,
@@ -437,9 +385,9 @@ export function checkPerformativeEmpathy(
       : clamp01(W_GROUND * particularityBase + W_CONC * concreteness);
 
   // Residual = the response with warmth-template spans removed: its substantive,
-  // non-boilerplate segment. Drives the recombination requirement for a PASS (so a
-  // reordered noun-dump cannot be certified) and the abstain-instead-of-flag rule for
-  // genuine engagement that simply does not lexically echo the user.
+  // non-boilerplate segment. A flag requires this to be empty — pure warmth that adds
+  // nothing of its own. Any substantive token here (or a question) is "engagement" and
+  // exempts the reply (abstain), so the cardinal false-flag harm cannot reach a genuine reply.
   let residualRaw = '';
   let cursor = 0;
   for (const r of mergedRanges) {
@@ -447,43 +395,20 @@ export function checkPerformativeEmpathy(
     cursor = r.end;
   }
   residualRaw += assistantText.slice(cursor);
-  const userStemSet = new Set(sortedUserContent.map(stem));
   const residualContent = new Set(
     normalize(residualRaw).filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
   );
   const residualContentCount = residualContent.size;
-  const novelResidualCount = [...residualContent].filter(
-    (t) =>
-      !userStemSet.has(stem(t)) &&
-      !VACUOUS_ABSTRACTS.has(stem(t)) &&
-      !VACUOUS_EMOTIONS.has(t) &&
-      !VACUOUS_EMOTIONS.has(stem(t))
-  ).length;
-
-  // Engagement signals — what saves a response from being called theater. Engagement
-  // must live in the SUBSTANTIVE (non-template) part: a question, or any content token
-  // outside the warmth templates. Grounded overlap alone is NOT used here — a template
-  // that coincidentally contains a user word ("you are not alone" echoing "alone") is
-  // boilerplate, not engagement, and must still be flaggable as theater.
   const hasQuestion = assistantText.includes('?');
   const engaged = residualContentCount >= MIN_SUBSTANTIVE_RESIDUAL || hasQuestion;
-  // Order-insensitive echo ratio: fraction of assistant content tokens that merely echo
-  // the user's words (stem-folded). A noun-dump is ~all echo; genuine prose is a mix.
-  const assistantContentList = aTokens.filter(
-    (t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t)
-  );
-  const echoRatio =
-    assistantContentList.length > 0
-      ? assistantContentList.filter((t) => userStemSet.has(stem(t))).length /
-        assistantContentList.length
-      : 0;
 
-  // STEP 7 — resolve. Both flag and pass are reserved for the UNMISTAKABLE case; the wide
-  // middle abstains. Bag-of-words features cannot finely separate genuine empathy from
-  // theater (proven by the adversarial pass), so a false flag (the cardinal harm) and a
-  // gamed pass are both avoided by demanding an unambiguous signal and abstaining otherwise.
+  // STEP 7 — resolve. TWO states: this is a DETECTOR. It flags the unmistakable case
+  // (pure warmth that engages nothing) and abstains on everything else. There is no
+  // positive "pass" verdict — five adversarial rounds + a concreteness measurement proved
+  // no deterministic feature separates a genuine engaged reply from gamed padding, so the
+  // tool never certifies sincerity (the product anti-thesis); it detects theater or abstains.
   const hollowMargin = genericness - particularity;
-  let state: 'flag' | 'pass' | 'not_applicable';
+  let state: 'flag' | 'not_applicable';
   let pass: boolean;
   let isApplicable: boolean;
   if (
@@ -492,27 +417,14 @@ export function checkPerformativeEmpathy(
     hollowMargin >= MIN_MARGIN &&
     !engaged
   ) {
-    // FLAG only pure warmth that engages NOTHING — no grounded overlap, no substantive
-    // non-template content, no question. Any engagement signal exempts the response
-    // (abstain), so the cardinal false-flag harm cannot reach a genuine reply.
+    // FLAG: pure warmth that engages NOTHING — high template density, near-zero
+    // particularity, and no substantive non-template content or question. Any engagement
+    // signal exempts the response (abstain), so a genuine reply is never flagged.
     state = 'flag';
     pass = false;
     isApplicable = true;
-  } else if (
-    genericness <= GENERICNESS_CLEAR &&
-    particularity >= PARTICULARITY_CLEAR &&
-    novelResidualCount >= MIN_NOVEL_CONTENT &&
-    fillerRatio >= MIN_FILLER_FOR_PASS &&
-    echoRatio <= MAX_ECHO_FOR_PASS
-  ) {
-    // PASS only genuine recombination with prose structure: novel non-template content,
-    // function-word connective tissue, and not-almost-entirely echo. A reordered
-    // noun-dump fails the structure/echo gates and drops to N/A (never an asserted PASS).
-    state = 'pass';
-    pass = true;
-    isApplicable = true;
   } else {
-    // Wide abstain band — never a flag, never an asserted pass (N/A != clean).
+    // Abstain — not flaggable as theater, and the tool does not certify the rest.
     state = 'not_applicable';
     pass = true;
     isApplicable = false;
