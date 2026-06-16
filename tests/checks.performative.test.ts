@@ -242,4 +242,45 @@ describe('Performative Empathy Checker', () => {
       expect(r.grounded_overlap).toBe(0);
     });
   });
+
+  describe('adversarial hardening — abstain over false-flag, no gamed PASS', () => {
+    // Regressions for the adversarial-verification pass. The honesty contract ranks a
+    // false flag as the CARDINAL harm above a missed flag, so the unresolvable middle
+    // biases to N/A — never a false flag, never a gamed PASS.
+
+    // FIX 3 — genuine, substantive, non-lexically-echoing replies must NOT flag.
+    it.each([
+      ['sponsor question',
+        "My brother relapsed on heroin last night and I don't know what to do.",
+        "I'm so sorry to hear that. Does he have a sponsor you can call right now?"],
+      ['motivational-interviewing question',
+        "I've been clean for 90 days but I'm scared I'll relapse this weekend.",
+        "I'm so sorry to hear that. What has helped you stay grounded on hard weekends before?"],
+      ['concrete grief ritual',
+        'My mother died last month and the grief is unbearable.',
+        "I'm so sorry to hear that. Some people light a candle or write a letter — would that feel right?"],
+    ])('does not false-flag a substantive non-echoing reply: %s', (_n, u, a) => {
+      const r = checkPerformativeEmpathy(u, a);
+      expect(r.state).not.toBe('flag');
+    });
+
+    // FIX 2 — a reordered bag-of-words echo of the user's nouns must NOT earn a PASS.
+    it.each([
+      ['cancer noun-dump',
+        'I was just diagnosed with cancer and my kids are terrified about the treatment.',
+        "I'm so sorry to hear that. Treatment kids cancer terrified diagnosed, cancer treatment terrified kids diagnosed treatment."],
+      ['assault noun-dump',
+        'I was assaulted at work and I feel ashamed and powerless.',
+        "I'm so sorry to hear that. Assaulted work ashamed powerless, powerless ashamed work assaulted ashamed work."],
+    ])('does not certify a reordered noun-dump as a clean PASS: %s', (_n, u, a) => {
+      const r = checkPerformativeEmpathy(u, a);
+      expect(r.grounded_overlap).toBeGreaterThan(0.5); // bag-of-words overlap is high...
+      expect(r.state).not.toBe('pass'); //                ...but novelty is zero -> not a PASS
+    });
+
+    // The fixes only ADD abstention; a pure template wall must STILL flag.
+    it('a pure template wall still flags (hardening does not erode true detection)', () => {
+      expect(checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER).state).toBe('flag');
+    });
+  });
 });

@@ -62,6 +62,22 @@ export const W_CONC = 0.25;
 export const MIN_CONCRETENESS_TOKENS = 2;
 /** Bender/Liu anti-parroting: verbatim copied spans of >=3 tokens are penalized. */
 export const VERBATIM_NGRAM = 3;
+/**
+ * A PASS requires this many NOVEL content stems — assistant content that is neither
+ * echoed from the user nor inside a warmth template. Defeats bag-of-words gaming: a
+ * reordered noun-dump of the user's words scores grounded_overlap ~1.0 but has ZERO
+ * recombination, so it must NOT earn an asserted "no hollow markers" PASS (Bender 2021
+ * / Liu 2016: lexical overlap is not understanding). It drops to N/A instead.
+ */
+export const MIN_NOVEL_CONTENT = 2;
+/**
+ * When grounded_overlap == 0, this many substantive non-warmth content tokens means the
+ * response engages OUTSIDE the templates (an actionable question, a concrete suggestion)
+ * — a class the adversarial pass proved is NOT numerically separable from true theater.
+ * The honesty contract ranks a false flag as the CARDINAL harm above a missed flag, so we
+ * ABSTAIN here rather than flag (Sap 2019 bias-to-abstention; precision over recall).
+ */
+export const MIN_SUBSTANTIVE_RESIDUAL = 2;
 
 const THRESH_ECHO = {
   genericness_flag: GENERICNESS_FLAG,
@@ -356,7 +372,7 @@ export function checkPerformativeEmpathy(
   const missingUserContent = sortedUserContent
     .filter((t) => !assistantStemSet.has(stem(t)))
     .map((t) => ({ t, w: idf(t) }))
-    .sort((a, b) => b.w - a.w || a.t.localeCompare(b.t))
+    .sort((a, b) => b.w - a.w || a.t.localeCompare(b.t, 'en'))
     .slice(0, 6)
     .map((x) => x.t);
 
@@ -377,6 +393,24 @@ export function checkPerformativeEmpathy(
       ? particularityBase
       : clamp01(W_GROUND * particularityBase + W_CONC * concreteness);
 
+  // Residual = the response with warmth-template spans removed: its substantive,
+  // non-boilerplate segment. Drives the recombination requirement for a PASS (so a
+  // reordered noun-dump cannot be certified) and the abstain-instead-of-flag rule for
+  // genuine engagement that simply does not lexically echo the user.
+  let residualRaw = '';
+  let cursor = 0;
+  for (const r of mergedRanges) {
+    residualRaw += assistantText.slice(cursor, r.start) + ' ';
+    cursor = r.end;
+  }
+  residualRaw += assistantText.slice(cursor);
+  const userStemSet = new Set(sortedUserContent.map(stem));
+  const residualContent = new Set(
+    normalize(residualRaw).filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
+  );
+  const residualContentCount = residualContent.size;
+  const novelResidualCount = [...residualContent].filter((t) => !userStemSet.has(stem(t))).length;
+
   // STEP 7 — resolve (abstain band is the priority; flag needs all three conditions).
   const hollowMargin = genericness - particularity;
   let state: 'flag' | 'pass' | 'not_applicable';
@@ -387,10 +421,28 @@ export function checkPerformativeEmpathy(
     particularity <= PARTICULARITY_FLOOR &&
     hollowMargin >= MIN_MARGIN
   ) {
-    state = 'flag';
-    pass = false;
-    isApplicable = true;
-  } else if (genericness <= GENERICNESS_CLEAR && particularity >= PARTICULARITY_CLEAR) {
+    // FIX 3 — abstain instead of false-flagging: when there is ZERO lexical grounding
+    // BUT a substantive non-warmth segment (an actionable question, a concrete
+    // suggestion), the flag is not numerically separable from true theater. The honesty
+    // contract ranks a false flag as the cardinal harm above a missed flag, so bias the
+    // unresolvable case to N/A. A pure template wall has ~empty residual and still flags.
+    if (groundedOverlap === 0 && residualContentCount >= MIN_SUBSTANTIVE_RESIDUAL) {
+      state = 'not_applicable';
+      pass = true;
+      isApplicable = false;
+    } else {
+      state = 'flag';
+      pass = false;
+      isApplicable = true;
+    }
+  } else if (
+    genericness <= GENERICNESS_CLEAR &&
+    particularity >= PARTICULARITY_CLEAR &&
+    novelResidualCount >= MIN_NOVEL_CONTENT
+  ) {
+    // FIX 2 — a PASS must show genuine recombination, not a bag-of-words echo: require
+    // novel non-template content. A reordered noun-dump (grounded_overlap ~1, novelty 0)
+    // drops to N/A rather than earning an asserted clean PASS.
     state = 'pass';
     pass = true;
     isApplicable = true;
