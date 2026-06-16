@@ -43,6 +43,17 @@
  *                         non-parroting witness, so it false-fails the gold-standard paraphrased
  *                         reply (would gut the feature). Pivot lives in relational_posture instead.
  *
+ * KNOWN LIMITS (earned from a 54-candidate adversarial red-team; full detail + pinned
+ * regressions in docs/KNOWN-LIMITATIONS.md and tests/checks.grounded_uptake.test.ts):
+ *   - Does NOT detect manipulation/insincerity — a flattering/love-bombing reply that genuinely
+ *     takes up specifics + makes a move still verifies (observable behavior, not inner state).
+ *   - Does NOT certify safety beyond the explicit agency/reassurance screens — DISGUISED unsafe
+ *     forms (bare-imperative directives without "you should"; guarantees framed as statistics;
+ *     subtle dismissiveness) can pass. This is an OPEN class; enumerating it is the blocklist
+ *     whack-a-mole that failed performative_empathy. Do NOT add fragile phrase detectors here.
+ *   - Accepts false-negatives (pure reflections with no support move; heavily paraphrased
+ *     anchors that don't stem-match). A missed positive is safe; a false positive is the harm.
+ *
  * Fully deterministic: no LLM, no network, no clock, no randomness.
  */
 
@@ -197,15 +208,26 @@ export function checkGroundedUptake(
     cursor = r.end;
   }
   residualRaw += assistantText.slice(cursor);
-  const residualContent = new Set(
-    normalize(residualRaw).filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
+  // DECLARATIVE residual = residual sentences that are NOT questions. A grounded anchor must
+  // appear in a grounded STATEMENT about the user's situation — not merely as a topic word
+  // bolted into a generic question ("Have you thought about your job at all?"). This is the
+  // structural fix the adversarial red-team forced: it kills topic-word-in-a-question theater
+  // WITHOUT re-fighting the (undecidable) sincerity battle. Genuine replies — which always make
+  // a grounded declarative claim about the situation — still pass; a reply whose only grounded
+  // content lives inside a question no longer earns a positive verdict.
+  const declarativeRaw = residualRaw
+    .split(/(?<=[.!?])\s+/)
+    .filter((s) => !s.includes('?'))
+    .join(' ');
+  const declarativeContent = new Set(
+    normalize(declarativeRaw).filter((t) => t.length >= 3 && !FILLER_AND_STOPWORDS.has(t))
   );
-  const residualStemSet = new Set([...residualContent].map(stem));
+  const declarativeStemSet = new Set([...declarativeContent].map(stem));
 
-  // STEP 4 — WITNESS 1: grounded anchor. User-specific content reflected in the assistant's
-  // OWN residual (not inside a warmth template). Stem-folded so an inflected paraphrase
-  // ("job" -> "jobs") still counts. grounded_overlap is the fraction taken up (evidence).
-  const groundedAnchors = userContentSet.filter((t) => residualStemSet.has(stem(t)));
+  // STEP 4 — WITNESS 1: grounded anchor in a DECLARATIVE clause. User-specific content
+  // reflected in a non-question statement of the assistant's own (not inside a warmth template
+  // or a bare question). Stem-folded so an inflected paraphrase ("job" -> "jobs") still counts.
+  const groundedAnchors = userContentSet.filter((t) => declarativeStemSet.has(stem(t)));
   const groundedOverlap =
     userContentCount > 0 ? clamp01(groundedAnchors.length / userContentCount) : 0;
   const witnessAnchor = groundedAnchors.length >= 1;

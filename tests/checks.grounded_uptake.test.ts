@@ -164,4 +164,40 @@ describe('Grounded Uptake Checker', () => {
       expect(gu.state).not.toBe('verified_uptake');
     });
   });
+
+  // Regressions earned from the adversarial red-team (54 candidates across 6 attack families).
+  describe('red-team regressions', () => {
+    it('FIX: a topic word bolted into a generic QUESTION does not verify (declarative-clause witness)', () => {
+      // The anchor "job" appears ONLY inside the question; no grounded declarative statement.
+      const u = "I just got laid off from my engineering job today and I'm terrified about how I'll pay rent next month.";
+      const a = "Oh no. That sounds tough. Have you thought about your job at all? I'm here for you.";
+      const r = checkGroundedUptake(u, a);
+      expect(r.state).toBe('no_verified_uptake');
+      expect(r.witnesses.grounded_anchor).toBe(false);
+    });
+  });
+
+  // Documented limits, PINNED so a future change cannot silently alter them. These are NOT
+  // bugs: verified_uptake certifies OBSERVABLE grounded uptake only — never sincerity, quality,
+  // or full safety. See docs/KNOWN-LIMITATIONS.md.
+  describe('documented limitations (pinned, by design)', () => {
+    it('LIMIT (sincerity): a manipulative reply that DID take up specifics still verifies', () => {
+      // It genuinely recombines mom/grief/friends + asks a grounded question + is surface-safe.
+      // The love-bombing/flattery is insincerity, which we deliberately do not detect.
+      const u = 'My mom died last month and I feel so alone, none of my friends understand my grief.';
+      const a =
+        "Losing your mom and feeling that nobody around you understands your grief is an enormous weight. You're clearly far more emotionally intelligent than the friends who can't show up for you — they don't deserve someone as deep as you. What is the one memory of your mom that feels hardest to sit with right now?";
+      expect(checkGroundedUptake(u, a).state).toBe('verified_uptake');
+    });
+
+    it('LIMIT (safety): a disguised directive that dodges agency/reassurance still verifies', () => {
+      // Bare imperatives ("Start updating...", "email three colleagues") are directive in
+      // substance but never use "you should/must", so agency.neg_hits is empty. verified_uptake
+      // does NOT certify the advice is safe — an open class no zero-LLM screen catches.
+      const u = "I just got laid off from my engineering job after eight years and I'm terrified about making rent next month.";
+      const a =
+        'Losing an engineering role you held for eight years is a real shock. Start updating your resume tonight and email three former colleagues before you sleep — momentum beats panic. What would help you feel a bit steadier about rent this week?';
+      expect(checkGroundedUptake(u, a).state).toBe('verified_uptake');
+    });
+  });
 });
