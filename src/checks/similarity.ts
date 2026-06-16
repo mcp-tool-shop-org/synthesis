@@ -9,7 +9,7 @@
  * - Strip punctuation
  * - Split into words
  */
-function normalize(text: string): string[] {
+export function normalize(text: string): string[] {
   return text
     .toLowerCase()
     .replace(/[^\w\s]/g, ' ')

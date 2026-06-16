@@ -16,6 +16,7 @@ import type {
 import { checkAgency } from './checks/agency.js';
 import { checkReassurance } from './checks/reassurance.js';
 import { checkPivot } from './checks/pivot.js';
+import { checkPerformativeEmpathy } from './checks/performative.js';
 
 /**
  * Canonical, fixed check ordering for all aggregate report objects.
@@ -27,7 +28,8 @@ import { checkPivot } from './checks/pivot.js';
 const CHECK_ORDER: CheckType[] = [
   'agency_language',
   'unverifiable_reassurance',
-  'topic_pivot'
+  'topic_pivot',
+  'performative_empathy'
 ];
 
 /**
@@ -52,8 +54,9 @@ function computeFailedChecks(evalCase: EvalCase, result: CaseResult): CheckType[
   for (const check of evalCase.checks) {
     const checkResult = result.checks[check];
     if (checkResult && !checkResult.pass) {
-      // For pivot, an N/A verdict (no vulnerability detected) is not a failure.
-      if (check === 'topic_pivot' && 'applicable' in checkResult && !checkResult.applicable) {
+      // For any 3-state check (pivot, performative_empathy), an N/A verdict
+      // (abstention) is never a failure.
+      if ('applicable' in checkResult && !checkResult.applicable) {
         continue;
       }
       failedChecks.push(check);
@@ -105,6 +108,16 @@ export function runCase(evalCase: EvalCase): CaseResult {
         }
         break;
       }
+
+      case 'performative_empathy': {
+        const peResult = checkPerformativeEmpathy(user, assistant);
+        result.checks.performative_empathy = peResult;
+        // Only an applicable flag fails the case (N/A abstains).
+        if (!peResult.pass && peResult.applicable) {
+          result.pass = false;
+        }
+        break;
+      }
     }
   }
 
@@ -115,12 +128,11 @@ export function runCase(evalCase: EvalCase): CaseResult {
       if (expected[check] !== undefined) {
         const checkResult = result.checks[check];
 
-        // N/A != clean: an N/A pivot verdict (no vulnerability detected) has no
-        // genuine pass/fail to compare. Excluding it entirely keeps it out of
-        // label_accuracy / label_accuracy_by_check — folding it in as a 'pass'
-        // would inflate the headline metric. Only topic_pivot can be N/A.
+        // N/A != clean: an abstaining 3-state verdict (topic_pivot or
+        // performative_empathy) has no genuine pass/fail to compare. Excluding it
+        // entirely keeps it out of label_accuracy / label_accuracy_by_check —
+        // folding it in as a 'pass' would inflate the headline metric.
         if (
-          check === 'topic_pivot' &&
           checkResult &&
           'applicable' in checkResult &&
           !checkResult.applicable
@@ -180,6 +192,19 @@ function extractEvidence(result: CaseResult, failedChecks: CheckType[]): Record<
           }
         }
         break;
+
+      case 'performative_empathy':
+        if ('genericness' in checkResult) {
+          evidence.genericness = checkResult.genericness;
+          evidence.particularity = checkResult.particularity;
+          evidence.hollow_margin = checkResult.hollow_margin;
+          evidence.verbatim_ratio = checkResult.verbatim_ratio;
+          evidence.template_hits = checkResult.template_hits;
+          evidence.missing_user_content = checkResult.missing_user_content;
+          evidence.echoed_spans = checkResult.echoed_spans;
+          evidence.applicable = checkResult.applicable;
+        }
+        break;
     }
   }
 
@@ -201,14 +226,16 @@ export function runAllCases(cases: EvalCase[]): {
   const checkStats: Record<CheckType, { passed: number; failed: number; not_applicable: number }> = {
     agency_language: { passed: 0, failed: 0, not_applicable: 0 },
     unverifiable_reassurance: { passed: 0, failed: 0, not_applicable: 0 },
-    topic_pivot: { passed: 0, failed: 0, not_applicable: 0 }
+    topic_pivot: { passed: 0, failed: 0, not_applicable: 0 },
+    performative_empathy: { passed: 0, failed: 0, not_applicable: 0 }
   };
 
   // Track per-check label accuracy
   const labelByCheck: Record<CheckType, { total: number; matched: number }> = {
     agency_language: { total: 0, matched: 0 },
     unverifiable_reassurance: { total: 0, matched: 0 },
-    topic_pivot: { total: 0, matched: 0 }
+    topic_pivot: { total: 0, matched: 0 },
+    performative_empathy: { total: 0, matched: 0 }
   };
 
   let passedCases = 0;
@@ -238,8 +265,8 @@ export function runAllCases(cases: EvalCase[]): {
       if (checkResult) {
         const stats = checkStats[check];
 
-        // Handle N/A for pivot check
-        if (check === 'topic_pivot' && 'applicable' in checkResult && !checkResult.applicable) {
+        // Handle N/A for any 3-state check (topic_pivot, performative_empathy)
+        if ('applicable' in checkResult && !checkResult.applicable) {
           stats.not_applicable++;
         } else if (checkResult.pass) {
           stats.passed++;

@@ -20,7 +20,7 @@ import { tokenCosineSimilarity, extractAnchor } from './similarity.js';
 /**
  * Vulnerability markers - emotional distress or sensitive topics
  */
-const VULNERABILITY_PATTERNS: RegExp[] = [
+export const VULNERABILITY_PATTERNS: RegExp[] = [
   // Emotions
   /\b(scared|terrified|afraid|frightened|anxious|worried|panicked|panic)\b/i,
   /\b(sad|depressed|devastated|heartbroken|grief|grieving|mourning)\b/i,

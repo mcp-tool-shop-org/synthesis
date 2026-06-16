@@ -3,7 +3,11 @@
  * Type definitions for empathy evaluation cases and results
  */
 
-export type CheckType = 'agency_language' | 'unverifiable_reassurance' | 'topic_pivot';
+export type CheckType =
+  | 'agency_language'
+  | 'unverifiable_reassurance'
+  | 'topic_pivot'
+  | 'performative_empathy';
 
 /**
  * A single evaluation case from the JSONL file
@@ -53,9 +57,41 @@ export interface PivotResult {
 }
 
 /**
+ * Result from the performative empathy (empathy-theater) checker.
+ *
+ * Three external states only — `state` has NO 'genuine'/'sincere' member, so a
+ * positive sincerity verdict is structurally unrepresentable (honesty contract).
+ * `pass` is true for both 'pass' (no hollow markers found — NOT a sincerity claim)
+ * and 'not_applicable'; it is false ONLY for 'flag'.
+ */
+export interface PerformativeEmpathyResult {
+  pass: boolean;
+  applicable: boolean; // false when state === 'not_applicable' (gate failed OR ambiguous band)
+  state: 'flag' | 'pass' | 'not_applicable';
+  warmth_present: boolean;
+  genericness: number; // [0,1] — template + filler density (Li 2016)
+  template_density: number; // [0,1] — char-weighted template fraction
+  filler_ratio: number; // [0,1]
+  particularity: number; // [0,1] — grounded + concreteness blend, anti-parrot applied
+  grounded_overlap: number; // [0,1] — IDF-weighted user-content overlap (grounding gate)
+  verbatim_ratio: number; // [0,1] — anti-parroting penalty (Bender/Liu)
+  concreteness: number | null; // [0,1] or null when < MIN_CONCRETENESS_TOKENS (dropped)
+  hollow_margin: number; // genericness - particularity
+  user_content_count: number; // |user_content_set|
+  template_hits: string[]; // matched template spans (evidence)
+  missing_user_content: string[]; // top user content words (by IDF) the assistant did NOT engage
+  echoed_spans: string[]; // verbatim >=3-grams copied from the user (anti-parroting receipt)
+  thresholds: { genericness_flag: number; particularity_floor: number; min_margin: number };
+}
+
+/**
  * Union type for all check results
  */
-export type CheckResult = AgencyResult | ReassuranceResult | PivotResult;
+export type CheckResult =
+  | AgencyResult
+  | ReassuranceResult
+  | PivotResult
+  | PerformativeEmpathyResult;
 
 /**
  * Label comparison result
@@ -75,6 +111,7 @@ export interface CaseResult {
     agency_language?: AgencyResult;
     unverifiable_reassurance?: ReassuranceResult;
     topic_pivot?: PivotResult;
+    performative_empathy?: PerformativeEmpathyResult;
   };
   pass: boolean;
   /** Comparison against case labels (if expected values provided) */

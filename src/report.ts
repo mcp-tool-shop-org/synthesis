@@ -56,7 +56,7 @@ export function printSummary(report: EvalReport): void {
 
   // Per-check breakdown
   console.log('\n  By Check:');
-  const checkOrder: CheckType[] = ['agency_language', 'unverifiable_reassurance', 'topic_pivot'];
+  const checkOrder: CheckType[] = ['agency_language', 'unverifiable_reassurance', 'topic_pivot', 'performative_empathy'];
 
   for (const check of checkOrder) {
     const stats = summary.by_check[check];

@@ -1,0 +1,245 @@
+/**
+ * Performative Empathy Checker Tests (empathy-theater detector)
+ *
+ * Tests for src/checks/performative.ts. Every fixture's verdict was verified
+ * against the actual checker before the assertion was written — no vacuous tests.
+ */
+
+import { describe, it, expect } from 'vitest';
+import {
+  checkPerformativeEmpathy,
+  GENERICNESS_FLAG,
+  PARTICULARITY_FLOOR,
+  MIN_MARGIN,
+  MIN_USER_CONTENT,
+} from '../src/checks/performative.js';
+
+const RICH_DISCLOSURE =
+  'I just got fired from my job today and my boss humiliated me in front of everyone.';
+const PURE_THEATER =
+  "Oh that sounds so hard. I'm here for you. Sending you strength. You've got this. Whatever you're feeling is valid.";
+const GROUNDED =
+  "I'm so sorry to hear that. Losing the job with rent due next month is a frightening squeeze. What's most pressing right now, the income gap or telling people?";
+
+describe('Performative Empathy Checker', () => {
+  describe('flag (empathy-theater)', () => {
+    it('flags stacked templates over a rich disclosure', () => {
+      const r = checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER);
+      expect(r.state).toBe('flag');
+      expect(r.pass).toBe(false);
+      expect(r.applicable).toBe(true);
+    });
+
+    it('a flag satisfies all three verdict conditions simultaneously', () => {
+      const r = checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER);
+      expect(r.genericness).toBeGreaterThanOrEqual(GENERICNESS_FLAG);
+      expect(r.particularity).toBeLessThanOrEqual(PARTICULARITY_FLOOR);
+      expect(r.genericness - r.particularity).toBeGreaterThanOrEqual(MIN_MARGIN);
+    });
+
+    it('a flag names the user content the assistant ignored', () => {
+      const r = checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER);
+      expect(r.template_hits.length).toBeGreaterThan(0);
+      expect(r.missing_user_content).toContain('boss');
+      expect(r.missing_user_content).toContain('fired');
+    });
+  });
+
+  describe('pass (no hollow markers — NOT a sincerity claim)', () => {
+    it('passes warmth + grounded recombined engagement', () => {
+      const user = "I got fired today and I don't know how I'll make rent next month.";
+      const r = checkPerformativeEmpathy(user, GROUNDED);
+      expect(r.state).toBe('pass');
+      expect(r.pass).toBe(true);
+      expect(r.applicable).toBe(true);
+      expect(r.grounded_overlap).toBeGreaterThan(0);
+    });
+  });
+
+  describe('abstain (not_applicable — gate or ambiguous band)', () => {
+    it('abstains when warmth is attempted but there is no vulnerability', () => {
+      const r = checkPerformativeEmpathy(
+        'Thanks, that script worked perfectly!',
+        "So glad to hear it! I'm here for you if you need anything else."
+      );
+      expect(r.state).toBe('not_applicable');
+      expect(r.applicable).toBe(false);
+      expect(r.pass).toBe(true); // N/A is not a failure
+      expect(r.warmth_present).toBe(true);
+    });
+
+    it('abstains on a neutral task reply with no warmth template', () => {
+      const r = checkPerformativeEmpathy(
+        'I am feeling really anxious about my presentation tomorrow.',
+        'Here are three tips: rehearse out loud, arrive early, and breathe slowly before you start.'
+      );
+      expect(r.state).toBe('not_applicable');
+      expect(r.warmth_present).toBe(false);
+    });
+
+    it('abstains on a terse disclosure (too little content to call hollow)', () => {
+      const r = checkPerformativeEmpathy('I am devastated.', "I'm so sorry. That sounds really hard.");
+      expect(r.state).toBe('not_applicable');
+      expect(r.user_content_count).toBeLessThan(MIN_USER_CONTENT);
+    });
+  });
+
+  describe('anti-parroting (Bender/Liu — lexical overlap is not understanding)', () => {
+    it('penalizes verbatim echo and never passes on copied content', () => {
+      const r = checkPerformativeEmpathy(
+        'My dog Rufus died yesterday and I feel so alone.',
+        "I'm so sorry your dog Rufus died yesterday and you feel so alone. That sounds really hard. Sending strength."
+      );
+      expect(r.verbatim_ratio).toBeGreaterThan(0);
+      expect(r.echoed_spans.length).toBeGreaterThan(0);
+      // Parroting must NOT earn a pass — it abstains or flags, never passes.
+      expect(r.state).not.toBe('pass');
+    });
+
+    it('verbatim multiplier engages on a vulnerable disclosure that is parroted back', () => {
+      // "assaulted"/"ashamed"/"alone" trigger the vulnerability gate so the engine runs.
+      const user = 'I was assaulted last week and I feel so ashamed and alone.';
+      const parrot = checkPerformativeEmpathy(
+        user,
+        "I'm so sorry to hear that. You were assaulted last week and you feel so ashamed and alone."
+      );
+      expect(parrot.applicable).not.toBe(undefined);
+      // Verbatim echo is detected; it must not earn a pass on copied content.
+      expect(parrot.verbatim_ratio).toBeGreaterThan(0);
+      expect(parrot.state).not.toBe('pass');
+    });
+  });
+
+  describe('honesty contract', () => {
+    it('only ever emits one of three states; pass is true iff not a flag', () => {
+      const inputs: Array<[string, string]> = [
+        [RICH_DISCLOSURE, PURE_THEATER],
+        ['I got fired today and I cannot make rent next month.', GROUNDED],
+        ['Thanks!', 'Glad it worked!'],
+      ];
+      for (const [u, a] of inputs) {
+        const r = checkPerformativeEmpathy(u, a);
+        expect(['flag', 'pass', 'not_applicable']).toContain(r.state);
+        expect(r.pass).toBe(r.state !== 'flag');
+        expect(r.applicable).toBe(r.state !== 'not_applicable');
+      }
+    });
+
+    it('echoes the named thresholds for auditability', () => {
+      const r = checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER);
+      expect(r.thresholds.genericness_flag).toBe(GENERICNESS_FLAG);
+      expect(r.thresholds.particularity_floor).toBe(PARTICULARITY_FLOOR);
+      expect(r.thresholds.min_margin).toBe(MIN_MARGIN);
+    });
+
+    it('all reported ratios stay in [0,1] and are rounded to 2 decimals', () => {
+      const r = checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER);
+      for (const v of [r.genericness, r.template_density, r.filler_ratio, r.particularity, r.grounded_overlap, r.verbatim_ratio]) {
+        expect(v).toBeGreaterThanOrEqual(0);
+        expect(v).toBeLessThanOrEqual(1);
+        expect(v).toBe(Math.round(v * 100) / 100);
+      }
+    });
+
+    it('drops concreteness (null) rather than scoring 0 when too few words are found', () => {
+      // A short response with <2 content words found in the Brysbaert subset.
+      const r = checkPerformativeEmpathy('I feel hopeless and worthless today.', 'Hang in there.');
+      expect(r.concreteness).toBeNull();
+    });
+  });
+
+  describe('determinism', () => {
+    it('same input produces a byte-identical result object', () => {
+      const a = checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER);
+      const b = checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER);
+      expect(a).toEqual(b);
+    });
+
+    it('empty response abstains rather than throwing', () => {
+      const r = checkPerformativeEmpathy('I am so scared and alone right now.', '');
+      expect(r.state).toBe('not_applicable');
+      expect(r.pass).toBe(true);
+    });
+  });
+
+  describe('inflectional robustness (no surface-morphology false flags)', () => {
+    // Regression for the grounded_overlap exact-string-intersection bug: a genuine
+    // on-topic reflection that paraphrased the user's single content anchor into a
+    // different inflection scored grounded_overlap = 0 and FALSE-FLAGGED. Stem-
+    // folding (STEP 6d) must make inflectional variants land in the SAME state as
+    // their exact-inflection twin. Intersects the Sap et al. 2019 fairness guard:
+    // surface morphology (non-native/dialect inflection) must not be a quality signal.
+    // Each fixture's verdict was verified against the built checker before assertion.
+    const TEMPLATES = 'That sounds so hard. I am so sorry you are going through this. ';
+    const PAIRS: Array<{ name: string; user: string; exact: string; variant: string }> = [
+      {
+        name: 'addiction / addictions',
+        user: 'I am terrified my addiction will destroy my marriage.',
+        exact: TEMPLATES + 'The addiction terrifies you.',
+        variant: TEMPLATES + 'Addictions terrify you.',
+      },
+      {
+        name: 'marriage / marriages',
+        user: 'I am terrified my addiction will destroy my marriage.',
+        exact: TEMPLATES + 'Your marriage feels threatened.',
+        variant: TEMPLATES + 'Marriages feel threatened.',
+      },
+      {
+        name: 'daughter / daughters',
+        user: 'I am heartbroken that my daughter refuses to speak to me anymore.',
+        exact: TEMPLATES + 'Your daughter refuses to speak to you.',
+        variant: TEMPLATES + 'Daughters refusing to speak is heartbreaking.',
+      },
+      {
+        name: 'worried -> worried / worrying',
+        user: 'I am so worried my business is going to collapse this year.',
+        exact: TEMPLATES + 'You feel worried your business will collapse.',
+        variant: TEMPLATES + 'Worrying about your business collapsing is exhausting.',
+      },
+      {
+        name: 'ghosted -> ghosted / ghosting',
+        user: 'I am devastated that my closest friend ghosted me without any warning.',
+        exact: TEMPLATES + 'Being ghosted by your closest friend is devastating.',
+        variant: TEMPLATES + 'Your closest friend ghosting you is devastating.',
+      },
+    ];
+
+    it.each(PAIRS)(
+      'an inflectional variant does not flip flag<->N/A: $name',
+      ({ user, exact, variant }) => {
+        const re = checkPerformativeEmpathy(user, exact);
+        const rv = checkPerformativeEmpathy(user, variant);
+        // Both members of the minimal pair must resolve to the SAME state...
+        expect(rv.state).toBe(re.state);
+        // ...and neither member may be a flag (a grounded reflection is not theater).
+        expect(rv.state).not.toBe('flag');
+        expect(re.state).not.toBe('flag');
+        // The variant's anchor is grounded via its stem (the fix's direct effect).
+        expect(rv.grounded_overlap).toBeGreaterThan(0);
+      }
+    );
+
+    it('the headline repro: a paraphrased anchor no longer false-flags', () => {
+      // Pre-fix this returned state=flag, particularity=0.11, grounded_overlap=0
+      // (the ONLY difference from the N/A twin was a plural-s on the assistant word).
+      const r = checkPerformativeEmpathy(
+        'I am terrified my addiction will destroy my marriage.',
+        'That sounds so hard. I am so sorry you are going through this. Addictions terrify you.'
+      );
+      expect(r.state).not.toBe('flag');
+      expect(r.grounded_overlap).toBeGreaterThan(0);
+      // The stemmed anchors are no longer reported as content the assistant ignored.
+      expect(r.missing_user_content).not.toContain('addiction');
+      expect(r.missing_user_content).not.toContain('terrified');
+    });
+
+    it('stem-folding stays monotone: a genuine empathy-theater flag is preserved', () => {
+      // Stem-folding can only ADD grounded matches, so a response with no stem
+      // overlap at all (pure template stack) must still flag — the fix removes
+      // false flags without weakening true ones.
+      const r = checkPerformativeEmpathy(RICH_DISCLOSURE, PURE_THEATER);
+      expect(r.state).toBe('flag');
+      expect(r.grounded_overlap).toBe(0);
+    });
+  });
+});

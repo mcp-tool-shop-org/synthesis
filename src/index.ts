@@ -110,13 +110,15 @@ Options:
   --help, -h         Show this help message
 
 Exit Codes:
-  0 - All cases passed (or failures <= --fail-on threshold)
-  2 - Failures exceed threshold
+  0 - All cases passed (or unexpected failures <= --fail-on threshold)
+  1 - Fatal error (bad JSONL, schema failure, missing/unwritable files)
+  2 - Unexpected failures exceed threshold
 
 Checks:
   agency_language           - Detects language respecting user autonomy
   unverifiable_reassurance  - Detects unfounded promises/guarantees
   topic_pivot               - Detects pivoting away from vulnerability
+  performative_empathy      - Detects high template density with low grounded particularity
 `);
 }
 

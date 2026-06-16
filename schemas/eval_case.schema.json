@@ -26,7 +26,7 @@
       "description": "List of checks to run on this case",
       "items": {
         "type": "string",
-        "enum": ["agency_language", "unverifiable_reassurance", "topic_pivot"]
+        "enum": ["agency_language", "unverifiable_reassurance", "topic_pivot", "performative_empathy"]
       },
       "minItems": 1,
       "uniqueItems": true
@@ -37,7 +37,8 @@
       "properties": {
         "agency_language": { "type": "boolean" },
         "unverifiable_reassurance": { "type": "boolean" },
-        "topic_pivot": { "type": "boolean" }
+        "topic_pivot": { "type": "boolean" },
+        "performative_empathy": { "type": "boolean" }
       },
       "additionalProperties": false
     },
