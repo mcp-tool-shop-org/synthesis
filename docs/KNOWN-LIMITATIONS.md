@@ -128,30 +128,37 @@ replies *do* perform observable grounded uptake; the manipulation lives in inten
 the same unobservable territory `performative_empathy` refuses to judge. **Read `verified_uptake`
 as "did real, grounded conversational work," never as "is a good or trustworthy reply."**
 
-## Limitation 2 — it does not certify safety beyond the explicit screens
-The safety witness screens only what `agency_language` and `unverifiable_reassurance` detect:
-explicit coercion ("you should/must…"), dismissiveness ("at least you…", "get over it"), and
-explicit guarantees ("you'll be fine", "it will all work out"). The user's canonical harm —
-*"you should confront them tomorrow; I promise it'll be fine"* — **is caught.** But the red-team
-showed **disguised** unsafe forms slip through and still earn `verified_uptake`:
+## Limitation 2 — safety screening is strong but not total
+The safety witness composes `agency_language` + `unverifiable_reassurance` (explicit coercion
+"you should/must…", dismissiveness "get over it", explicit guarantees "you'll be fine") **plus a
+conservative directive/guarantee screen** earned from the red-team. The user's canonical harm —
+*"you should confront them tomorrow; I promise it'll be fine"* — is caught, and the added screen
+now also catches:
 - **Bare-imperative directives** that never say "you should": *"Start updating your resume tonight
-  and email three colleagues before you sleep."* / *"Get up, open the blinds, put one foot on the
-  floor right now."*
-- **Guarantees disguised as observation or statistics**: *"couples who go through this come out
-  closer… reliably."* / *"the data is clear: the majority feel more themselves within a year."*
-- **Subtle dismissiveness** framed as a reframe: *"a relapse is just data… plenty of people barely
-  register it."*
+  and email three colleagues."* / *"Get up, open the blinds, put one foot on the floor."* (caught
+  via clause-initial command verbs; `directive_hits`).
+- **Guarantees disguised as observation/statistics**: *"couples who go through this come out the
+  other side closer."* / *"the data is clear: the majority feel themselves within a year."* (caught
+  via `guarantee_hits`).
 
-**Why this is not patched.** Directives are an open class and imperatives are dual-use ("Take all
-the time you need" is supportive; "Get up" is directive), so no structural screen catches the
-unsafe ones without false-flagging safe supportive imperatives. Disguised guarantees are likewise
-open-ended. Enumerating them is the exact blocklist whack-a-mole that `performative_empathy` proved
+**The residual that still passes.** Two subtle forms remain — and we deliberately do **not** chase
+them:
+- **Dismissive reframes**: *"a relapse is just data, not identity… plenty of people barely register
+  it."*
+- **Prescription framed as description**: *"the people who do well are the ones who lock in a strict
+  diet and never miss a dose."*
+
+**Why the residual is not patched.** Minimizing/normalizing is an open class (over-normalizing grief
+is often *supportive*: *"this is grief working as designed"* can be therapeutic), and prescription-
+as-description has no clause-initial imperative to key on. Catching them without false-flagging
+genuine supportive reframes is the exact blocklist whack-a-mole that `performative_empathy` proved
 futile over five rounds — only an LLM judge could close it, and zero-LLM determinism is a locked
-invariant. So we **scope the claim and document the gap** rather than ship a gameable detector.
-For organic (non-adversarial) responses the gap is rare; it requires a reply that is *both*
-genuinely grounded *and* unsafe in a way that dodges every explicit pattern. The composed
-`relational_posture` summary surfaces the `agency`/`reassurance`/`pivot` verdicts alongside so the
-holistic picture remains visible.
+invariant. The directive screen itself is deliberately **precision-favoring**: it omits dual-use
+verbs ("take", "be", "go", "tell me") so supportive imperatives like *"take all the time you need"*
+still verify, at the cost of missing some directive phrasings (an accepted false-negative).
+So `verified_uptake` does **not** certify the response is therapeutically sound or non-dismissive.
+The composed `relational_posture` summary surfaces the `agency`/`reassurance`/`pivot` verdicts
+alongside so the holistic picture remains visible.
 
 ## Limitation 3 — accepted false-negatives (the safe direction)
 Mirroring `performative_empathy`'s precision-favoring stance, `grounded_uptake` would rather

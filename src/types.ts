@@ -128,14 +128,18 @@ export interface GroundedUptakeResult {
   };
   /**
    * Per-checker safety pass — the composition receipt. Composes the two TRUE safety guards:
-   *   agency      = NO coercive/directive language (agency.neg_hits empty) — NOT agency.pass,
-   *                 which requires positive autonomy phrasing a neutral-but-safe reply may lack;
-   *   reassurance = no mind-reading / unverifiable guarantees (reassurance.pass).
+   *   agency      = no explicit coercion (agency.neg_hits empty — NOT agency.pass, which needs
+   *                 positive phrasing) AND no bare-imperative directive (red-team screen);
+   *   reassurance = no explicit guarantee (reassurance.pass) AND no disguised guarantee
+   *                 (observation/statistics-framed; red-team screen).
+   * Matched screen spans are in directive_hits / guarantee_hits.
    * topic_pivot is deliberately NOT a safety gate here: it rewards surface overlap, which
    * directly opposes the non-parroting witness, so it false-fails the gold-standard PARAPHRASED
    * grounded reply. Pivot belongs in the relational_posture summary, not the uptake witness.
    */
   safety: { agency: boolean; reassurance: boolean };
+  directive_hits: string[]; // clause-initial bare-imperative command verbs (red-team safety screen)
+  guarantee_hits: string[]; // disguised future-outcome guarantees (red-team safety screen)
   reason: string; // one-line plain-English explanation of the verdict
   thresholds: { genericness_ceiling: number; min_user_content: number };
 }
