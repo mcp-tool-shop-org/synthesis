@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.1] - 2026-09-15
+
+### Fixed
+- `tests/exports.test.ts` no longer `import('@mcptoolshop/synthesis')`. Vite resolves that specifier at collect time, before `dist/` exists, so Linux CI failed while local Windows skipped. Snapshot stays on the source barrel. `v1.3.0` never published to npm.
+
 ## [1.3.0] - 2026-09-15
 
 Dogfood-swarm feature pass: a published library contract, a fairness FPR audit pack, a planted-RED inverted oracle, and a closed report schema. Checkers stay frozen and zero-LLM.
@@ -186,7 +191,8 @@ existing code and docs honest.
 - Embedding adapter interface for future extensibility
 - JSON Schema for test case validation (`schemas/eval_case.schema.json`)
 
-[Unreleased]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.3.1...HEAD
+[1.3.1]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.3.0...v1.3.1
 [1.3.0]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.0.2...v1.1.0

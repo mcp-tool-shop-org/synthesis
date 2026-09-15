@@ -429,7 +429,7 @@ synthesis/
 | E. 身份（软性） | 10 |
 | **Overall** | **50/50** |
 
-> 所有门槛均通过。 `package.json` 是 `1.3.0`。发布通过可信发布（OIDC）方式发布到 npm。
+> 所有门槛均通过。 `package.json` 是 `1.3.1`。发布通过可信发布（OIDC）方式发布到 npm。
 
 > 完整审计：[SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 

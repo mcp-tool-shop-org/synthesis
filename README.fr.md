@@ -429,7 +429,7 @@ Voir [SECURITY.md](SECURITY.md) pour signaler les vulnérabilités.
 | E. Identité (souple) | 10 |
 | **Overall** | **50/50** |
 
-> Toutes les portes sont OUVERTES. `package.json` est `1.3.0`. La version est publiée sur npm via une publication de confiance (OIDC).
+> Toutes les portes sont OUVERTES. `package.json` est `1.3.1`. La version est publiée sur npm via une publication de confiance (OIDC).
 
 > Audit complet : [SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 
