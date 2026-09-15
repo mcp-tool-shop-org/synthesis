@@ -42,8 +42,9 @@ export function printSummary(report: EvalReport): void {
 
   console.log(`\n  ${passColor}${passIcon}${reset} ${summary.passed}/${summary.cases} cases passed (${passRate}%)`);
 
-  // Show expected vs unexpected failures
-  if (summary.failed > 0) {
+  // Show expected vs unexpected failures (unexpected includes silent
+  // negatives that passed — those do not increment summary.failed).
+  if (summary.failed > 0 || hasUnexpectedFailures) {
     console.log(`    ${yellow}├${reset} Expected failures (negative examples): ${summary.expected_failures}`);
     console.log(`    ${hasUnexpectedFailures ? '\x1b[31m' : yellow}└${reset} Unexpected failures: ${summary.unexpected_failures}`);
   }
@@ -120,7 +121,11 @@ export function printSummary(report: EvalReport): void {
   if (unexpectedFailures.length > 0) {
     console.log(`\n  ${'\x1b[31m'}Unexpected Failures (regressions):${reset}`);
     for (const failure of unexpectedFailures.slice(0, 5)) {
-      const checks = failure.failed.join(', ');
+      const failPart = failure.failed.join(', ');
+      const passPart = failure.unexpected_pass && failure.unexpected_pass.length > 0
+        ? `unexpected pass: ${failure.unexpected_pass.join(', ')}`
+        : '';
+      const checks = [failPart, passPart].filter(Boolean).join('; ') || 'unexpected pass';
       console.log(`    • ${failure.id}: ${checks}`);
       printEvidence(failure.evidence);
     }
@@ -148,6 +153,7 @@ export function printSummary(report: EvalReport): void {
  */
 function printEvidence(evidence: Record<string, unknown>): void {
   for (const [key, value] of Object.entries(evidence)) {
+    if (key === 'unexpected_pass') continue; // already rendered on the failure title line
     if (Array.isArray(value) && value.length > 0) {
       console.log(`      ${key}: ${value.slice(0, 3).join(', ')}${value.length > 3 ? '...' : ''}`);
     } else if (typeof value === 'number') {

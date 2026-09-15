@@ -77,6 +77,11 @@ import {
 // intentionally NOT composed here — see witness 5 in the header.
 import { checkAgency } from './agency.js';
 import { checkReassurance } from './reassurance.js';
+import {
+  foldTypographicApostrophes,
+  collectAllMatchRanges,
+  unionCharRanges,
+} from './_text.js';
 
 // --- Thresholds (named + research-cited) ---
 
@@ -145,15 +150,26 @@ const DIRECTIVE_VERBS: ReadonlySet<string> = new Set([
 
 const DIRECTIVE_LEAD = /^(also|first|firstly|next|now|so|second|secondly|third|finally|just|please|really|maybe|perhaps|never|always)\s+/;
 
+/** Leading markdown/numbered-list markers: -, *, 1), 1. */
+const LIST_MARK = /^(?:[-*]+|\d+[.)]?|[.)])\s*/;
+
 /** Return the first clause-initial directive command verb found, or null. */
 function directiveHit(text: string): string | null {
-  // Split into clauses on sentence/list boundaries and on "and"/"then" joins (imperative lists
-  // like "cut off X, screenshot Y, and tell Z" decompose into separate command clauses).
-  const clauses = text.split(/[.!?;:,]+|\s+\b(?:and|then)\b\s+/i);
+  // Split on sentence/list punctuation, newlines, and "and"/"then" joins so
+  // markdown bullets and stacked commands each become their own clause.
+  const clauses = text.split(/[.!?;:,\n\r]+|\s+\b(?:and|then)\b\s+/i);
   for (const raw of clauses) {
     let c = raw.trim().toLowerCase();
     if (!c) continue;
-    c = c.replace(DIRECTIVE_LEAD, '');
+    // Strip stacked discourse markers ("now please just …") and list prefixes
+    // until the clause is stable, then test the first remaining token.
+    let prev = '';
+    while (c !== prev) {
+      prev = c;
+      c = c.replace(DIRECTIVE_LEAD, '');
+      c = c.replace(LIST_MARK, '');
+      c = c.trim();
+    }
     const m = c.match(/^([a-z][a-z']*)/);
     if (m && DIRECTIVE_VERBS.has(m[1])) return m[1];
   }
@@ -234,6 +250,9 @@ export function checkGroundedUptake(
   userText: string,
   assistantText: string
 ): GroundedUptakeResult {
+  userText = foldTypographicApostrophes(userText);
+  assistantText = foldTypographicApostrophes(assistantText);
+
   // STEP 0 — tokenize.
   const aTokens = normalize(assistantText);
   const aLenTokens = aTokens.length;
@@ -256,19 +275,10 @@ export function checkGroundedUptake(
 
   // STEP 3 — template spans + residual (the assistant's OWN, non-boilerplate segment).
   // Reuse the EXACT warmth-template set shared with performative_empathy.
-  const templateRanges: Array<{ start: number; end: number }> = [];
-  for (const p of TEMPLATE_PATTERNS) {
-    const m = p.exec(assistantText);
-    if (m && m.index >= 0) templateRanges.push({ start: m.index, end: m.index + m[0].length });
-  }
-  const mergedRanges = templateRanges
-    .sort((a, b) => a.start - b.start)
-    .reduce<Array<{ start: number; end: number }>>((acc, r) => {
-      const last = acc[acc.length - 1];
-      if (last && r.start <= last.end) last.end = Math.max(last.end, r.end);
-      else acc.push({ start: r.start, end: r.end });
-      return acc;
-    }, []);
+  // Every match of every template (not first-only) so a repeated warmth wall
+  // cannot undercount template density. Clone-with-g; never exec shared regexes.
+  const templateRanges = collectAllMatchRanges(assistantText, TEMPLATE_PATTERNS);
+  const mergedRanges = unionCharRanges(templateRanges);
   const templateChars = mergedRanges.reduce((s, r) => s + (r.end - r.start), 0);
   const templateDensity = clamp01(aLenChars > 0 ? templateChars / aLenChars : 0);
   const fillerCount = aTokens.filter((t) => FILLER_AND_STOPWORDS.has(t)).length;

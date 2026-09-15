@@ -40,9 +40,8 @@ jobs:
             npm install
           fi
 
-      - run: npm run build --if-present
-
-      - run: npm test --if-present
+      - name: Verify (test + build + eval)
+        run: npm run verify
 
       # Tokenless publish via Trusted Publishing — npm uses the OIDC id-token automatically
       # and attaches provenance. No NPM_TOKEN secret is involved.

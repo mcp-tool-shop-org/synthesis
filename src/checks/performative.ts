@@ -38,6 +38,11 @@ import { normalize } from './similarity.js';
 import { VULNERABILITY_PATTERNS } from './pivot.js';
 import { FILLER_AND_STOPWORDS } from './lexicons/filler.js';
 import { CONCRETENESS } from './lexicons/concreteness.js';
+import {
+  foldTypographicApostrophes,
+  collectAllMatchRanges,
+  unionCharRanges,
+} from './_text.js';
 
 // --- Thresholds (named + research-cited; values bias toward ABSTENTION) ---
 
@@ -115,7 +120,9 @@ const TEMPLATE_SOURCES: string[] = [
 ];
 // Exported so the grounded_uptake checker reuses the EXACT same warmth-template set
 // for its template-containment witness (single source of truth; performative stays frozen).
-export const TEMPLATE_PATTERNS: RegExp[] = TEMPLATE_SOURCES.map((s) => new RegExp(s, 'i'));
+export const TEMPLATE_PATTERNS: RegExp[] = TEMPLATE_SOURCES.map(
+  (s) => new RegExp(foldTypographicApostrophes(s), 'i')
+);
 
 const clamp01 = (x: number): number => Math.max(0, Math.min(1, x));
 const round2 = (x: number): number => Math.round(x * 100) / 100;
@@ -252,20 +259,18 @@ export function checkPerformativeEmpathy(
   userText: string,
   assistantText: string
 ): PerformativeEmpathyResult {
+  userText = foldTypographicApostrophes(userText);
+  assistantText = foldTypographicApostrophes(assistantText);
+
   // STEP 0 — tokenize.
   const aTokens = normalize(assistantText);
   const aLenTokens = aTokens.length;
   const aLenChars = assistantText.length;
   const uTokens = normalize(userText);
 
-  // STEP 1 — warmth (template matches against the RAW response, with char ranges).
-  const templateRanges: Array<{ text: string; start: number; end: number }> = [];
-  for (const p of TEMPLATE_PATTERNS) {
-    const m = p.exec(assistantText);
-    if (m && m.index >= 0) {
-      templateRanges.push({ text: m[0], start: m.index, end: m.index + m[0].length });
-    }
-  }
+  // STEP 1 — warmth (every template match, not first-only). Clone-with-g so
+  // shared TEMPLATE_PATTERNS lastIndex is never mutated.
+  const templateRanges = collectAllMatchRanges(assistantText, TEMPLATE_PATTERNS);
   const templateHits = templateRanges.map((r) => r.text);
   const warmthPresent = templateRanges.length >= MIN_WARMTH_HITS;
 
@@ -295,18 +300,9 @@ export function checkPerformativeEmpathy(
     return naResult(warmthPresent, fillerRatio, templateHits, userContentCount);
   }
 
-  // STEP 5 — genericness G.
-  const mergedRanges = [...templateRanges]
-    .sort((a, b) => a.start - b.start)
-    .reduce<Array<{ start: number; end: number }>>((acc, r) => {
-      const last = acc[acc.length - 1];
-      if (last && r.start <= last.end) {
-        last.end = Math.max(last.end, r.end);
-      } else {
-        acc.push({ start: r.start, end: r.end });
-      }
-      return acc;
-    }, []);
+  // STEP 5 — genericness G. Union every repeated template span (a warmth wall
+  // of one phrase copied N times must count N times, not once).
+  const mergedRanges = unionCharRanges(templateRanges);
   const templateChars = mergedRanges.reduce((s, r) => s + (r.end - r.start), 0);
   const templateDensity = clamp01(templateChars / aLenChars);
   const genericness = clamp01(W_TEMPLATE * templateDensity + W_FILLER * fillerRatio);

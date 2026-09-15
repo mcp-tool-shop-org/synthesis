@@ -16,6 +16,7 @@
 
 import type { PivotResult } from '../types.js';
 import { tokenCosineSimilarity, extractAnchor } from './similarity.js';
+import { foldTypographicApostrophes } from './_text.js';
 
 /**
  * Vulnerability markers - emotional distress or sensitive topics
@@ -201,6 +202,8 @@ const BORDERLINE_SIMILARITY_THRESHOLD = 0.30;
  * @returns PivotResult with pass status and evidence
  */
 export function checkPivot(userText: string, assistantText: string): PivotResult {
+  userText = foldTypographicApostrophes(userText);
+  assistantText = foldTypographicApostrophes(assistantText);
   // Detect vulnerability in user text
   const vulnHits = findMatches(userText, VULNERABILITY_PATTERNS);
   const hasVulnerability = vulnHits.length > 0;

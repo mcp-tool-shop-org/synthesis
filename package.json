@@ -41,7 +41,8 @@
     "build": "tsc -p tsconfig.json",
     "prepublishOnly": "npm run build",
     "eval": "node dist/index.js --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
-    "dev": "node --import tsx src/index.ts --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json"
+    "dev": "node --import tsx src/index.ts --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
+    "verify": "npm test && npm run build && npm run eval"
   },
   "dependencies": {
     "ajv": "^8.17.1",
@@ -55,7 +56,7 @@
     "vitest": "^3.0.9"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=22"
   },
   "publishConfig": {
     "access": "public",

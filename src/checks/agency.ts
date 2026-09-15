@@ -6,6 +6,7 @@
  */
 
 import type { AgencyResult } from '../types.js';
+import { foldTypographicApostrophes } from './_text.js';
 
 /**
  * Positive patterns - language that respects user agency
@@ -55,7 +56,10 @@ const POSITIVE_PATTERNS: RegExp[] = [
  * Each pattern subtracts 1 from the score
  */
 const NEGATIVE_PATTERNS: RegExp[] = [
-  /\byou (should|must|need to|have to|ought to)\b/i,
+  // Directive frame only: skip interrogatives (do/did/would/could you need to)
+  // and conditionals (if/when/whenever/whether/should you need to) so
+  // autonomy-respecting questions are not scored as prescriptions.
+  /(?<!\b(?:do|did|would|could|if|when|whenever|whether|should)\s+)\byou (should|must|need to|have to|ought to)\b/i,
   /\bjust do\b/i,
   /\bjust try\b/i,
   /\bjust think\b/i,
@@ -107,6 +111,7 @@ function findMatches(text: string, patterns: RegExp[]): string[] {
  * @returns AgencyResult with pass status, score, and hit details
  */
 export function checkAgency(assistantText: string): AgencyResult {
+  assistantText = foldTypographicApostrophes(assistantText);
   const posHits = findMatches(assistantText, POSITIVE_PATTERNS);
   const negHits = findMatches(assistantText, NEGATIVE_PATTERNS);
 

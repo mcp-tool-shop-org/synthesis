@@ -21,3 +21,4 @@ npm-debug.log*
 site/.astro/
 site/node_modules/
 site/dist/
+.swarm/

@@ -1,5 +1,5 @@
 /**
- * Love Eval Types
+ * Synthesis Types
  * Type definitions for empathy evaluation cases and results
  */
 
@@ -203,6 +203,8 @@ export interface CaseResult {
   label_comparison?: Partial<Record<CheckType, LabelComparison>>;
   /** True if this is a negative example (expected to fail) */
   is_negative_example?: boolean;
+  /** Checks expected to fail (labels or negative tags) that passed instead */
+  unexpected_pass?: CheckType[];
   /** Composed case-level posture (present when >=1 relational check ran) */
   relational_posture?: RelationalPostureResult;
 }
@@ -216,6 +218,8 @@ export interface FailureRecord {
   evidence: Record<string, unknown>;
   /** True if this failure was expected (negative example) */
   expected_failure?: boolean;
+  /** Checks expected to fail that passed (silent checker) */
+  unexpected_pass?: CheckType[];
 }
 
 /**
@@ -243,7 +247,7 @@ export interface ReportSummary {
   /** Total cases evaluated */
   cases: number;
 
-  /** Cases that passed all checks (includes negative examples that correctly failed) */
+  /** Cases whose requested checks all passed (silent negatives still land here and also increment unexpected_failures) */
   passed: number;
 
   /** Cases that failed at least one check */
@@ -258,7 +262,11 @@ export interface ReportSummary {
   /** Negative examples that correctly failed (regression tests working) */
   expected_failures: number;
 
-  /** Unexpected failures (bugs/regressions) — same as strict_failed */
+  /**
+   * Unexpected failures (bugs/regressions) AND unexpected passes (a negative
+   * example / expected-false check the checker let through). Same as
+   * strict_failed; drives the exit code.
+   */
   unexpected_failures: number;
 
   /** Per-check pass/fail/N/A counts */

@@ -6,7 +6,7 @@
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { spawn } from 'node:child_process';
-import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 
 // We need to test the CLI by importing and calling functions directly
@@ -30,7 +30,7 @@ const testSchema = {
       "type": "array",
       "items": {
         "type": "string",
-        "enum": ["agency_language", "unverifiable_reassurance", "topic_pivot"]
+        "enum": ["agency_language", "unverifiable_reassurance", "topic_pivot", "performative_empathy", "grounded_uptake"]
       }
     },
     "expected": { "type": "object" },
@@ -60,49 +60,68 @@ describe('CLI Tests', () => {
     } catch {
       // Ignore cleanup errors
     }
+    // Defaults test may write the bundled report path; do not leave it behind.
+    try {
+      rmSync(join(process.cwd(), 'out', 'report.json'), { force: true });
+    } catch {
+      // Ignore cleanup errors
+    }
   });
 
   describe('Argument Parsing', () => {
     it('test_parse_args_defaults - uses default paths when no args provided', async () => {
-      // Test that defaults are used - verify via running with no args
-      // This is tested indirectly by checking the CLI behavior
-      const defaultCases = 'data/evals.jsonl';
-      const defaultSchema = 'schemas/eval_case.schema.json';
-      const defaultOut = 'out/report.json';
+      const defaultOut = join(process.cwd(), 'out', 'report.json');
+      const result = await runCLI([]);
 
-      // These are the expected defaults from index.ts
-      expect(defaultCases).toBe('data/evals.jsonl');
-      expect(defaultSchema).toBe('schemas/eval_case.schema.json');
-      expect(defaultOut).toBe('out/report.json');
+      expect(result.stdout).toContain('Loading cases from: data/evals.jsonl');
+      expect(result.stdout).toContain('Using schema: schemas/eval_case.schema.json');
+      expect(result.stdout).toContain('Report written to: out/report.json');
+      expect(existsSync(defaultOut)).toBe(true);
     });
 
     it('test_parse_args_cases_schema_out - parses --cases, --schema, --out correctly', async () => {
-      // Write valid test data
       writeFileSync(TEST_CASES, JSON.stringify(validCase));
 
-      // Run CLI with custom paths - verify it creates output at specified location
       const result = await runCLI([
         '--cases', TEST_CASES,
         '--schema', TEST_SCHEMA,
         '--out', TEST_OUT
       ]);
 
-      // Should succeed or fail based on content, but paths should be recognized
-      expect(result.stdout + result.stderr).toBeDefined();
+      expect(result.stdout).toContain(`Loading cases from: ${TEST_CASES}`);
+      expect(result.stdout).toContain(`Using schema: ${TEST_SCHEMA}`);
+      expect(result.stdout).toContain(`Report written to: ${TEST_OUT}`);
+      expect(existsSync(TEST_OUT)).toBe(true);
     });
 
     it('test_parse_args_fail_on - parses --fail-on threshold', async () => {
-      writeFileSync(TEST_CASES, JSON.stringify(validCase));
+      // Known unexpected failure: directive language, no agency-positive hits.
+      // If --fail-on is ignored (default 0), both spawns would exit 2.
+      const failingCase = {
+        id: "fail-001",
+        user: "I'm sad",
+        assistant: "You should just cheer up and stop being so negative.",
+        checks: ["agency_language"]
+      };
+      writeFileSync(TEST_CASES, JSON.stringify(failingCase));
 
-      const result = await runCLI([
+      const failOnZero = await runCLI([
         '--cases', TEST_CASES,
         '--schema', TEST_SCHEMA,
         '--out', TEST_OUT,
-        '--fail-on', '5'
+        '--fail-on', '0'
       ]);
+      expect(failOnZero.code).toBe(2);
+      expect(failOnZero.stdout).toContain('unexpected failures > 0 threshold');
 
-      // Should parse without error
-      expect(result.code).toBeDefined();
+      const failOnOne = await runCLI([
+        '--cases', TEST_CASES,
+        '--schema', TEST_SCHEMA,
+        '--out', TEST_OUT,
+        '--fail-on', '1'
+      ]);
+      expect(failOnOne.code).toBe(0);
+      expect(failOnOne.stdout).not.toContain('Exiting with code 2');
     });
 
     it('test_parse_args_help_exits_zero - --help exits with code 0', async () => {

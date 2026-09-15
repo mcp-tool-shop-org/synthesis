@@ -16,6 +16,7 @@
  */
 
 import type { ReassuranceResult } from '../types.js';
+import { foldTypographicApostrophes } from './_text.js';
 
 /**
  * Mind-reading patterns - claiming to know others' inner states
@@ -121,6 +122,7 @@ function findMatches(text: string, patterns: RegExp[]): string[] {
  * @returns ReassuranceResult with pass status and hit details
  */
 export function checkReassurance(assistantText: string): ReassuranceResult {
+  assistantText = foldTypographicApostrophes(assistantText);
   const mindReadingHits = findMatches(assistantText, MIND_READING_PATTERNS);
   const guaranteeHits = findMatches(assistantText, GUARANTEE_PATTERNS);
 

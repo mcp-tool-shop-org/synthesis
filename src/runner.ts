@@ -36,12 +36,133 @@ const CHECK_ORDER: CheckType[] = [
 ];
 
 /**
- * Check if a case is tagged as a negative example
+ * Map a `-fail` tag stem onto the check it names.
+ *
+ * Classification is check-granular: `reassurance-fail` expects only
+ * `unverifiable_reassurance` to fail, not every other check on the case.
+ * Compound tags (`ack-but-pivot-fail`) match the last known check token.
+ */
+const FAIL_TAG_STEM_TO_CHECK: Record<string, CheckType> = {
+  reassurance: 'unverifiable_reassurance',
+  pivot: 'topic_pivot',
+  performative: 'performative_empathy',
+  agency: 'agency_language'
+};
+
+function failTagToCheck(tag: string): CheckType | undefined {
+  if (!tag.endsWith('-fail')) return undefined;
+  const stem = tag.slice(0, -'-fail'.length);
+  if (FAIL_TAG_STEM_TO_CHECK[stem]) return FAIL_TAG_STEM_TO_CHECK[stem];
+  const parts = stem.split('-');
+  for (let i = parts.length - 1; i >= 0; i--) {
+    const mapped = FAIL_TAG_STEM_TO_CHECK[parts[i]];
+    if (mapped) return mapped;
+  }
+  return undefined;
+}
+
+/**
+ * Check if a case is a negative example (expected to fail at least one
+ * defect detector). Tags (`negative_example`, `*-fail`) or an explicit
+ * `expected[check] === false` (other than grounded_uptake) all count.
  */
 function isNegativeExample(evalCase: EvalCase): boolean {
-  return evalCase.tags?.includes('negative_example') ||
-         evalCase.tags?.some(t => t.endsWith('-fail')) ||
-         false;
+  if (evalCase.tags?.includes('negative_example')) return true;
+  if (evalCase.tags?.some(t => t.endsWith('-fail'))) return true;
+  if (evalCase.expected) {
+    for (const check of CHECK_ORDER) {
+      if (check === 'grounded_uptake') continue;
+      if (evalCase.expected[check] === false) return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Checks this case is expected to fail, at CHECK granularity.
+ *
+ * Precedence: explicit `expected[check] === false` labels, then mapped
+ * `*-fail` tags (only the named check), then whole-case `negative_example`
+ * / unmapped `-fail` tags. `grounded_uptake` is never expected-to-fail
+ * (pass is always true; it is a positive witness, not a defect detector).
+ */
+function expectedFailChecks(evalCase: EvalCase): Set<CheckType> | 'all' | undefined {
+  const fromLabels = new Set<CheckType>();
+  let hasLabel = false;
+  if (evalCase.expected) {
+    for (const check of CHECK_ORDER) {
+      if (evalCase.expected[check] !== undefined) {
+        hasLabel = true;
+        if (evalCase.expected[check] === false && check !== 'grounded_uptake') {
+          fromLabels.add(check);
+        }
+      }
+    }
+  }
+
+  const mapped = new Set<CheckType>();
+  let hasMappedFail = false;
+  let hasUnmappedFail = false;
+  for (const tag of evalCase.tags ?? []) {
+    if (!tag.endsWith('-fail')) continue;
+    const check = failTagToCheck(tag);
+    if (check && check !== 'grounded_uptake') {
+      hasMappedFail = true;
+      mapped.add(check);
+    } else if (!check) {
+      hasUnmappedFail = true;
+    }
+  }
+
+  if (hasLabel) {
+    for (const check of mapped) {
+      if (evalCase.expected?.[check] === undefined) {
+        fromLabels.add(check);
+      }
+    }
+    return fromLabels;
+  }
+  if (hasMappedFail) return mapped;
+  if (hasUnmappedFail || evalCase.tags?.includes('negative_example')) return 'all';
+  return undefined;
+}
+
+function isCheckExpectedToFail(evalCase: EvalCase, check: CheckType): boolean {
+  if (check === 'grounded_uptake') return false;
+  const expected = expectedFailChecks(evalCase);
+  if (expected === undefined) return false;
+  if (expected === 'all') return evalCase.checks.includes(check);
+  return expected.has(check);
+}
+
+function checkDidFail(result: CaseResult, check: CheckType): boolean {
+  const checkResult = result.checks[check];
+  if (!checkResult) return false;
+  if ('applicable' in checkResult && !checkResult.applicable) return false;
+  return !checkResult.pass;
+}
+
+/**
+ * Checks that were expected to fail but did not (passed, N/A, or skipped).
+ *
+ * A tagged negative whose defect checks all pass is an unexpected pass even
+ * if no per-check `expected: false` label was set — the tag heuristic must
+ * not swallow a checker that went silent.
+ */
+function computeUnexpectedPassChecks(evalCase: EvalCase, result: CaseResult): CheckType[] {
+  const unexpected: CheckType[] = [];
+  for (const check of evalCase.checks) {
+    if (check === 'grounded_uptake') continue;
+    if (!isCheckExpectedToFail(evalCase, check)) continue;
+    if (checkDidFail(result, check)) continue;
+    unexpected.push(check);
+  }
+  if (unexpected.length === 0 && isNegativeExample(evalCase) && result.pass) {
+    for (const check of evalCase.checks) {
+      if (check !== 'grounded_uptake') unexpected.push(check);
+    }
+  }
+  return unexpected;
 }
 
 /**
@@ -173,6 +294,11 @@ export function runCase(evalCase: EvalCase): CaseResult {
     }
   }
 
+  const unexpectedPass = computeUnexpectedPassChecks(evalCase, result);
+  if (unexpectedPass.length > 0) {
+    result.unexpected_pass = unexpectedPass;
+  }
+
   return result;
 }
 
@@ -274,17 +400,9 @@ export function runAllCases(cases: EvalCase[]): {
   let labelTotal = 0;
   let labelMatched = 0;
 
-  // Count non-negative cases for strict stats
-  let nonNegativeCases = 0;
-
   for (const evalCase of cases) {
     const result = runCase(evalCase);
     results.push(result);
-
-    const isNegative = result.is_negative_example || false;
-    if (!isNegative) {
-      nonNegativeCases++;
-    }
 
     // Update per-check stats
     for (const check of evalCase.checks) {
@@ -326,38 +444,60 @@ export function runAllCases(cases: EvalCase[]): {
       }
     }
 
-    // Track overall case pass/fail.
-    // Derive the failed-checks list ONCE; counters and the failures array both
-    // flow from it so a counted failure always has a matching evidence record.
+    // Track overall case pass/fail at the checker layer, then classify the
+    // gate at CHECK granularity so a *-fail tag cannot swallow a sibling
+    // check that failed unexpectedly, and a negative that the checker now
+    // PASSES still increments unexpected_failures (exit 2).
+    const failedChecks = computeFailedChecks(evalCase, result);
+    const unexpectedPassChecks = result.unexpected_pass ?? [];
+    const unexpectedFailedChecks = failedChecks.filter(
+      c => !isCheckExpectedToFail(evalCase, c)
+    );
+    const expectedFailedChecks = failedChecks.filter(
+      c => isCheckExpectedToFail(evalCase, c)
+    );
+    const hasUnexpected =
+      unexpectedFailedChecks.length > 0 || unexpectedPassChecks.length > 0;
+
     if (result.pass) {
       passedCases++;
     } else {
       failedCases++;
+    }
 
-      // Classify as expected or unexpected failure
-      if (isNegative) {
-        expectedFailures++;
-      } else {
-        unexpectedFailures++;
+    if (hasUnexpected) {
+      unexpectedFailures++;
+      const evidence = extractEvidence(result, failedChecks);
+      if (unexpectedPassChecks.length > 0) {
+        evidence.unexpected_pass = unexpectedPassChecks;
       }
-
-      const failedChecks = computeFailedChecks(evalCase, result);
-
-      failures.push({
+      const record: FailureRecord = {
         id: result.id,
         failed: failedChecks,
-        evidence: extractEvidence(result, failedChecks),
-        expected_failure: isNegative
+        evidence,
+        expected_failure: false
+      };
+      if (unexpectedPassChecks.length > 0) {
+        record.unexpected_pass = unexpectedPassChecks;
+      }
+      failures.push(record);
+    } else if (expectedFailedChecks.length > 0) {
+      expectedFailures++;
+      failures.push({
+        id: result.id,
+        failed: expectedFailedChecks,
+        evidence: extractEvidence(result, expectedFailedChecks),
+        expected_failure: true
       });
     }
   }
 
-  // Invariant (evidence-trail completeness): every counted failure must have a
-  // failure record carrying its evidence. An exit-2 without a record would hide
-  // a regression.
-  if (failures.length !== failedCases) {
+  // Invariant (evidence-trail completeness): every counted expected or
+  // unexpected failure — including unexpected passes — must have a record.
+  // An exit-2 without a record would hide a silent checker.
+  if (failures.length !== expectedFailures + unexpectedFailures) {
     throw new Error(
-      `Evidence-trail invariant violated: ${failedCases} failed case(s) but ${failures.length} failure record(s)`
+      `Evidence-trail invariant violated: ${expectedFailures} expected + ${unexpectedFailures} unexpected failure(s) but ${failures.length} failure record(s)`
     );
   }
 
@@ -371,9 +511,11 @@ export function runAllCases(cases: EvalCase[]): {
     }
   }
 
-  // Compute strict stats (excluding negative examples)
-  const strictPassed = nonNegativeCases - unexpectedFailures;
+  // Strict stats: unexpected_failures now includes silent negatives
+  // (expected-to-fail checks that passed), so subtract both buckets
+  // from the case count rather than "non-negative minus unexpected".
   const strictFailed = unexpectedFailures;
+  const strictPassed = cases.length - expectedFailures - unexpectedFailures;
 
   // Build summary
   const summary: ReportSummary = {

@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "love_eval_case.schema.json",
-  "title": "Love Eval Case",
+  "$id": "https://github.com/mcp-tool-shop-org/synthesis/schemas/eval_case.schema.json",
+  "title": "Synthesis Eval Case",
   "description": "Schema for empathy evaluation test cases",
   "type": "object",
   "required": ["id", "user", "assistant", "checks"],
