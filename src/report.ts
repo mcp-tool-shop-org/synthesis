@@ -46,16 +46,28 @@ export function writeReport(report: EvalReport, outputPath: string): void {
 
 export type SummaryWriter = (...args: unknown[]) => void;
 
+/** C2 contrastive foil — default TTY, not gated on --explain. */
+export const SUMMARY_FOIL =
+  'FAIL = checker fired; N/A = abstain (not a pass); verified_uptake = observable uptake (not sincerity/safety).';
+
+export interface PrintSummaryOptions {
+  /** Extra foil + per-case claims/non_claims. Limits still print when this is false. */
+  explain?: boolean;
+}
+
 /**
  * Print a summary to the console (or a provided writer).
  * ANSI color is gated on `color` (defaults to stdout TTY).
+ * `explain` dumps per-case claims; non_claims always print for postures that appeared.
  */
 export function printSummary(
   report: EvalReport,
   write: SummaryWriter = console.log,
-  color: boolean = Boolean(process.stdout?.isTTY)
+  color: boolean = Boolean(process.stdout?.isTTY),
+  options: PrintSummaryOptions = {}
 ): void {
   const { summary, failures } = report;
+  const explain = options.explain === true;
   const reset = color ? '\x1b[0m' : '';
   const red = color ? '\x1b[31m' : '';
   const green = color ? '\x1b[32m' : '';
@@ -65,6 +77,10 @@ export function printSummary(
   write('\n' + '═'.repeat(60));
   write('  SYNTHESIS - Empathy Evaluation Report');
   write('═'.repeat(60));
+  write(`  ${yellow}${SUMMARY_FOIL}${reset}`);
+  if (explain) {
+    write('  --explain dumps per-case claims/non_claims; limits also print on the default TTY.');
+  }
 
   // Overall stats (guard division-by-zero when there are no cases)
   const passRate = summary.cases > 0
@@ -114,15 +130,32 @@ export function printSummary(
     write(`    ${checkColor}${icon}${reset} ${checkName}: ${stats.passed}/${applicable} (${rate}%)${naNote}`);
   }
 
-  // Relational posture distribution (composed case-level summary)
-  const postureCounts = new Map<RelationalPosture, number>();
+  // Relational posture distribution (composed case-level summary).
+  // Default TTY prints unique non_claims + one example's claims per appeared state (C2).
+  type PostureAgg = {
+    count: number;
+    nonClaims: Set<string>;
+    exampleId: string;
+    exampleClaims: string[];
+  };
+  const postureAggs = new Map<RelationalPosture, PostureAgg>();
   for (const r of report.results) {
-    if (r.relational_posture) {
-      const s = r.relational_posture.state;
-      postureCounts.set(s, (postureCounts.get(s) ?? 0) + 1);
+    const p = r.relational_posture;
+    if (!p) continue;
+    const existing = postureAggs.get(p.state);
+    if (existing) {
+      existing.count += 1;
+      for (const nc of p.non_claims) existing.nonClaims.add(nc);
+    } else {
+      postureAggs.set(p.state, {
+        count: 1,
+        nonClaims: new Set(p.non_claims),
+        exampleId: r.id,
+        exampleClaims: [...p.claims],
+      });
     }
   }
-  if (postureCounts.size > 0) {
+  if (postureAggs.size > 0) {
     const POSTURE_ICON: Record<RelationalPosture, string> = {
       grounded_uptake_verified: `${cyan}▸${reset}`,
       unresolved_abstain: `${yellow}◦${reset}`,
@@ -132,10 +165,27 @@ export function printSummary(
     };
     write('\n  Relational Posture:');
     for (const state of POSTURE_ORDER) {
-      const n = postureCounts.get(state);
-      if (!n) continue;
+      const agg = postureAggs.get(state);
+      if (!agg) continue;
       const label = state.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-      write(`    ${POSTURE_ICON[state]} ${label}: ${n}`);
+      write(`    ${POSTURE_ICON[state]} ${label}: ${agg.count}`);
+      const nonClaims = [...agg.nonClaims];
+      if (nonClaims.length > 0) {
+        write(`      non_claims: ${nonClaims.join('; ')}`);
+      }
+      if (agg.exampleClaims.length > 0) {
+        write(`      claims [${agg.exampleId}]: ${agg.exampleClaims.join('; ')}`);
+      }
+    }
+    if (explain) {
+      write('\n  Per-case relational_posture (--explain):');
+      for (const r of report.results) {
+        const p = r.relational_posture;
+        if (!p) continue;
+        write(`    • ${r.id}: ${p.state}`);
+        write(`      claims: ${p.claims.length > 0 ? p.claims.join('; ') : '(none)'}`);
+        write(`      non_claims: ${p.non_claims.length > 0 ? p.non_claims.join('; ') : '(none)'}`);
+      }
     }
   }
 

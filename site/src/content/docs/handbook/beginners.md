@@ -63,7 +63,7 @@ Before diving in, here are the terms you will encounter throughout the handbook:
 
 ## Your first eval in 5 minutes
 
-**Prerequisites:** Node.js 18 or later.
+**Prerequisites:** Node.js 22 or later.
 
 ```bash
 # Clone the repository

@@ -301,4 +301,6 @@ export interface CLIOptions {
   schema: string;
   out: string;
   failOn: number;
+  /** Extra TTY foil + per-case claims/non_claims. Limits also print without this flag. */
+  explain: boolean;
 }

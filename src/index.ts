@@ -22,7 +22,7 @@ import { realpathSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadCases, validateCase } from './load.js';
 import { runCase, runAllCases } from './runner.js';
-import { writeReport, printSummary, formatArtifact } from './report.js';
+import { writeReport, printSummary, formatArtifact, SUMMARY_FOIL } from './report.js';
 import { computeRelationalPosture } from './relational.js';
 import type { CLIOptions, EvalReport } from './types.js';
 
@@ -35,6 +35,7 @@ export {
   printSummary,
   formatArtifact,
   computeRelationalPosture,
+  SUMMARY_FOIL,
 };
 export type { EvalCase, CheckType, EvalReport, CLIOptions } from './types.js';
 
@@ -63,7 +64,8 @@ function parseArgs(args: string[]): CLIOptions {
     cases: 'data/evals.jsonl',
     schema: 'schemas/eval_case.schema.json',
     out: 'out/report.json',
-    failOn: 0
+    failOn: 0,
+    explain: false
   };
 
   // Require a present, non-flag value for a value-taking flag. A missing value
@@ -105,6 +107,9 @@ function parseArgs(args: string[]): CLIOptions {
         i++;
         break;
       }
+      case '--explain':
+        options.explain = true;
+        break;
       case '--help':
       case '-h':
         printHelp();
@@ -139,12 +144,16 @@ Options:
   --schema <path>    Path to JSON schema (default: schemas/eval_case.schema.json)
   --out <path>       Output path for report (default: out/report.json)
   --fail-on <n>      Maximum allowed failures before exit code 2 (default: 0)
+  --explain          Extra foil: dump per-case claims and non_claims (limits also print on the default TTY)
   --help, -h         Show this help message
 
 Exit Codes:
   0 - All cases passed (or unexpected failures <= --fail-on threshold)
   1 - Fatal error (bad JSONL, schema failure, missing/unwritable files)
   2 - Unexpected failures exceed threshold
+
+Legend:
+  ${SUMMARY_FOIL}
 
 Checks:
   agency_language           - Detects language respecting user autonomy
@@ -153,8 +162,8 @@ Checks:
   performative_empathy      - Flags empathy-theater (detector; never certifies sincerity)
   grounded_uptake           - Verifies observable grounded uptake (the positive witness)
 
-Each case is also summarized as a relational_posture (results[].relational_posture)
-with claims and non_claims.
+Each case is also summarized as a relational_posture (TTY and results[].relational_posture)
+with claims and non_claims. Default TTY prints non_claims; --explain is extra, not the only honesty surface.
 `;
   // JSON mode keeps stdout for machine artifacts; help is human text on stderr.
   if (isJsonOutput()) {
@@ -216,12 +225,12 @@ function cliLog(...args: unknown[]): void {
   }
 }
 
-function emitSummary(report: EvalReport): void {
+function emitSummary(report: EvalReport, explain: boolean): void {
   if (isJsonOutput()) {
-    printSummary(report, console.error, Boolean(process.stderr?.isTTY));
+    printSummary(report, console.error, Boolean(process.stderr?.isTTY), { explain });
     return;
   }
-  printSummary(report, console.log, Boolean(process.stdout?.isTTY));
+  printSummary(report, console.log, Boolean(process.stdout?.isTTY), { explain });
 }
 
 /**
@@ -262,7 +271,7 @@ async function main(): Promise<void> {
   }
   cliLog(`Report written to: ${options.out}`);
 
-  emitSummary(report);
+  emitSummary(report, options.explain);
 
   // MCP_OUTPUT=json: stdout is ONLY the artifact so JSON.parse(stdout) works.
   const artifact = formatArtifact(report, options.out);
@@ -278,7 +287,9 @@ async function main(): Promise<void> {
     process.exit(2);
   }
 
-  if (summary.expected_failures > 0) {
+  if (unexpectedCount > 0) {
+    cliLog(`Exiting 0: ${unexpectedCount} unexpected failures <= --fail-on ${options.failOn}`);
+  } else if (summary.expected_failures > 0) {
     cliLog(`All checks passed! (${summary.expected_failures} expected failures correctly caught)`);
   } else {
     cliLog('All checks passed!');

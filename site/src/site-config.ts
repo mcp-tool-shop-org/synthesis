@@ -2,7 +2,7 @@ import type { SiteConfig } from '@mcptoolshop/site-theme';
 
 export const config: SiteConfig = {
   title: 'Synthesis',
-  description: 'Deterministic detection of relational failure modes — agency, reassurance, topic-pivot, performative empathy, grounded uptake — in AI responses. No LLM judge, no scoring; just auditable evidence.',
+  description: 'Deterministic detection of relational failure modes — agency, reassurance, topic-pivot, performative empathy, grounded uptake — plus a composed relational_posture summary (claims + non_claims). No LLM judge, no probabilistic scoring; just auditable evidence.',
   logoBadge: 'S',
   brandName: 'Synthesis',
   repoUrl: 'https://github.com/mcp-tool-shop-org/synthesis',
@@ -13,9 +13,9 @@ export const config: SiteConfig = {
     badge: 'Node.js / CI',
     headline: 'Synthesis,',
     headlineAccent: 'deterministic evals for care in AI.',
-    description: 'Rule-based pattern matching that catches relational failure modes in AI responses. No LLM judge, no probabilistic scoring \u2014 just auditable, per-checker evidence. Five checkers covering agency, reassurance, topic-pivot, empathy-theater, and grounded uptake.',
+    description: 'Rule-based pattern matching that catches relational failure modes in AI responses. No LLM judge, no probabilistic scoring \u2014 just auditable, per-checker evidence. Five checkers covering agency, reassurance, topic-pivot, empathy-theater, and grounded uptake. A composed relational_posture (claims + non_claims) rolls those results into one case-level verdict \u2014 not a sixth checker.',
     primaryCta: { href: '#quick-start', label: 'Get started' },
-    secondaryCta: { href: 'handbook/', label: 'Read the Handbook' },
+    secondaryCta: { href: '/synthesis/handbook/', label: 'Read the Handbook' },
     previews: [
       { label: 'Install', code: 'npm install @mcptoolshop/synthesis' },
       { label: 'Eval', code: 'npm run build && npm run eval' },
@@ -52,7 +52,7 @@ export const config: SiteConfig = {
         },
         {
           title: 'CI integration',
-          code: 'name: Empathy Eval\non:\n  push:\n    paths: [\'data/**\', \'src/**\', \'schemas/**\', \'tests/**\', \'scripts/**\']\n\njobs:\n  eval:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2\n      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0\n        with: { node-version: \'18\' }\n      - run: npm ci\n      - run: npm run verify',
+          code: 'name: Empathy Eval\non:\n  push:\n    paths: [\'data/**\', \'src/**\', \'schemas/**\', \'tests/**\', \'scripts/**\']\n\njobs:\n  eval:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2\n      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0\n        with: { node-version: \'22\' }\n      - run: npm ci\n      - run: npm run verify',
         },
       ],
     },
@@ -81,7 +81,10 @@ export const config: SiteConfig = {
         ['expected_failures', 'Negative examples correctly caught. Higher is better'],
         ['unexpected_failures', 'Same as strict_failed. Drives the exit code'],
         ['label_accuracy', 'How well computed results match ground-truth expected labels'],
+        ['label_accuracy_by_check', 'Per-checker label accuracy (total, matched, accuracy)'],
         ['by_check', 'Per-checker pass/fail/N/A breakdown'],
+        ['grounded_uptake.state', 'Positive-witness verdict: verified_uptake, no_verified_uptake, or not_applicable (pass is always true)'],
+        ['results[].relational_posture', 'Composed case-level summary with state, claims, and non_claims. Not a sixth checker; non_claims states what a verdict does not assert'],
       ],
     },
     {
