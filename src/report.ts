@@ -6,8 +6,9 @@
 
 import { writeFileSync, mkdirSync, renameSync, unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
-import type { EvalReport, RelationalPosture } from './types.js';
+import type { EvalReport, RelationalPosture, RelationalPostureResult } from './types.js';
 import { CHECK_ORDER } from './runner.js';
+import { computeRelationalPosture, NO_RELATIONAL_CHECK_POSTURE } from './relational.js';
 
 /** Display order for the TTY posture block. A new RelationalPosture fails tsc until listed. */
 export const POSTURE_ORDER = [
@@ -22,16 +23,31 @@ type _AssertNever<T extends never> = T;
 type _PostureOrderExhaustive = _AssertNever<Exclude<RelationalPosture, (typeof POSTURE_ORDER)[number]>>;
 void 0 as _PostureOrderExhaustive;
 
+/** Closed-model posture for JSON: never omit the key, even on a hand-built result. */
+function postureForSerialize(result: EvalReport['results'][number]): RelationalPostureResult {
+  if (result.relational_posture != null) return result.relational_posture;
+  return computeRelationalPosture(result.checks) ?? NO_RELATIONAL_CHECK_POSTURE;
+}
+
 /**
  * Write the full JSON report to disk atomically (temp file + rename).
- * On failure the temp file is unlinked and the error includes outputPath.
+ * Root is the closed {summary, failures, results} object; every result includes
+ * relational_posture. On failure the temp file is unlinked and the error includes outputPath.
  */
 export function writeReport(report: EvalReport, outputPath: string): void {
   const dir = dirname(outputPath);
   const tmpPath = `${outputPath}.tmp`;
   try {
     mkdirSync(dir, { recursive: true });
-    writeFileSync(tmpPath, JSON.stringify(report, null, 2), 'utf-8');
+    const payload = {
+      summary: report.summary,
+      failures: report.failures,
+      results: report.results.map((r) => ({
+        ...r,
+        relational_posture: postureForSerialize(r),
+      })),
+    };
+    writeFileSync(tmpPath, JSON.stringify(payload, null, 2), 'utf-8');
     renameSync(tmpPath, outputPath);
   } catch (err) {
     try {

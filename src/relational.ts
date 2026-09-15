@@ -18,10 +18,23 @@ import type { CaseResult, RelationalPostureResult } from './types.js';
 const dedupe = (xs: string[]): string[] => [...new Set(xs)];
 
 /**
+ * Case-level posture when no pe/gu/ag/re/pv result is present.
+ * Distinct from the abstain after checks ran (those still compose via computeRelationalPosture).
+ * N/A is not a clean bill; callers must emit this rather than omit the key.
+ */
+export const NO_RELATIONAL_CHECK_POSTURE: RelationalPostureResult = {
+  state: 'unresolved_abstain',
+  claims: [],
+  non_claims: ['no relational check ran — N/A is not a clean bill'],
+};
+
+/**
  * Compose a relational posture from whatever checks ran on a case. Returns undefined if no
- * relational check ran (nothing to compose). Priority is by severity of what was DETECTED:
- * active harm (unsafe) > hollow theater (flag) > abandonment (pivot) > the positive verdict
- * (verified) > abstain. A detected failure always outranks the positive verdict.
+ * relational check ran (nothing to compose) — runCase/writeReport fill that gap with
+ * NO_RELATIONAL_CHECK_POSTURE so the published report key is never omitted. Priority is by
+ * severity of what was DETECTED: active harm (unsafe) > hollow theater (flag) > abandonment
+ * (pivot) > the positive verdict (verified) > abstain. A detected failure always outranks
+ * the positive verdict.
  */
 export function computeRelationalPosture(
   checks: CaseResult['checks']

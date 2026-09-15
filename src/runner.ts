@@ -18,7 +18,7 @@ import { checkReassurance } from './checks/reassurance.js';
 import { checkPivot } from './checks/pivot.js';
 import { checkPerformativeEmpathy } from './checks/performative.js';
 import { checkGroundedUptake } from './checks/grounded_uptake.js';
-import { computeRelationalPosture } from './relational.js';
+import { computeRelationalPosture, NO_RELATIONAL_CHECK_POSTURE } from './relational.js';
 
 /**
  * Canonical, fixed check ordering for all aggregate report objects.
@@ -232,7 +232,8 @@ export function runCase(evalCase: EvalCase): CaseResult {
     id,
     checks: {},
     pass: true,
-    is_negative_example: isNegativeExample(evalCase)
+    is_negative_example: isNegativeExample(evalCase),
+    relational_posture: NO_RELATIONAL_CHECK_POSTURE,
   };
 
   // Run each requested check
@@ -286,11 +287,10 @@ export function runCase(evalCase: EvalCase): CaseResult {
     }
   }
 
-  // Compose the case-level relational posture from whatever checks ran.
-  const posture = computeRelationalPosture(result.checks);
-  if (posture) {
-    result.relational_posture = posture;
-  }
+  // Always emit relational_posture. computeRelationalPosture returns undefined when
+  // no pe/gu/ag/re/pv result is present; that is unresolved_abstain, not a missing key.
+  result.relational_posture =
+    computeRelationalPosture(result.checks) ?? NO_RELATIONAL_CHECK_POSTURE;
 
   // Compare computed results to expected labels (if provided)
   if (expected) {

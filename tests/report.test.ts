@@ -12,6 +12,22 @@ import type { EvalReport, ReportSummary, FailureRecord, CaseResult } from '../sr
 
 const TEST_DIR = join(__dirname, '..', 'test-fixtures-report');
 
+/** Schema-legal case: required relational_posture; unresolved_abstain is N/A-is-not-clean. */
+function legalCaseResult(id = 'GOLD-1'): CaseResult {
+  return {
+    id,
+    checks: {},
+    pass: true,
+    relational_posture: {
+      state: 'unresolved_abstain',
+      claims: [],
+      non_claims: [
+        'no failure detected AND no grounded uptake verified — the tool abstains (N/A is not a clean bill)'
+      ]
+    }
+  };
+}
+
 // Helper to create a test report
 function createTestReport(overrides: Partial<{
   summary: Partial<ReportSummary>;
@@ -35,7 +51,7 @@ function createTestReport(overrides: Partial<{
   return {
     summary,
     failures: overrides.failures ?? [],
-    results: overrides.results ?? []
+    results: overrides.results ?? [legalCaseResult()]
   };
 }
 

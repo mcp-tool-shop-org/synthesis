@@ -212,8 +212,11 @@ export interface CaseResult {
   is_negative_example?: boolean;
   /** Checks expected to fail (labels or negative tags) that passed instead */
   unexpected_pass?: CheckType[];
-  /** Composed case-level posture (present when >=1 relational check ran) */
-  relational_posture?: RelationalPostureResult;
+  /**
+   * Composed case-level posture. Always present: when no pe/gu/ag/re/pv check ran,
+   * state is unresolved_abstain (N/A is not a clean bill). Never omit the key.
+   */
+  relational_posture: RelationalPostureResult;
 }
 
 /**
