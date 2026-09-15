@@ -9,8 +9,13 @@
  * TEMPLATE_PATTERNS lastIndex is never mutated.
  */
 
-/** Fold U+2018 / U+2019 / backtick to ASCII apostrophe. */
+/**
+ * Fold U+2018 / U+2019 / backtick to ASCII apostrophe.
+ * Non-string input (null/undefined/number from open schemas) returns ''
+ * so callers degrade instead of throwing on .replace.
+ */
 export function foldTypographicApostrophes(text: string): string {
+  if (typeof text !== 'string') return '';
   return text.replace(/[\u2018\u2019`]/g, "'");
 }
 

@@ -32,18 +32,43 @@ jobs:
       - name: Upgrade npm for Trusted Publishing
         run: npm install -g npm@latest
 
+      # Lifecycle scripts stay off while this job holds id-token:write. Verify and
+      # prepublishOnly (tsc) run as explicit later steps, not as install hooks.
       - name: Install dependencies
         run: |
           if [ -f package-lock.json ]; then
-            npm ci
+            npm ci --ignore-scripts
           else
-            npm install
+            npm install --ignore-scripts
           fi
 
       - name: Verify (test + build + eval)
         run: npm run verify
 
+      - name: Assert package version matches GitHub release tag
+        if: github.event_name == 'release'
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: |
+          set -euo pipefail
+          TAG="${RELEASE_TAG#v}"
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "$PKG" != "$TAG" ]; then
+            echo "::error::package.json version ($PKG) does not match release tag ($TAG)"
+            exit 1
+          fi
+
       # Tokenless publish via Trusted Publishing — npm uses the OIDC id-token automatically
       # and attaches provenance. No NPM_TOKEN secret is involved.
+      # GitHub pre-releases and semver prerelease versions must not land on latest.
       - name: Publish to npm (Trusted Publishing)
-        run: npm publish --provenance --access public
+        env:
+          RELEASE_PRERELEASE: ${{ github.event.release.prerelease }}
+        run: |
+          set -euo pipefail
+          PKG="$(node -p "require('./package.json').version")"
+          if [ "${RELEASE_PRERELEASE}" = "true" ] || [[ "$PKG" == *-* ]]; then
+            npm publish --provenance --access public --tag next
+          else
+            npm publish --provenance --access public
+          fi

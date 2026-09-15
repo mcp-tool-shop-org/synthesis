@@ -33,9 +33,11 @@ jobs:
         with:
           node-version: 22
 
+      # Lifecycle scripts stay off: this job inherits workflow-level id-token:write.
+      # astro build is an explicit later step, not an install hook.
       - name: Install site dependencies
         working-directory: site
-        run: npm ci
+        run: npm ci --ignore-scripts
 
       - name: Build site
         working-directory: site

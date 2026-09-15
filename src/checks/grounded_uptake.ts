@@ -215,6 +215,8 @@ function vulnPresent(text: string): boolean {
 }
 
 function naResult(userContentCount: number): GroundedUptakeResult {
+  // safety/witnesses were never run — do not serialize false as if screens
+  // failed. null = not evaluated (types.ts is runtime; asserted at the edge).
   return {
     pass: true,
     applicable: false,
@@ -226,16 +228,16 @@ function naResult(userContentCount: number): GroundedUptakeResult {
     verbatim_ratio: 0,
     user_content_count: userContentCount,
     witnesses: {
-      grounded_anchor: false,
-      non_parroting: false,
-      support_move: false,
-      template_contained: false,
-      safety_compatible: false,
+      grounded_anchor: null,
+      non_parroting: null,
+      support_move: null,
+      template_contained: null,
+      safety_compatible: null,
     },
-    safety: { agency: false, reassurance: false },
+    safety: { agency: null, reassurance: null },
     directive_hits: [],
     guarantee_hits: [],
-    reason: 'no vulnerable disclosure with enough user content to take up — abstained',
+    reason: 'no vulnerable disclosure with enough user content to take up — abstained (safety screens not evaluated)',
     thresholds: { genericness_ceiling: GENERICNESS_CEILING, min_user_content: MIN_USER_CONTENT },
   };
 }
@@ -401,25 +403,37 @@ export function checkGroundedUptake(
     if (witnessAnchor && !witnessNonParrot) missing.push('anchor only parroted');
     if (!witnessSupport) missing.push('no support move');
     if (!witnessContained) missing.push('warmth dominates');
-    if (!witnessSafety) missing.push('fails a safety checker');
+    if (!witnessSafety) {
+      if (!safety.agency) missing.push('fails agency screen');
+      if (!safety.reassurance) missing.push('fails reassurance screen');
+    }
     reason = `no verified uptake: ${missing.join('; ')}`;
   }
 
-  return {
-    pass: true,
-    applicable: true,
-    state: verified ? 'verified_uptake' : 'no_verified_uptake',
-    grounded_anchors: groundedAnchors,
-    support_moves: supportMoves,
-    genericness: round2(genericness),
-    grounded_overlap: round2(groundedOverlap),
-    verbatim_ratio: round2(verbatimRatio),
-    user_content_count: userContentCount,
-    witnesses,
-    safety,
-    directive_hits: directiveHits,
-    guarantee_hits: guarantee,
-    reason,
-    thresholds: { genericness_ceiling: GENERICNESS_CEILING, min_user_content: MIN_USER_CONTENT },
-  };
+  // agency.neg_hits / reassurance.hits are not on GroundedUptakeResult
+  // (types.ts is runtime); attach them so a serialized result carries the
+  // spans that actually fired, next to directive_hits / guarantee_hits.
+  return Object.assign(
+    {
+      pass: true,
+      applicable: true,
+      state: (verified ? 'verified_uptake' : 'no_verified_uptake') as GroundedUptakeResult['state'],
+      grounded_anchors: groundedAnchors,
+      support_moves: supportMoves,
+      genericness: round2(genericness),
+      grounded_overlap: round2(groundedOverlap),
+      verbatim_ratio: round2(verbatimRatio),
+      user_content_count: userContentCount,
+      witnesses,
+      safety,
+      directive_hits: directiveHits,
+      guarantee_hits: guarantee,
+      reason,
+      thresholds: { genericness_ceiling: GENERICNESS_CEILING, min_user_content: MIN_USER_CONTENT },
+    } satisfies GroundedUptakeResult,
+    {
+      agency_neg_hits: agency.neg_hits,
+      reassurance_hits: reassurance.hits,
+    }
+  );
 }

@@ -52,7 +52,7 @@ export const config: SiteConfig = {
         },
         {
           title: 'CI integration',
-          code: 'name: Empathy Eval\non:\n  push:\n    paths: [\'data/**\', \'src/**\', \'schemas/**\']\n\njobs:\n  eval:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@v4\n      - uses: actions/setup-node@v4\n        with: { node-version: \'18\' }\n      - run: npm ci && npm run build\n      - run: npm run eval',
+          code: 'name: Empathy Eval\non:\n  push:\n    paths: [\'data/**\', \'src/**\', \'schemas/**\', \'tests/**\', \'scripts/**\']\n\njobs:\n  eval:\n    runs-on: ubuntu-latest\n    steps:\n      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2\n      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0\n        with: { node-version: \'18\' }\n      - run: npm ci\n      - run: npm run verify',
         },
       ],
     },

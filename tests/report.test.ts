@@ -10,7 +10,7 @@ import { join } from 'node:path';
 import { writeReport, printSummary, formatArtifact } from '../src/report.js';
 import type { EvalReport, ReportSummary, FailureRecord, CaseResult } from '../src/types.js';
 
-const TEST_DIR = join(process.cwd(), 'test-fixtures-report');
+const TEST_DIR = join(__dirname, '..', 'test-fixtures-report');
 
 // Helper to create a test report
 function createTestReport(overrides: Partial<{
@@ -45,6 +45,7 @@ describe('Report Tests', () => {
   });
 
   afterEach(() => {
+    vi.restoreAllMocks();
     try {
       rmSync(TEST_DIR, { recursive: true, force: true });
     } catch {
@@ -79,25 +80,29 @@ describe('Report Tests', () => {
   });
 
   describe('printSummary', () => {
-    it('test_print_summary_pass_rate - displays pass rate correctly', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+    function capturePrintSummary(report: EvalReport): string {
+      const log = vi.fn();
+      const origLog = console.log;
+      console.log = log as typeof console.log;
+      try {
+        printSummary(report);
+        return log.mock.calls.map(c => c.join(' ')).join('\n');
+      } finally {
+        console.log = origLog;
+      }
+    }
 
+    it('test_print_summary_pass_rate - displays pass rate correctly', () => {
       const report = createTestReport({
         summary: { cases: 10, passed: 8, failed: 2 }
       });
 
-      printSummary(report);
-
-      const output = consoleSpy.mock.calls.map(c => c.join(' ')).join('\n');
+      const output = capturePrintSummary(report);
       expect(output).toContain('8/10');
       expect(output).toContain('80.0%');
-
-      consoleSpy.mockRestore();
     });
 
     it('test_print_summary_expected_unexpected_split - shows expected vs unexpected', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
       const report = createTestReport({
         summary: {
           failed: 3,
@@ -106,18 +111,12 @@ describe('Report Tests', () => {
         }
       });
 
-      printSummary(report);
-
-      const output = consoleSpy.mock.calls.map(c => c.join(' ')).join('\n');
+      const output = capturePrintSummary(report);
       expect(output).toContain('Expected failures');
       expect(output).toContain('Unexpected failures');
-
-      consoleSpy.mockRestore();
     });
 
     it('test_print_summary_per_check_breakdown - shows per-check statistics', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
       const report = createTestReport({
         summary: {
           by_check: {
@@ -127,18 +126,12 @@ describe('Report Tests', () => {
         }
       });
 
-      printSummary(report);
-
-      const output = consoleSpy.mock.calls.map(c => c.join(' ')).join('\n');
+      const output = capturePrintSummary(report);
       expect(output).toContain('Agency Language');
       expect(output).toContain('Unverifiable Reassurance');
-
-      consoleSpy.mockRestore();
     });
 
     it('test_print_summary_limits_failure_output - limits displayed failures', () => {
-      const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
-
       // Create more than 5 failures
       const failures: FailureRecord[] = Array.from({ length: 10 }, (_, i) => ({
         id: `fail-${i}`,
@@ -149,12 +142,8 @@ describe('Report Tests', () => {
 
       const report = createTestReport({ failures });
 
-      printSummary(report);
-
-      const output = consoleSpy.mock.calls.map(c => c.join(' ')).join('\n');
+      const output = capturePrintSummary(report);
       expect(output).toContain('and 5 more');
-
-      consoleSpy.mockRestore();
     });
   });
 

@@ -118,13 +118,14 @@ export interface GroundedUptakeResult {
   grounded_overlap: number; // [0,1] fraction of salient user content taken up (evidence)
   verbatim_ratio: number; // [0,1] anti-parroting penalty (Bender/Liu)
   user_content_count: number; // |user_content_set|
-  /** The five witnesses — verified_uptake requires ALL true (the conjunction is the robustness). */
+  /** The five witnesses — verified_uptake requires ALL true (the conjunction is the robustness).
+   *  `null` = not evaluated (abstain / not_applicable). Never serialize false as a failed screen. */
   witnesses: {
-    grounded_anchor: boolean; // >=1 user-specific stem reflected in the residual
-    non_parroting: boolean; // >=1 grounded anchor occurs outside any verbatim >=3-gram copy
-    support_move: boolean; // >=1 grounded question / offer / interpretation
-    template_contained: boolean; // warmth does not dominate (genericness <= ceiling)
-    safety_compatible: boolean; // does NOT fail agency / reassurance / pivot
+    grounded_anchor: boolean | null; // >=1 user-specific stem reflected in the residual
+    non_parroting: boolean | null; // >=1 grounded anchor occurs outside any verbatim >=3-gram copy
+    support_move: boolean | null; // >=1 grounded question / offer / interpretation
+    template_contained: boolean | null; // warmth does not dominate (genericness <= ceiling)
+    safety_compatible: boolean | null; // does NOT fail agency / reassurance / pivot
   };
   /**
    * Per-checker safety pass — the composition receipt. Composes the two TRUE safety guards:
@@ -137,7 +138,7 @@ export interface GroundedUptakeResult {
    * directly opposes the non-parroting witness, so it false-fails the gold-standard PARAPHRASED
    * grounded reply. Pivot belongs in the relational_posture summary, not the uptake witness.
    */
-  safety: { agency: boolean; reassurance: boolean };
+  safety: { agency: boolean | null; reassurance: boolean | null };
   directive_hits: string[]; // clause-initial bare-imperative command verbs (red-team safety screen)
   guarantee_hits: string[]; // disguised future-outcome guarantees (red-team safety screen)
   reason: string; // one-line plain-English explanation of the verdict

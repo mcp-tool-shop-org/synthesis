@@ -20,12 +20,40 @@
 import { resolve } from 'node:path';
 import { realpathSync } from 'node:fs';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { loadCases } from './load.js';
+import { loadCases, validateCase } from './load.js';
 import { runCase, runAllCases } from './runner.js';
 import { writeReport, printSummary, formatArtifact } from './report.js';
+import { computeRelationalPosture } from './relational.js';
 import type { CLIOptions, EvalReport } from './types.js';
 
-export { loadCases, runCase, runAllCases, writeReport, printSummary, formatArtifact };
+export {
+  loadCases,
+  validateCase,
+  runCase,
+  runAllCases,
+  writeReport,
+  printSummary,
+  formatArtifact,
+  computeRelationalPosture,
+};
+export type { EvalCase, CheckType, EvalReport, CLIOptions } from './types.js';
+
+function isJsonOutput(): boolean {
+  return (process.env.MCP_OUTPUT ?? '').toLowerCase() === 'json';
+}
+
+/** Fatal CLI path: details on stderr; JSON error object on stdout when JSON mode. */
+function failFatal(message: string, extra?: unknown): never {
+  if (extra !== undefined) {
+    console.error(message, extra);
+  } else {
+    console.error(message);
+  }
+  if (isJsonOutput()) {
+    console.log(JSON.stringify({ error: true, message }));
+  }
+  process.exit(1);
+}
 
 /**
  * Parse command line arguments
@@ -42,8 +70,7 @@ function parseArgs(args: string[]): CLIOptions {
   // or one that starts with '--' (i.e. the next flag) is a usage error.
   const requireValue = (flag: string, value: string | undefined): string => {
     if (value === undefined || value.startsWith('--')) {
-      console.error(`${flag} requires a value`);
-      process.exit(1);
+      failFatal(`${flag} requires a value`);
     }
     return value;
   };
@@ -72,8 +99,7 @@ function parseArgs(args: string[]): CLIOptions {
         // always false, silently passing regressions.
         const n = Number(value);
         if (!Number.isInteger(n) || n < 0) {
-          console.error('--fail-on must be a non-negative integer');
-          process.exit(1);
+          failFatal('--fail-on must be a non-negative integer');
         }
         options.failOn = n;
         i++;
@@ -87,12 +113,10 @@ function parseArgs(args: string[]): CLIOptions {
       default:
         // Reject unknown flags so typos surface instead of silently using defaults.
         if (arg.startsWith('-')) {
-          console.error(`Unknown option: ${arg}`);
-          process.exit(1);
+          failFatal(`Unknown option: ${arg}`);
         }
         // Bare positional args are not supported; flag them too.
-        console.error(`Unexpected argument: ${arg}`);
-        process.exit(1);
+        failFatal(`Unexpected argument: ${arg}`);
     }
   }
 
@@ -103,7 +127,7 @@ function parseArgs(args: string[]): CLIOptions {
  * Print help message
  */
 function printHelp(): void {
-  console.log(`
+  const text = `
 Synthesis - Deterministic Empathy Evaluations
 
 Usage:
@@ -131,39 +155,56 @@ Checks:
 
 Each case is also summarized as a relational_posture (results[].relational_posture)
 with claims and non_claims.
-`);
+`;
+  // JSON mode keeps stdout for machine artifacts; help is human text on stderr.
+  if (isJsonOutput()) {
+    console.error(text);
+  } else {
+    console.log(text);
+  }
+}
+
+function hrefsMatch(a: string, b: string): boolean {
+  if (a === b) return true;
+  if (process.platform === 'win32') return a.toLowerCase() === b.toLowerCase();
+  return false;
+}
+
+function realOrResolve(p: string): string {
+  try {
+    return realpathSync(p);
+  } catch {
+    return resolve(p);
+  }
 }
 
 /**
  * True when this file is the process entry point (CLI / bin), false when
- * imported as a library. Compares import.meta.url to process.argv[1] via
- * pathToFileURL so Windows paths, file:// URLs, and drive-letter casing match.
- * realpath argv[1] so a symlink bin still counts as a direct run.
+ * imported as a library. realpath both argv[1] and import.meta.url so a
+ * symlink / junction / /tmp→/private/tmp mismatch still counts as a direct
+ * run. On parse/compare failure, log to stderr (no silent exit 0) and fall
+ * back to resolved-path equality; if that also throws, exit 1.
  */
 function isDirectRun(): boolean {
   const argv1 = process.argv[1];
   if (!argv1) return false;
   try {
     const rawEntry = argv1.startsWith('file:') ? fileURLToPath(argv1) : argv1;
-    let entryPath: string;
+    const rawSelf = fileURLToPath(import.meta.url);
+    const entryHref = pathToFileURL(realOrResolve(rawEntry)).href;
+    const selfHref = pathToFileURL(realOrResolve(rawSelf)).href;
+    return hrefsMatch(entryHref, selfHref);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(`synthesis: CLI entry guard failed (${msg})`);
     try {
-      entryPath = realpathSync(rawEntry);
+      const rawEntry = argv1.startsWith('file:') ? fileURLToPath(argv1) : argv1;
+      const rawSelf = fileURLToPath(import.meta.url);
+      return hrefsMatch(resolve(rawEntry), resolve(rawSelf));
     } catch {
-      entryPath = resolve(rawEntry);
+      process.exit(1);
     }
-    const entryHref = pathToFileURL(entryPath).href;
-    if (import.meta.url === entryHref) return true;
-    if (process.platform === 'win32') {
-      return import.meta.url.toLowerCase() === entryHref.toLowerCase();
-    }
-    return false;
-  } catch {
-    return false;
   }
-}
-
-function isJsonOutput(): boolean {
-  return process.env.MCP_OUTPUT === 'json';
 }
 
 /** Human banners/logs: stdout normally; stderr when stdout must be JSON-only. */
@@ -176,17 +217,11 @@ function cliLog(...args: unknown[]): void {
 }
 
 function emitSummary(report: EvalReport): void {
-  if (!isJsonOutput()) {
-    printSummary(report);
+  if (isJsonOutput()) {
+    printSummary(report, console.error, Boolean(process.stderr?.isTTY));
     return;
   }
-  const origLog = console.log;
-  console.log = console.error;
-  try {
-    printSummary(report);
-  } finally {
-    console.log = origLog;
-  }
+  printSummary(report, console.log, Boolean(process.stdout?.isTTY));
 }
 
 /**
@@ -205,8 +240,7 @@ async function main(): Promise<void> {
     cases = loadCases(options.cases, options.schema);
     cliLog(`Loaded ${cases.length} cases`);
   } catch (error) {
-    console.error('\nFailed to load cases:', (error as Error).message);
-    process.exit(1);
+    failFatal(`Failed to load cases: ${(error as Error).message}`);
   }
 
   // Run all evaluations
@@ -224,8 +258,7 @@ async function main(): Promise<void> {
   try {
     writeReport(report, options.out);
   } catch (e) {
-    console.error('\nFailed to write report:', (e as Error).message);
-    process.exit(1);
+    failFatal(`Failed to write report: ${(e as Error).message}`);
   }
   cliLog(`Report written to: ${options.out}`);
 
@@ -255,7 +288,7 @@ async function main(): Promise<void> {
 
 if (isDirectRun()) {
   main().catch(error => {
-    console.error('Fatal error:', error);
-    process.exit(1);
+    const message = error instanceof Error ? error.message : String(error);
+    failFatal(`Fatal error: ${message}`, error);
   });
 }

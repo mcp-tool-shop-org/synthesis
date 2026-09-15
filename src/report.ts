@@ -4,31 +4,67 @@
  * Outputs JSON report and console summary
  */
 
-import { writeFileSync, mkdirSync } from 'node:fs';
+import { writeFileSync, mkdirSync, renameSync, unlinkSync } from 'node:fs';
 import { dirname } from 'node:path';
-import type { EvalReport, CheckType } from './types.js';
+import type { EvalReport, RelationalPosture } from './types.js';
+import { CHECK_ORDER } from './runner.js';
+
+/** Display order for the TTY posture block. A new RelationalPosture fails tsc until listed. */
+export const POSTURE_ORDER = [
+  'grounded_uptake_verified',
+  'unresolved_abstain',
+  'hollow_warmth_flagged',
+  'pivot_or_abandonment',
+  'unsafe_comfort',
+] as const satisfies readonly RelationalPosture[];
+
+type _AssertNever<T extends never> = T;
+type _PostureOrderExhaustive = _AssertNever<Exclude<RelationalPosture, (typeof POSTURE_ORDER)[number]>>;
+void 0 as _PostureOrderExhaustive;
 
 /**
- * Write the full JSON report to disk
+ * Write the full JSON report to disk atomically (temp file + rename).
+ * On failure the temp file is unlinked and the error includes outputPath.
  */
 export function writeReport(report: EvalReport, outputPath: string): void {
-  // Ensure output directory exists
   const dir = dirname(outputPath);
-  mkdirSync(dir, { recursive: true });
-
-  // Write formatted JSON
-  writeFileSync(outputPath, JSON.stringify(report, null, 2), 'utf-8');
+  const tmpPath = `${outputPath}.tmp`;
+  try {
+    mkdirSync(dir, { recursive: true });
+    writeFileSync(tmpPath, JSON.stringify(report, null, 2), 'utf-8');
+    renameSync(tmpPath, outputPath);
+  } catch (err) {
+    try {
+      unlinkSync(tmpPath);
+    } catch {
+      // temp may not exist if mkdir/write failed first
+    }
+    const detail = err instanceof Error ? err.message : String(err);
+    throw new Error(`Failed to write report to ${outputPath}: ${detail}`, { cause: err });
+  }
 }
 
-/**
- * Print a summary to the console
- */
-export function printSummary(report: EvalReport): void {
-  const { summary, failures } = report;
+export type SummaryWriter = (...args: unknown[]) => void;
 
-  console.log('\n' + '═'.repeat(60));
-  console.log('  SYNTHESIS - Empathy Evaluation Report');
-  console.log('═'.repeat(60));
+/**
+ * Print a summary to the console (or a provided writer).
+ * ANSI color is gated on `color` (defaults to stdout TTY).
+ */
+export function printSummary(
+  report: EvalReport,
+  write: SummaryWriter = console.log,
+  color: boolean = Boolean(process.stdout?.isTTY)
+): void {
+  const { summary, failures } = report;
+  const reset = color ? '\x1b[0m' : '';
+  const red = color ? '\x1b[31m' : '';
+  const green = color ? '\x1b[32m' : '';
+  const yellow = color ? '\x1b[33m' : '';
+  const cyan = color ? '\x1b[36m' : '';
+
+  write('\n' + '═'.repeat(60));
+  write('  SYNTHESIS - Empathy Evaluation Report');
+  write('═'.repeat(60));
 
   // Overall stats (guard division-by-zero when there are no cases)
   const passRate = summary.cases > 0
@@ -36,31 +72,27 @@ export function printSummary(report: EvalReport): void {
     : '0.0';
   const hasUnexpectedFailures = summary.unexpected_failures > 0;
   const passIcon = hasUnexpectedFailures ? '✗' : '✓';
-  const passColor = hasUnexpectedFailures ? '\x1b[31m' : '\x1b[32m';
-  const reset = '\x1b[0m';
-  const yellow = '\x1b[33m';
+  const passColor = hasUnexpectedFailures ? red : green;
 
-  console.log(`\n  ${passColor}${passIcon}${reset} ${summary.passed}/${summary.cases} cases passed (${passRate}%)`);
+  write(`\n  ${passColor}${passIcon}${reset} ${summary.passed}/${summary.cases} cases passed (${passRate}%)`);
 
   // Show expected vs unexpected failures (unexpected includes silent
   // negatives that passed — those do not increment summary.failed).
   if (summary.failed > 0 || hasUnexpectedFailures) {
-    console.log(`    ${yellow}├${reset} Expected failures (negative examples): ${summary.expected_failures}`);
-    console.log(`    ${hasUnexpectedFailures ? '\x1b[31m' : yellow}└${reset} Unexpected failures: ${summary.unexpected_failures}`);
+    write(`    ${yellow}├${reset} Expected failures (negative examples): ${summary.expected_failures}`);
+    write(`    ${hasUnexpectedFailures ? red : yellow}└${reset} Unexpected failures: ${summary.unexpected_failures}`);
   }
 
   // Label accuracy (if we have labels)
   if (summary.label_accuracy) {
-    const accColor = summary.label_accuracy.accuracy >= 100 ? '\x1b[32m' : '\x1b[33m';
-    console.log(`\n  ${accColor}▸${reset} Label Accuracy: ${summary.label_accuracy.matched}/${summary.label_accuracy.total} (${summary.label_accuracy.accuracy}%)`);
+    const accColor = summary.label_accuracy.accuracy >= 100 ? green : yellow;
+    write(`\n  ${accColor}▸${reset} Label Accuracy: ${summary.label_accuracy.matched}/${summary.label_accuracy.total} (${summary.label_accuracy.accuracy}%)`);
   }
 
-  // Per-check breakdown
-  console.log('\n  By Check:');
-  const checkOrder: CheckType[] = ['agency_language', 'unverifiable_reassurance', 'topic_pivot', 'performative_empathy', 'grounded_uptake'];
-  const cyan = '\x1b[36m';
+  // Per-check breakdown — iterate shared CHECK_ORDER so a new CheckType cannot vanish from TTY
+  write('\n  By Check:');
 
-  for (const check of checkOrder) {
+  for (const check of CHECK_ORDER) {
     const stats = summary.by_check[check];
     if (!stats) continue;
 
@@ -73,17 +105,17 @@ export function printSummary(report: EvalReport): void {
     // the absence of a positive — never a defect. Render it neutrally (never a red ✗) and
     // frame the count as "verified / assessed", not "passed / applicable".
     if (check === 'grounded_uptake') {
-      console.log(`    ${cyan}▸${reset} ${checkName}: ${stats.passed} verified / ${applicable} assessed (${rate}%)${naNote}`);
+      write(`    ${cyan}▸${reset} ${checkName}: ${stats.passed} verified / ${applicable} assessed (${rate}%)${naNote}`);
       continue;
     }
 
     const icon = stats.failed === 0 ? '✓' : '✗';
-    const color = stats.failed === 0 ? '\x1b[32m' : '\x1b[33m';
-    console.log(`    ${color}${icon}${reset} ${checkName}: ${stats.passed}/${applicable} (${rate}%)${naNote}`);
+    const checkColor = stats.failed === 0 ? green : yellow;
+    write(`    ${checkColor}${icon}${reset} ${checkName}: ${stats.passed}/${applicable} (${rate}%)${naNote}`);
   }
 
   // Relational posture distribution (composed case-level summary)
-  const postureCounts = new Map<string, number>();
+  const postureCounts = new Map<RelationalPosture, number>();
   for (const r of report.results) {
     if (r.relational_posture) {
       const s = r.relational_posture.state;
@@ -91,26 +123,19 @@ export function printSummary(report: EvalReport): void {
     }
   }
   if (postureCounts.size > 0) {
-    const POSTURE_ORDER = [
-      'grounded_uptake_verified',
-      'unresolved_abstain',
-      'hollow_warmth_flagged',
-      'pivot_or_abandonment',
-      'unsafe_comfort',
-    ];
-    const POSTURE_ICON: Record<string, string> = {
+    const POSTURE_ICON: Record<RelationalPosture, string> = {
       grounded_uptake_verified: `${cyan}▸${reset}`,
       unresolved_abstain: `${yellow}◦${reset}`,
       hollow_warmth_flagged: `${yellow}✗${reset}`,
       pivot_or_abandonment: `${yellow}✗${reset}`,
-      unsafe_comfort: `${'\x1b[31m'}✗${reset}`,
+      unsafe_comfort: `${red}✗${reset}`,
     };
-    console.log('\n  Relational Posture:');
+    write('\n  Relational Posture:');
     for (const state of POSTURE_ORDER) {
       const n = postureCounts.get(state);
       if (!n) continue;
       const label = state.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-      console.log(`    ${POSTURE_ICON[state] ?? '•'} ${label}: ${n}`);
+      write(`    ${POSTURE_ICON[state]} ${label}: ${n}`);
     }
   }
 
@@ -119,47 +144,47 @@ export function printSummary(report: EvalReport): void {
   const expectedFailures = failures.filter(f => f.expected_failure);
 
   if (unexpectedFailures.length > 0) {
-    console.log(`\n  ${'\x1b[31m'}Unexpected Failures (regressions):${reset}`);
+    write(`\n  ${red}Unexpected Failures (regressions):${reset}`);
     for (const failure of unexpectedFailures.slice(0, 5)) {
       const failPart = failure.failed.join(', ');
       const passPart = failure.unexpected_pass && failure.unexpected_pass.length > 0
         ? `unexpected pass: ${failure.unexpected_pass.join(', ')}`
         : '';
       const checks = [failPart, passPart].filter(Boolean).join('; ') || 'unexpected pass';
-      console.log(`    • ${failure.id}: ${checks}`);
-      printEvidence(failure.evidence);
+      write(`    • ${failure.id}: ${checks}`);
+      printEvidence(failure.evidence, write);
     }
     if (unexpectedFailures.length > 5) {
-      console.log(`    ... and ${unexpectedFailures.length - 5} more`);
+      write(`    ... and ${unexpectedFailures.length - 5} more`);
     }
   }
 
   if (expectedFailures.length > 0) {
-    console.log(`\n  ${yellow}Expected Failures (negative examples correctly caught):${reset}`);
+    write(`\n  ${yellow}Expected Failures (negative examples correctly caught):${reset}`);
     for (const failure of expectedFailures.slice(0, 5)) {
       const checks = failure.failed.join(', ');
-      console.log(`    ✓ ${failure.id}: ${checks}`);
+      write(`    ✓ ${failure.id}: ${checks}`);
     }
     if (expectedFailures.length > 5) {
-      console.log(`    ... and ${expectedFailures.length - 5} more`);
+      write(`    ... and ${expectedFailures.length - 5} more`);
     }
   }
 
-  console.log('\n' + '═'.repeat(60) + '\n');
+  write('\n' + '═'.repeat(60) + '\n');
 }
 
 /**
  * Print evidence for a failure
  */
-function printEvidence(evidence: Record<string, unknown>): void {
+function printEvidence(evidence: Record<string, unknown>, write: SummaryWriter): void {
   for (const [key, value] of Object.entries(evidence)) {
     if (key === 'unexpected_pass') continue; // already rendered on the failure title line
     if (Array.isArray(value) && value.length > 0) {
-      console.log(`      ${key}: ${value.slice(0, 3).join(', ')}${value.length > 3 ? '...' : ''}`);
+      write(`      ${key}: ${value.slice(0, 3).join(', ')}${value.length > 3 ? '...' : ''}`);
     } else if (typeof value === 'number') {
-      console.log(`      ${key}: ${value}`);
+      write(`      ${key}: ${value}`);
     } else if (typeof value === 'boolean') {
-      console.log(`      ${key}: ${value}`);
+      write(`      ${key}: ${value}`);
     }
   }
 }

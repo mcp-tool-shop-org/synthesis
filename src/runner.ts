@@ -27,13 +27,17 @@ import { computeRelationalPosture } from './relational.js';
  * insertion order would make report.json byte-different across case-file
  * orderings. This fixed order guarantees stable, replayable output.
  */
-const CHECK_ORDER: CheckType[] = [
+export const CHECK_ORDER = [
   'agency_language',
   'unverifiable_reassurance',
   'topic_pivot',
   'performative_empathy',
-  'grounded_uptake'
-];
+  'grounded_uptake',
+] as const satisfies readonly CheckType[];
+
+type _AssertNever<T extends never> = T;
+type _CheckOrderExhaustive = _AssertNever<Exclude<CheckType, (typeof CHECK_ORDER)[number]>>;
+void 0 as _CheckOrderExhaustive;
 
 /**
  * Map a `-fail` tag stem onto the check it names.

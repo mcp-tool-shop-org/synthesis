@@ -5,16 +5,20 @@
  */
 
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { writeFileSync, mkdirSync, rmSync } from 'node:fs';
-import { join } from 'node:path';
+import { writeFileSync, mkdirSync, rmSync, existsSync } from 'node:fs';
+import { join, relative, isAbsolute } from 'node:path';
 import { loadCases, validateCase } from '../src/load.js';
+
+// Pin to the test-file repo root, not process.cwd(): an isolated worktree's
+// vitest may be launched with cwd at the parent checkout.
+const REPO_ROOT = join(__dirname, '..');
 
 // The real bundled schema (not the simplified testSchema below) is used for the
 // TEST-008 guard tests, which assert behavior specific to its
 // `additionalProperties: false` constraints on `expected`.
-const REAL_SCHEMA = join(process.cwd(), 'schemas', 'eval_case.schema.json');
+const REAL_SCHEMA = join(REPO_ROOT, 'schemas', 'eval_case.schema.json');
 
-const TEST_DIR = join(process.cwd(), 'test-fixtures-load');
+const TEST_DIR = join(REPO_ROOT, 'test-fixtures-load');
 const TEST_CASES = join(TEST_DIR, 'cases.jsonl');
 const TEST_SCHEMA = join(TEST_DIR, 'schema.json');
 
@@ -151,6 +155,14 @@ describe('JSONL Loader Tests', () => {
     // (1) an UNKNOWN expected key is REJECTED at the schema boundary; (2) a
     // KNOWN expected key that simply isn't in `checks` is SCHEMA-VALID (the
     // runner silently ignores it — see runner.test.ts for the runtime half).
+
+    it('resolves REAL_SCHEMA under the test-file repo root (not process.cwd())', () => {
+      const rel = relative(REPO_ROOT, REAL_SCHEMA);
+      expect(rel.startsWith('..')).toBe(false);
+      expect(isAbsolute(rel)).toBe(false);
+      expect(REAL_SCHEMA).toBe(join(REPO_ROOT, 'schemas', 'eval_case.schema.json'));
+      expect(existsSync(REAL_SCHEMA)).toBe(true);
+    });
 
     it('rejects an expected key that is not a known check (additionalProperties: false)', () => {
       const badCase = {

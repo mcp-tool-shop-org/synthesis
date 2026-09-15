@@ -13,22 +13,26 @@ Synthesis is designed to drop into CI pipelines. Deterministic results, structur
 name: Empathy Eval
 on:
   push:
-    paths: ['data/**', 'src/**', 'schemas/**']
+    paths:
+      - 'data/**'
+      - 'src/**'
+      - 'schemas/**'
+      - 'tests/**'
+      - 'scripts/**'
 
 jobs:
   eval:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: '18'
       - run: npm ci
-      - run: npm run build
-      - run: npm run eval
+      - run: npm run verify
 ```
 
-The eval step exits with code `2` if `unexpected_failures > 0`, which fails the CI job. Expected failures (negative examples) do not affect the exit code.
+The verify step (test + build + eval) exits with code `2` if `unexpected_failures > 0`, which fails the CI job. Expected failures (negative examples) do not affect the exit code.
 
 ## Failure threshold
 
