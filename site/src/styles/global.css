@@ -1,3 +1,11 @@
 @import "tailwindcss";
 @import "@mcptoolshop/site-theme/styles/theme.css";
 @source "../../node_modules/@mcptoolshop/site-theme";
+
+/* Stack DataTable CSS grids (Checker / What / Example) on small viewports.
+   Inline repeat(N, minmax(0,1fr)) otherwise crushes ~90px columns at 375px. */
+@media (max-width: 48rem) {
+  .overflow-hidden.rounded-2xl .grid {
+    grid-template-columns: 1fr !important;
+  }
+}

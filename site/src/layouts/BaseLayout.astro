@@ -1,0 +1,141 @@
+---
+const {
+  title,
+  description,
+  logoBadge,
+  brandName,
+  nav = [],
+  repoUrl,
+  npmUrl,
+  footerText,
+} = Astro.props;
+
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+
+const siteOrigin = Astro.site ?? new URL('https://mcp-tool-shop-org.github.io');
+const ogUrl = new URL(base, siteOrigin).href;
+const ogImage =
+  'https://raw.githubusercontent.com/mcp-tool-shop-org/brand/main/logos/synthesis/readme.png';
+
+// Brand CDN PNG 200s (OG + Starlight favicon). Tab icon is an inline S-on-zinc
+// SVG so we never point at /synthesis/favicon.svg (404) or ship a 1MB PNG.
+const faviconSvg =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#27272a"/><text x="16" y="23" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#fafafa">S</text></svg>';
+const faviconHref = `data:image/svg+xml;utf8,${encodeURIComponent(faviconSvg)}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <meta name="color-scheme" content="dark" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={ogUrl} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+    <link rel="icon" type="image/svg+xml" href={faviconHref} />
+    <link rel="icon" type="image/png" href={ogImage} />
+    <title>{title}</title>
+  </head>
+
+  <body class="min-h-screen bg-surface text-heading antialiased">
+    <div class="mx-auto max-w-6xl px-4">
+      <header class="flex items-center justify-between py-6">
+        <a href={base} class="flex items-center gap-2 font-semibold tracking-tight">
+          <span class="inline-flex h-8 w-8 items-center justify-center rounded-xl bg-surface-strong">
+            {logoBadge}
+          </span>
+          <span>{brandName}</span>
+        </a>
+
+        <nav aria-label="Main navigation" class="hidden items-center gap-6 text-sm text-muted md:flex">
+          {nav.map((item: { href: string; label: string }) => (
+            <a href={item.href} class="hover:text-heading">{item.label}</a>
+          ))}
+        </nav>
+
+        <div class="flex items-center gap-3">
+          {(nav.length > 0 || npmUrl) && (
+            <details class="relative md:hidden">
+              <summary
+                class="inline-flex cursor-pointer list-none items-center justify-center rounded-xl border border-edge p-2 text-heading hover:bg-surface-raised [&::-webkit-details-marker]:hidden"
+                aria-label="Toggle navigation menu"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+                  <line x1="3" y1="6" x2="21" y2="6" />
+                  <line x1="3" y1="12" x2="21" y2="12" />
+                  <line x1="3" y1="18" x2="21" y2="18" />
+                </svg>
+              </summary>
+              <nav
+                aria-label="Mobile navigation"
+                class="absolute right-0 z-50 mt-2 flex w-56 flex-col gap-1 rounded-xl border border-edge bg-surface-raised p-2 shadow-lg"
+              >
+                {nav.map((item: { href: string; label: string }) => (
+                  <a
+                    href={item.href}
+                    class="rounded-lg px-3 py-2 text-sm text-muted hover:bg-surface hover:text-heading"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+                {npmUrl && (
+                  <a
+                    href={npmUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    class="rounded-lg px-3 py-2 text-sm text-muted hover:bg-surface hover:text-heading"
+                  >
+                    npm
+                  </a>
+                )}
+              </nav>
+            </details>
+          )}
+          {npmUrl && (
+            <a
+              class="hidden rounded-xl border border-edge px-4 py-2 text-sm text-body hover:bg-surface-raised md:inline-flex"
+              href={npmUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
+              npm
+            </a>
+          )}
+          <a
+            class="inline-flex rounded-xl bg-action px-4 py-2 text-sm font-medium text-action-text hover:bg-action-hover"
+            href={repoUrl}
+            target="_blank"
+            rel="noreferrer"
+          >
+            GitHub
+          </a>
+        </div>
+      </header>
+
+      <main class="pb-24">
+        <slot />
+      </main>
+
+      <footer class="border-t border-edge-subtle py-10 text-sm text-dim">
+        <div class="flex flex-col justify-between gap-4 md:flex-row">
+          <p set:html={footerText} />
+          <div class="flex gap-4">
+            {npmUrl && (
+              <a class="hover:text-body" href={npmUrl} target="_blank" rel="noreferrer">npm</a>
+            )}
+            <a class="hover:text-body" href={repoUrl} target="_blank" rel="noreferrer">GitHub</a>
+            <a class="hover:text-body" href="https://opensource.org/license/mit/" target="_blank" rel="noreferrer">License</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>

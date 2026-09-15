@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import Ajv from 'ajv';
 import addFormats from 'ajv-formats';
 import type { EvalCase } from './types.js';
+import { useAsciiGlyphs } from './color.js';
 
 /**
  * Load and validate evaluation cases from a JSONL file
@@ -55,9 +56,11 @@ export function loadCases(casesPath: string, schemaPath: string): EvalCase[] {
   }
 
   if (errors.length > 0) {
-    console.error('\n❌ Schema validation errors:');
+    const ascii = useAsciiGlyphs(process.stderr);
+    console.error(ascii ? '\n[x] Schema validation errors:' : '\n❌ Schema validation errors:');
+    const bullet = ascii ? '*' : '•';
     for (const err of errors) {
-      console.error(`  • ${err}`);
+      console.error(`  ${bullet} ${err}`);
     }
     throw new Error(`Failed to load ${errors.length} case(s)`);
   }

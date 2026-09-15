@@ -30,20 +30,21 @@ const POSITIVE_PATTERNS: RegExp[] = [
   /\bwhen you're ready\b/i,
   /\bif you'd like\b/i,
   /\bif you want\b/i,
-  /\bwhat does .* look like to you\b/i,
-  /\bwhat .* means to you\b/i,
+  // Bounded non-greedy gaps so match[0] stays a short phrase, not the whole turn.
+  /\bwhat does .{0,40}? look like to you\b/i,
+  /\bwhat .{0,40}? means to you\b/i,
   /\byour perspective\b/i,
   /\byour experience\b/i,
   /\bwhat's prompting\b/i,
   /\bwhat's making\b/i,
   // Open-ended questions that invite user perspective
   /\bwhat (do you|aspects|questions)\b/i,
-  /\bwhat .* (to|for) you\b/i,
-  /\bhow .* to you\b/i,
+  /\bwhat .{0,40}? (to|for) you\b/i,
+  /\bhow .{0,40}? to you\b/i,
   /\bare you (safe|okay|alright|currently)\b/i,
   /\bdo you (need|have)\b/i,
   /\btell me (more|about)\b/i,
-  /\bshare .* (with me|about)\b/i,
+  /\bshare .{0,40}? (with me|about)\b/i,
   // Inviting user reflection
   /\bwhat do you notice\b/i,
   /\bwhat questions\b/i,
@@ -89,6 +90,9 @@ const NEGATIVE_PATTERNS: RegExp[] = [
   /\bcheer up\b/i,
 ];
 
+/** Max serialized match[0] length; longer spans are sliced and given an ellipsis. */
+const HIT_SERIALIZE_MAX = 80;
+
 /**
  * Find all matching patterns in text.
  *
@@ -96,13 +100,18 @@ const NEGATIVE_PATTERNS: RegExp[] = [
  * consistent with pivot.ts/reassurance.ts which also report `match[0]`.
  * This keeps the evidence trail an honest record of WHAT was matched, not the
  * raw regex source. Pass/fail is unaffected: the score still counts hits.
+ * Serialized match[0] is capped so a future greedy pattern cannot dump a wall.
  */
 function findMatches(text: string, patterns: RegExp[]): string[] {
   const matches: string[] = [];
   for (const pattern of patterns) {
     const matched = text.match(pattern)?.[0];
     if (matched) {
-      matches.push(matched);
+      matches.push(
+        matched.length > HIT_SERIALIZE_MAX
+          ? `${matched.slice(0, HIT_SERIALIZE_MAX)}...`
+          : matched
+      );
     }
   }
   return matches;

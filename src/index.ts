@@ -24,6 +24,7 @@ import { loadCases, validateCase } from './load.js';
 import { runCase, runAllCases } from './runner.js';
 import { writeReport, printSummary, formatArtifact, SUMMARY_FOIL } from './report.js';
 import { computeRelationalPosture } from './relational.js';
+import { hasColors } from './color.js';
 import type { CLIOptions, EvalReport } from './types.js';
 
 export {
@@ -65,7 +66,8 @@ function parseArgs(args: string[]): CLIOptions {
     schema: 'schemas/eval_case.schema.json',
     out: 'out/report.json',
     failOn: 0,
-    explain: false
+    explain: false,
+    noColor: false
   };
 
   // Require a present, non-flag value for a value-taking flag. A missing value
@@ -110,6 +112,9 @@ function parseArgs(args: string[]): CLIOptions {
       case '--explain':
         options.explain = true;
         break;
+      case '--no-color':
+        options.noColor = true;
+        break;
       case '--help':
       case '-h':
         printHelp();
@@ -145,6 +150,7 @@ Options:
   --out <path>       Output path for report (default: out/report.json)
   --fail-on <n>      Maximum allowed failures before exit code 2 (default: 0)
   --explain          Extra foil: dump per-case claims and non_claims (limits also print on the default TTY)
+  --no-color         Disable ANSI color and use ASCII glyphs (also honors NO_COLOR, FORCE_COLOR=0, TERM=dumb)
   --help, -h         Show this help message
 
 Exit Codes:
@@ -225,12 +231,12 @@ function cliLog(...args: unknown[]): void {
   }
 }
 
-function emitSummary(report: EvalReport, explain: boolean): void {
+function emitSummary(report: EvalReport, explain: boolean, color: boolean): void {
   if (isJsonOutput()) {
-    printSummary(report, console.error, Boolean(process.stderr?.isTTY), { explain });
+    printSummary(report, console.error, color, { explain });
     return;
   }
-  printSummary(report, console.log, Boolean(process.stdout?.isTTY), { explain });
+  printSummary(report, console.log, color, { explain });
 }
 
 /**
@@ -271,7 +277,9 @@ async function main(): Promise<void> {
   }
   cliLog(`Report written to: ${options.out}`);
 
-  emitSummary(report, options.explain);
+  const colorStream = isJsonOutput() ? process.stderr : process.stdout;
+  const color = options.noColor ? false : hasColors(colorStream);
+  emitSummary(report, options.explain, color);
 
   // MCP_OUTPUT=json: stdout is ONLY the artifact so JSON.parse(stdout) works.
   const artifact = formatArtifact(report, options.out);

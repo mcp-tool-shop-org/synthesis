@@ -55,15 +55,118 @@ export interface PrintSummaryOptions {
   explain?: boolean;
 }
 
+/** Hanging indent for wrapped foil / claims / non_claims continuation lines. */
+const HANG_INDENT = '      ';
+
+type SummaryGlyphs = {
+  banner: string;
+  tee: string;
+  elbow: string;
+  bullet: string;
+  fail: string;
+  pass: string;
+  pointer: string;
+  hollow: string;
+  ellipsis: string;
+};
+
+function summaryGlyphs(color: boolean): SummaryGlyphs {
+  if (color) {
+    return {
+      banner: '═',
+      tee: '├',
+      elbow: '└',
+      bullet: '•',
+      fail: '✗',
+      pass: '✓',
+      pointer: '▸',
+      hollow: '◦',
+      ellipsis: '…',
+    };
+  }
+  return {
+    banner: '=',
+    tee: '+',
+    elbow: '+',
+    bullet: '*',
+    fail: '[x]',
+    pass: '[v]',
+    pointer: '[>]',
+    hollow: 'o',
+    ellipsis: '...',
+  };
+}
+
+/** Banner/wrap width: min(60, stdout.columns || 80). */
+export function summaryBannerWidth(columns: number | undefined = process.stdout?.columns): number {
+  const cols = typeof columns === 'number' && Number.isFinite(columns) && columns > 0
+    ? Math.floor(columns)
+    : 80;
+  return Math.min(60, cols);
+}
+
+function wrapPrefixed(
+  prefix: string,
+  body: string,
+  width: number,
+  hang: string,
+  truncate: boolean,
+  ellipsis: string
+): string[] {
+  const cap = Math.max(ellipsis.length + 1, width - 8);
+  const fit = (line: string): string => {
+    if (!truncate || line.length <= width) return line;
+    return line.slice(0, cap) + ellipsis;
+  };
+
+  const words = body.split(/\s+/).filter((w) => w.length > 0);
+  if (words.length === 0) return [fit(prefix.replace(/\s+$/u, ''))];
+
+  const lines: string[] = [];
+  let indent = prefix;
+  let line = prefix;
+
+  for (const word of words) {
+    if (line === indent) {
+      line = indent + word;
+      continue;
+    }
+    if (line.length + 1 + word.length <= width) {
+      line += ` ${word}`;
+      continue;
+    }
+    lines.push(fit(line));
+    indent = hang;
+    line = hang + word;
+  }
+  lines.push(fit(line));
+  return lines;
+}
+
+function writeWrapped(
+  write: SummaryWriter,
+  prefix: string,
+  body: string,
+  width: number,
+  hang: string,
+  truncate: boolean,
+  ellipsis: string
+): void {
+  for (const line of wrapPrefixed(prefix, body, width, hang, truncate, ellipsis)) {
+    write(line);
+  }
+}
+
 /**
  * Print a summary to the console (or a provided writer).
- * ANSI color is gated on `color` (defaults to stdout TTY).
- * `explain` dumps per-case claims; non_claims always print for postures that appeared.
+ * ANSI color is gated on `color` (defaults to false — callers must opt in).
+ * When color is false, box/emoji glyphs are ASCII. `explain` dumps per-case claims;
+ * non_claims always print for postures that appeared.
  */
 export function printSummary(
   report: EvalReport,
   write: SummaryWriter = console.log,
-  color: boolean = Boolean(process.stdout?.isTTY),
+  color: boolean = false,
   options: PrintSummaryOptions = {}
 ): void {
   const { summary, failures } = report;
@@ -73,11 +176,16 @@ export function printSummary(
   const green = color ? '\x1b[32m' : '';
   const yellow = color ? '\x1b[33m' : '';
   const cyan = color ? '\x1b[36m' : '';
+  const g = summaryGlyphs(color);
+  const width = summaryBannerWidth();
+  const bar = g.banner.repeat(width);
 
-  write('\n' + '═'.repeat(60));
+  write('\n' + bar);
   write('  SYNTHESIS - Empathy Evaluation Report');
-  write('═'.repeat(60));
-  write(`  ${yellow}${SUMMARY_FOIL}${reset}`);
+  write(bar);
+  for (const line of wrapPrefixed('  ', SUMMARY_FOIL, width, HANG_INDENT, false, g.ellipsis)) {
+    write(`${yellow}${line}${reset}`);
+  }
   if (explain) {
     write('  --explain dumps per-case claims/non_claims; limits also print on the default TTY.');
   }
@@ -87,7 +195,7 @@ export function printSummary(
     ? ((summary.passed / summary.cases) * 100).toFixed(1)
     : '0.0';
   const hasUnexpectedFailures = summary.unexpected_failures > 0;
-  const passIcon = hasUnexpectedFailures ? '✗' : '✓';
+  const passIcon = hasUnexpectedFailures ? g.fail : g.pass;
   const passColor = hasUnexpectedFailures ? red : green;
 
   write(`\n  ${passColor}${passIcon}${reset} ${summary.passed}/${summary.cases} cases passed (${passRate}%)`);
@@ -95,14 +203,14 @@ export function printSummary(
   // Show expected vs unexpected failures (unexpected includes silent
   // negatives that passed — those do not increment summary.failed).
   if (summary.failed > 0 || hasUnexpectedFailures) {
-    write(`    ${yellow}├${reset} Expected failures (negative examples): ${summary.expected_failures}`);
-    write(`    ${hasUnexpectedFailures ? red : yellow}└${reset} Unexpected failures: ${summary.unexpected_failures}`);
+    write(`    ${yellow}${g.tee}${reset} Expected failures (negative examples): ${summary.expected_failures}`);
+    write(`    ${hasUnexpectedFailures ? red : yellow}${g.elbow}${reset} Unexpected failures: ${summary.unexpected_failures}`);
   }
 
   // Label accuracy (if we have labels)
   if (summary.label_accuracy) {
     const accColor = summary.label_accuracy.accuracy >= 100 ? green : yellow;
-    write(`\n  ${accColor}▸${reset} Label Accuracy: ${summary.label_accuracy.matched}/${summary.label_accuracy.total} (${summary.label_accuracy.accuracy}%)`);
+    write(`\n  ${accColor}${g.pointer}${reset} Label Accuracy: ${summary.label_accuracy.matched}/${summary.label_accuracy.total} (${summary.label_accuracy.accuracy}%)`);
   }
 
   // Per-check breakdown — iterate shared CHECK_ORDER so a new CheckType cannot vanish from TTY
@@ -118,14 +226,14 @@ export function printSummary(
     const naNote = stats.not_applicable > 0 ? ` [${stats.not_applicable} N/A]` : '';
 
     // grounded_uptake is a POSITIVE witness: "failed" here means no_verified_uptake, which is
-    // the absence of a positive — never a defect. Render it neutrally (never a red ✗) and
+    // the absence of a positive — never a defect. Render it neutrally (never a red fail glyph) and
     // frame the count as "verified / assessed", not "passed / applicable".
     if (check === 'grounded_uptake') {
-      write(`    ${cyan}▸${reset} ${checkName}: ${stats.passed} verified / ${applicable} assessed (${rate}%)${naNote}`);
+      write(`    ${cyan}${g.pointer}${reset} ${checkName}: ${stats.passed} verified / ${applicable} assessed (${rate}%)${naNote}`);
       continue;
     }
 
-    const icon = stats.failed === 0 ? '✓' : '✗';
+    const icon = stats.failed === 0 ? g.pass : g.fail;
     const checkColor = stats.failed === 0 ? green : yellow;
     write(`    ${checkColor}${icon}${reset} ${checkName}: ${stats.passed}/${applicable} (${rate}%)${naNote}`);
   }
@@ -157,11 +265,11 @@ export function printSummary(
   }
   if (postureAggs.size > 0) {
     const POSTURE_ICON: Record<RelationalPosture, string> = {
-      grounded_uptake_verified: `${cyan}▸${reset}`,
-      unresolved_abstain: `${yellow}◦${reset}`,
-      hollow_warmth_flagged: `${yellow}✗${reset}`,
-      pivot_or_abandonment: `${yellow}✗${reset}`,
-      unsafe_comfort: `${red}✗${reset}`,
+      grounded_uptake_verified: `${cyan}${g.pointer}${reset}`,
+      unresolved_abstain: `${yellow}${g.hollow}${reset}`,
+      hollow_warmth_flagged: `${yellow}${g.fail}${reset}`,
+      pivot_or_abandonment: `${yellow}${g.fail}${reset}`,
+      unsafe_comfort: `${red}${g.fail}${reset}`,
     };
     write('\n  Relational Posture:');
     for (const state of POSTURE_ORDER) {
@@ -171,10 +279,18 @@ export function printSummary(
       write(`    ${POSTURE_ICON[state]} ${label}: ${agg.count}`);
       const nonClaims = [...agg.nonClaims];
       if (nonClaims.length > 0) {
-        write(`      non_claims: ${nonClaims.join('; ')}`);
+        writeWrapped(write, '      non_claims: ', nonClaims.join('; '), width, HANG_INDENT, true, g.ellipsis);
       }
       if (agg.exampleClaims.length > 0) {
-        write(`      claims [${agg.exampleId}]: ${agg.exampleClaims.join('; ')}`);
+        writeWrapped(
+          write,
+          `      claims [${agg.exampleId}]: `,
+          agg.exampleClaims.join('; '),
+          width,
+          HANG_INDENT,
+          true,
+          g.ellipsis
+        );
       }
     }
     if (explain) {
@@ -182,9 +298,25 @@ export function printSummary(
       for (const r of report.results) {
         const p = r.relational_posture;
         if (!p) continue;
-        write(`    • ${r.id}: ${p.state}`);
-        write(`      claims: ${p.claims.length > 0 ? p.claims.join('; ') : '(none)'}`);
-        write(`      non_claims: ${p.non_claims.length > 0 ? p.non_claims.join('; ') : '(none)'}`);
+        write(`    ${g.bullet} ${r.id}: ${p.state}`);
+        writeWrapped(
+          write,
+          '      claims: ',
+          p.claims.length > 0 ? p.claims.join('; ') : '(none)',
+          width,
+          HANG_INDENT,
+          true,
+          g.ellipsis
+        );
+        writeWrapped(
+          write,
+          '      non_claims: ',
+          p.non_claims.length > 0 ? p.non_claims.join('; ') : '(none)',
+          width,
+          HANG_INDENT,
+          true,
+          g.ellipsis
+        );
       }
     }
   }
@@ -201,7 +333,7 @@ export function printSummary(
         ? `unexpected pass: ${failure.unexpected_pass.join(', ')}`
         : '';
       const checks = [failPart, passPart].filter(Boolean).join('; ') || 'unexpected pass';
-      write(`    • ${failure.id}: ${checks}`);
+      write(`    ${g.bullet} ${failure.id}: ${checks}`);
       printEvidence(failure.evidence, write);
     }
     if (unexpectedFailures.length > 5) {
@@ -213,14 +345,14 @@ export function printSummary(
     write(`\n  ${yellow}Expected Failures (negative examples correctly caught):${reset}`);
     for (const failure of expectedFailures.slice(0, 5)) {
       const checks = failure.failed.join(', ');
-      write(`    ✓ ${failure.id}: ${checks}`);
+      write(`    ${g.pass} ${failure.id}: ${checks}`);
     }
     if (expectedFailures.length > 5) {
       write(`    ... and ${expectedFailures.length - 5} more`);
     }
   }
 
-  write('\n' + '═'.repeat(60) + '\n');
+  write('\n' + bar + '\n');
 }
 
 /**

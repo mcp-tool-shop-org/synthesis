@@ -303,4 +303,6 @@ export interface CLIOptions {
   failOn: number;
   /** Extra TTY foil + per-case claims/non_claims. Limits also print without this flag. */
   explain: boolean;
+  /** Force color=false (ASCII glyphs, no ANSI). Also implied by NO_COLOR / FORCE_COLOR=0 / TERM=dumb. */
+  noColor: boolean;
 }
