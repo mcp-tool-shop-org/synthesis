@@ -211,9 +211,17 @@ describe('CLI Tests', () => {
         '--out', TEST_OUT
       ], { MCP_OUTPUT: 'json' });
 
-      // Should contain JSON artifact
-      expect(result.stdout).toContain('"type"');
-      expect(result.stdout).toContain('artifact');
+      const artifact = JSON.parse(result.stdout);
+      expect(artifact.type).toBe('artifact');
+      expect(artifact.name).toBe('synthesis-report');
+      expect(result.stdout.trim().startsWith('{')).toBe(true);
+      expect(result.stdout).not.toContain('Synthesis - Deterministic Empathy Evaluations');
+    });
+
+    it('test_import_does_not_run_cli', async () => {
+      const { loadCases, runAllCases } = await import('../src/index.ts');
+      expect(typeof loadCases).toBe('function');
+      expect(typeof runAllCases).toBe('function');
     });
   });
 });

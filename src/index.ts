@@ -12,12 +12,20 @@
  *   0 - All cases passed (or failures <= --fail-on threshold)
  *   1 - Fatal load/runtime error (bad args, unreadable cases, unwritable output)
  *   2 - One or more unexpected failures (exceed --fail-on threshold)
+ *
+ * This module is also the package barrel. Importing it as a library must not
+ * run the CLI or call process.exit — main() is gated on isDirectRun().
  */
 
+import { resolve } from 'node:path';
+import { realpathSync } from 'node:fs';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { loadCases } from './load.js';
-import { runAllCases } from './runner.js';
+import { runCase, runAllCases } from './runner.js';
 import { writeReport, printSummary, formatArtifact } from './report.js';
 import type { CLIOptions, EvalReport } from './types.js';
+
+export { loadCases, runCase, runAllCases, writeReport, printSummary, formatArtifact };
 
 /**
  * Parse command line arguments
@@ -127,27 +135,82 @@ with claims and non_claims.
 }
 
 /**
+ * True when this file is the process entry point (CLI / bin), false when
+ * imported as a library. Compares import.meta.url to process.argv[1] via
+ * pathToFileURL so Windows paths, file:// URLs, and drive-letter casing match.
+ * realpath argv[1] so a symlink bin still counts as a direct run.
+ */
+function isDirectRun(): boolean {
+  const argv1 = process.argv[1];
+  if (!argv1) return false;
+  try {
+    const rawEntry = argv1.startsWith('file:') ? fileURLToPath(argv1) : argv1;
+    let entryPath: string;
+    try {
+      entryPath = realpathSync(rawEntry);
+    } catch {
+      entryPath = resolve(rawEntry);
+    }
+    const entryHref = pathToFileURL(entryPath).href;
+    if (import.meta.url === entryHref) return true;
+    if (process.platform === 'win32') {
+      return import.meta.url.toLowerCase() === entryHref.toLowerCase();
+    }
+    return false;
+  } catch {
+    return false;
+  }
+}
+
+function isJsonOutput(): boolean {
+  return process.env.MCP_OUTPUT === 'json';
+}
+
+/** Human banners/logs: stdout normally; stderr when stdout must be JSON-only. */
+function cliLog(...args: unknown[]): void {
+  if (isJsonOutput()) {
+    console.error(...args);
+  } else {
+    console.log(...args);
+  }
+}
+
+function emitSummary(report: EvalReport): void {
+  if (!isJsonOutput()) {
+    printSummary(report);
+    return;
+  }
+  const origLog = console.log;
+  console.log = console.error;
+  try {
+    printSummary(report);
+  } finally {
+    console.log = origLog;
+  }
+}
+
+/**
  * Main entry point
  */
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2));
 
-  console.log('Synthesis - Deterministic Empathy Evaluations');
-  console.log(`Loading cases from: ${options.cases}`);
-  console.log(`Using schema: ${options.schema}`);
+  cliLog('Synthesis - Deterministic Empathy Evaluations');
+  cliLog(`Loading cases from: ${options.cases}`);
+  cliLog(`Using schema: ${options.schema}`);
 
   // Load and validate cases
   let cases;
   try {
     cases = loadCases(options.cases, options.schema);
-    console.log(`Loaded ${cases.length} cases`);
+    cliLog(`Loaded ${cases.length} cases`);
   } catch (error) {
     console.error('\nFailed to load cases:', (error as Error).message);
     process.exit(1);
   }
 
   // Run all evaluations
-  console.log('Running evaluations...');
+  cliLog('Running evaluations...');
   const { results, failures, summary } = runAllCases(cases);
 
   // Build report
@@ -164,35 +227,35 @@ async function main(): Promise<void> {
     console.error('\nFailed to write report:', (e as Error).message);
     process.exit(1);
   }
-  console.log(`Report written to: ${options.out}`);
+  cliLog(`Report written to: ${options.out}`);
 
-  // Print summary
-  printSummary(report);
+  emitSummary(report);
 
-  // MCP-style artifact output (for tool integration)
+  // MCP_OUTPUT=json: stdout is ONLY the artifact so JSON.parse(stdout) works.
   const artifact = formatArtifact(report, options.out);
-  if (process.env.MCP_OUTPUT === 'json') {
-    console.log(JSON.stringify(artifact, null, 2));
+  if (isJsonOutput()) {
+    console.log(JSON.stringify(artifact));
   }
 
   // Exit code based on UNEXPECTED failures only
   // Expected failures (negative examples) are regression tests and don't count against the threshold
   const unexpectedCount = summary.unexpected_failures;
   if (unexpectedCount > options.failOn) {
-    console.log(`Exiting with code 2 (${unexpectedCount} unexpected failures > ${options.failOn} threshold)`);
+    cliLog(`Exiting with code 2 (${unexpectedCount} unexpected failures > ${options.failOn} threshold)`);
     process.exit(2);
   }
 
   if (summary.expected_failures > 0) {
-    console.log(`All checks passed! (${summary.expected_failures} expected failures correctly caught)`);
+    cliLog(`All checks passed! (${summary.expected_failures} expected failures correctly caught)`);
   } else {
-    console.log('All checks passed!');
+    cliLog('All checks passed!');
   }
   process.exit(0);
 }
 
-// Run
-main().catch(error => {
-  console.error('Fatal error:', error);
-  process.exit(1);
-});
+if (isDirectRun()) {
+  main().catch(error => {
+    console.error('Fatal error:', error);
+    process.exit(1);
+  });
+}

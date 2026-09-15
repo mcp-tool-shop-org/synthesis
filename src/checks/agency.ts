@@ -56,10 +56,14 @@ const POSITIVE_PATTERNS: RegExp[] = [
  * Each pattern subtracts 1 from the score
  */
 const NEGATIVE_PATTERNS: RegExp[] = [
-  // Directive frame only: skip interrogatives (do/did/would/could you need to)
+  // Directive frame only: skip interrogatives (do/did/would/could/will you need to)
   // and conditionals (if/when/whenever/whether/should you need to) so
   // autonomy-respecting questions are not scored as prescriptions.
-  /(?<!\b(?:do|did|would|could|if|when|whenever|whether|should)\s+)\byou (should|must|need to|have to|ought to)\b/i,
+  // Obligation verbs take an optional 'll/will between you and have to/need to
+  // ("You'll have to", "You will need to") so a modal cannot evade the hit.
+  // Typographic apostrophes are folded in checkAgency before these run.
+  /(?<!\b(?:do|did|would|could|if|when|whenever|whether|should|will)\s+)\byou (should|must|ought to)\b/i,
+  /(?<!\b(?:do|did|would|could|if|when|whenever|whether|should|will)\s+)\byou(?:'ll| will)? (?:have to|need to)\b/i,
   /\bjust do\b/i,
   /\bjust try\b/i,
   /\bjust think\b/i,
