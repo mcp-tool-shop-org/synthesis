@@ -33,9 +33,11 @@ npm run build
 npm run eval
 ```
 
-This loads the bundled test cases from `data/evals.jsonl`, runs all five checkers, and writes a JSON report to `out/report.json`.
+This loads the bundled GREEN pack from `data/evals.jsonl`, runs all five checkers, and writes a JSON report to `out/report.json`.
 
 Exit code `0` means no unexpected failures.
+
+A separate planted pack lives at `data/planted-theater.jsonl`. Run it with `npm run eval:planted`. That harness is inverted: every planted row must stay RED (schema-invalid or theater-flagged). Do **not** mix planted RED rows into `data/evals.jsonl` — `npm run eval` and `npm run verify` stay GREEN against the evals pack only.
 
 ## Development mode
 

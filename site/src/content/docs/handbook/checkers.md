@@ -66,17 +66,9 @@ The topic_pivot checker uses token cosine similarity to measure how topically re
 
 The threshold is **0.45** for a clear pass and **0.3** for a borderline pass (when acknowledgment is present and no pivot indicators are detected).
 
-### Custom embedding adapters
+### Custom embedding adapters (internal)
 
-The similarity module exposes an `EmbeddingAdapter` interface for drop-in replacement of the default token cosine with ML embeddings. Call `setEmbeddingAdapter()` with your own adapter to use a different similarity backend. The adapter must implement a single method:
-
-```typescript
-interface EmbeddingAdapter {
-  similarity(text1: string, text2: string): Promise<number>;
-}
-```
-
-The default token cosine adapter is synchronous but wrapped in an async interface for compatibility with ML embedding services.
+The similarity module has an internal `EmbeddingAdapter` hook (`setEmbeddingAdapter()`). It is **not** a public import on `@mcptoolshop/synthesis` — the v1 barrel does not export it. Import the barrel runner (`runCase` / `runAllCases`); do not deep-import `checks/similarity`.
 
 ## performative_empathy
 

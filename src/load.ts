@@ -9,7 +9,9 @@ import type { EvalCase } from './types.js';
 import { useAsciiGlyphs } from './color.js';
 
 /**
- * Load and validate evaluation cases from a JSONL file
+ * Load and validate evaluation cases from a JSONL file.
+ * Throws if any line is Ajv-invalid — mixed planted-RED packs must use
+ * evaluatePlanted() in planted.ts instead.
  */
 export function loadCases(casesPath: string, schemaPath: string): EvalCase[] {
   // Load schema.

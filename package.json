@@ -50,6 +50,7 @@
     "eval": "node dist/index.js --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
     "eval:planted": "node scripts/eval-planted.mjs",
     "check:report-schema": "node scripts/check-report-schema.mjs",
+    "example": "node scripts/example-run-fixture.mjs",
     "dev": "node --import tsx src/index.ts --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
     "verify": "npm test && npm run build && npm run eval && npm run check:report-schema"
   },

@@ -29,10 +29,13 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
-      - run: npm run verify
+      - run: npm run verify          # GREEN on data/evals.jsonl
+      - run: npm run eval:planted    # inverted; data/planted-theater.jsonl must stay RED
 ```
 
-The verify step (test + build + eval) exits with code `2` if `unexpected_failures > 0`, which fails the CI job. Expected failures (negative examples) do not affect the exit code.
+The verify step (test + build + eval) stays GREEN on `data/evals.jsonl` and exits with code `2` if `unexpected_failures > 0`, which fails the CI job. Expected failures (negative examples) do not affect the exit code.
+
+`npm run eval:planted` is inverted CI against `data/planted-theater.jsonl`: it must exit non-zero if any planted row is GREEN. Do **not** mix planted RED rows into `data/evals.jsonl`.
 
 ## Failure threshold
 

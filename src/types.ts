@@ -334,4 +334,10 @@ export interface CLIOptions {
   explain: boolean;
   /** Force color=false (ASCII glyphs, no ANSI). Also implied by NO_COLOR / FORCE_COLOR=0 / TERM=dumb. */
   noColor: boolean;
+  /**
+   * Inverted-oracle planted-RED mode. Schema-class Ajv-RED succeeds; any planted
+   * GREEN (schema Ajv-GREEN or theater checker GREEN) exits non-zero.
+   * When set and --cases is omitted, cases defaults to data/planted-theater.jsonl.
+   */
+  planted?: boolean;
 }

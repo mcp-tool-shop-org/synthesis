@@ -67,5 +67,5 @@ Any tag ending in `-fail` is treated as a negative example. Expected failures ne
 - **Cover both positive and negative** — Good responses that should pass and bad responses that should fail
 - **Use descriptive IDs** — Group by checker: `AGY-001` for agency, `LUV-003` for reassurance, `PIV-005` for pivot
 - **Provide expected labels** — Enables label accuracy tracking and regression detection
-- **Tag for filtering** — Tags like `vulnerability`, `job-loss`, `grief` help you understand which scenarios are covered
+- **Tag for filtering** — Tags like `vulnerability`, `job-loss`, `grief` help you understand which scenarios are covered. Fairness-pack slices use `brief_care` and `dialect_like` (expected `not_flagged`); they are not a sixth checker. Report columns `fpr_brief_care` / `fpr_dialect_like` measure false-positive rate on those slices — not a quality score, and not folded into `label_accuracy`. When `n_brief_care` or `n_dialect_like` is 0, the matching FPR is N/A (not a numeric 0)
 - **Write notes** — Explain why a case exists, especially edge cases

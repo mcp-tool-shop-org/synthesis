@@ -11,16 +11,20 @@ sidebar:
 synthesis [options]
 
 Options:
-  --cases <path>     Path to JSONL test cases     (default: data/evals.jsonl)
-  --schema <path>    Path to JSON schema           (default: schemas/eval_case.schema.json)
+  --cases <path>     Path to JSONL test cases      (default: data/evals.jsonl)
+  --schema <path>    Path to the case JSON schema  (default: schemas/eval_case.schema.json)
   --out <path>       Output path for JSON report   (default: out/report.json)
   --fail-on <n>      Max allowed unexpected failures before exit code 2 (default: 0)
   --help, -h         Show help message
 ```
 
+CLI `--schema` is the **case** schema (`schemas/eval_case.schema.json`). It does not select the report schema.
+
 ## Report format
 
-Every run produces a structured JSON report at the configured output path.
+Every run produces a structured JSON report at the configured output path (`out/report.json` by default). The published contract is `schemas/eval_report.schema.json`: JSON Schema **draft-07**, `additionalProperties: false`, required `relational_posture` on every result, with N/A enumerated in checker `state` (`not_applicable`) and `unresolved_abstain` as the N/A-is-not-clean posture.
+
+Gold instances `schemas/report.good.json` and `schemas/report.fail.json` (mirrored under `tests/gold/`) prove **illegal-envelope polarity**: `good` must validate; `fail` must not. `fail` is an illegal envelope (extra key / missing `relational_posture`), **not** a failed eval. Checker failures belong in `failures[]` on a still-legal envelope.
 
 ### Summary fields
 
@@ -33,7 +37,7 @@ Every run produces a structured JSON report at the configured output path.
 | `strict_failed` | Unexpected failures — regressions |
 | `expected_failures` | Negative examples correctly caught |
 | `unexpected_failures` | Same as `strict_failed` — drives exit code |
-| `label_accuracy` | How well computed results match ground-truth `expected` labels |
+| `label_accuracy` | How well computed results match ground-truth `expected` labels. Does not include FPR |
 | `by_check` | Per-checker pass/fail/N/A breakdown |
 
 ### Additional summary fields
@@ -41,6 +45,10 @@ Every run produces a structured JSON report at the configured output path.
 | Field | What It Means |
 |-------|---------------|
 | `label_accuracy_by_check` | Per-checker label accuracy breakdown (total, matched, accuracy percentage) |
+| `fpr_brief_care` | False-positive rate on the `brief_care` genuine-care slice. Not a quality score; not folded into `label_accuracy`. N/A (`null`) when `n_brief_care` is 0 — never a numeric 0 on an empty slice |
+| `fpr_dialect_like` | False-positive rate on the `dialect_like` informal-register genuine-care slice (not a demographic classifier). Not a quality score. N/A (`null`) when `n_dialect_like` is 0 |
+| `n_brief_care` | Count of `brief_care`-tagged cases in this run |
+| `n_dialect_like` | Count of `dialect_like`-tagged cases in this run |
 
 ### Failure entries
 
@@ -91,55 +99,72 @@ Expected failures (negative examples) never affect the exit code.
 
 ## Exported API
 
-Synthesis exports the following functions from its source modules. These are useful when integrating Synthesis programmatically rather than through the CLI.
+The public specifier is `@mcptoolshop/synthesis` — the package barrel (`"."`) only. Import these names from that specifier. Named checkers (`checkAgency`, `checkReassurance`, `checkPivot`, `checkPerformativeEmpathy`, `checkGroundedUptake`) and similarity helpers (`tokenCosineSimilarity`, `extractAnchor`, `setEmbeddingAdapter`, `EmbeddingAdapter`) are **internal**. Import the barrel runner; do not deep-import `checks/*`.
 
-| Module | Export | Purpose |
-|--------|--------|---------|
-| `load` | `loadCases(casesPath, schemaPath)` | Load and validate JSONL eval cases against a JSON schema |
-| `load` | `validateCase(evalCase, schemaPath)` | Validate a single case object (useful for testing) |
-| `runner` | `runCase(evalCase)` | Run all checks on a single eval case |
-| `runner` | `runAllCases(cases)` | Run all cases and compute aggregate metrics |
-| `report` | `writeReport(report, outputPath)` | Write the JSON report to disk |
-| `report` | `printSummary(report)` | Print a formatted summary to the console |
-| `report` | `formatArtifact(report, outputPath)` | Format the report as an MCP-style artifact object |
-| `checks/agency` | `checkAgency(assistantText)` | Run the agency language checker on a single response |
-| `checks/reassurance` | `checkReassurance(assistantText)` | Run the reassurance checker on a single response |
-| `checks/pivot` | `checkPivot(userText, assistantText)` | Run the topic pivot checker on a conversation pair |
-| `checks/performative` | `checkPerformativeEmpathy(userText, assistantText)` | Run the performative-empathy detector on a conversation pair |
-| `checks/grounded_uptake` | `checkGroundedUptake(userText, assistantText)` | Run the grounded-uptake positive witness on a conversation pair |
-| `relational` | `computeRelationalPosture(checks)` | Compose a case-level posture summary from the other checks' results |
-| `checks/similarity` | `tokenCosineSimilarity(text1, text2)` | Compute bag-of-words cosine similarity between two texts |
-| `checks/similarity` | `extractAnchor(text, maxSentences)` | Extract the first N sentences from a response |
-| `checks/similarity` | `setEmbeddingAdapter(adapter)` | Replace the default similarity engine with a custom adapter |
+```ts
+import {
+  loadCases,
+  validateCase,
+  runCase,
+  runAllCases,
+  writeReport,
+  printSummary,
+  formatArtifact,
+  computeRelationalPosture,
+  SUMMARY_FOIL,
+} from '@mcptoolshop/synthesis';
+import type { EvalCase, CheckType, EvalReport, CLIOptions } from '@mcptoolshop/synthesis';
+```
+
+| Export | Purpose |
+|--------|---------|
+| `loadCases(casesPath, schemaPath)` | Load and validate JSONL eval cases against the case JSON schema |
+| `validateCase(evalCase, schemaPath)` | Validate a single case object (useful for testing) |
+| `runCase(evalCase)` | Run all requested checks on a single eval case |
+| `runAllCases(cases)` | Run all cases and compute aggregate metrics |
+| `writeReport(report, outputPath)` | Write the JSON report to disk |
+| `printSummary(report)` | Print a formatted summary to the console |
+| `formatArtifact(report, outputPath)` | Format the report as an MCP-style artifact object |
+| `computeRelationalPosture(checks)` | Compose a case-level posture summary from the other checks' results |
+| `SUMMARY_FOIL` | Shared TTY legend string for claims / non_claims |
+| Types: `EvalCase`, `CheckType`, `EvalReport`, `CLIOptions` | Public TypeScript types from the barrel |
+
+Internal (not on `"."`): `checkAgency`, `checkReassurance`, `checkPivot`, `checkPerformativeEmpathy`, `checkGroundedUptake`, `tokenCosineSimilarity`, `extractAnchor`, `setEmbeddingAdapter`, `EmbeddingAdapter`.
 
 ## Project structure
 
 ```
 synthesis/
   data/
-    evals.jsonl              # Bundled test cases
+    evals.jsonl              # GREEN pack — npm run eval / npm run verify
+    planted-theater.jsonl    # Planted RED pack — npm run eval:planted only; do not mix into evals.jsonl
   schemas/
-    eval_case.schema.json    # JSON Schema for case validation
+    eval_case.schema.json    # Case JSON Schema (CLI --schema)
+    eval_report.schema.json  # Published report contract (draft-07)
+    report.good.json         # Gold: legal envelope
+    report.fail.json         # Gold: illegal envelope (not a failed eval)
   docs/
     KNOWN-LIMITATIONS.md     # What the checkers do and do not certify
     study-grounding.md       # Research grounding for the checker designs
   src/
-    index.ts                 # CLI entry point
+    index.ts                 # CLI entry point and public barrel
     load.ts                  # JSONL loader + AJV schema validation
     runner.ts                # Runs checks, computes metrics
     report.ts                # JSON report + console summary
     relational.ts            # Composed case-level posture summary
     types.ts                 # TypeScript type definitions
     checks/
-      agency.ts              # Agency language checker
-      reassurance.ts         # Unverifiable reassurance checker
-      pivot.ts               # Topic pivot checker
-      performative.ts        # Performative-empathy detector
-      grounded_uptake.ts     # Grounded-uptake positive witness
-      similarity.ts          # Token cosine similarity
+      agency.ts              # Agency language checker (internal)
+      reassurance.ts         # Unverifiable reassurance checker (internal)
+      pivot.ts               # Topic pivot checker (internal)
+      performative.ts        # Performative-empathy detector (internal)
+      grounded_uptake.ts     # Grounded-uptake positive witness (internal)
+      similarity.ts          # Token cosine similarity (internal)
   out/
     report.json              # Generated report (gitignored)
 ```
+
+`npm run eval` and `npm run verify` stay GREEN against `data/evals.jsonl`. `npm run eval:planted` is inverted CI: every planted row must stay RED (schema-invalid or theater-flagged). Do not mix planted RED rows into `data/evals.jsonl`.
 
 ## Security
 

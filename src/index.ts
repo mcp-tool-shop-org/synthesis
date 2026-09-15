@@ -7,10 +7,11 @@
  * Usage:
  *   npm run eval
  *   node dist/index.js --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json
+ *   node dist/index.js --planted
  *
  * Exit codes:
- *   0 - All cases passed (or failures <= --fail-on threshold)
- *   1 - Fatal load/runtime error (bad args, unreadable cases, unwritable output)
+ *   0 - All cases passed (or failures <= --fail-on threshold); planted pack all RED
+ *   1 - Fatal load/runtime error (bad args, unreadable cases, unwritable output) or planted GREEN
  *   2 - One or more unexpected failures (exceed --fail-on threshold)
  *
  * This module is also the package barrel. Importing it as a library must not
@@ -25,6 +26,7 @@ import { runCase, runAllCases } from './runner.js';
 import { writeReport, printSummary, formatArtifact, SUMMARY_FOIL } from './report.js';
 import { computeRelationalPosture } from './relational.js';
 import { hasColors } from './color.js';
+import { evaluatePlanted, DEFAULT_PLANTED_CASES } from './planted.js';
 import type { CLIOptions, EvalReport } from './types.js';
 
 export {
@@ -38,7 +40,18 @@ export {
   computeRelationalPosture,
   SUMMARY_FOIL,
 };
-export type { EvalCase, CheckType, EvalReport, CLIOptions } from './types.js';
+export type {
+  EvalCase,
+  CheckType,
+  EvalReport,
+  CLIOptions,
+  CaseResult,
+  RelationalPosture,
+  RelationalPostureResult,
+  ReportSummary,
+  FailureRecord,
+  CheckSummary,
+} from './types.js';
 
 function isJsonOutput(): boolean {
   return (process.env.MCP_OUTPUT ?? '').toLowerCase() === 'json';
@@ -67,8 +80,10 @@ function parseArgs(args: string[]): CLIOptions {
     out: 'out/report.json',
     failOn: 0,
     explain: false,
-    noColor: false
+    noColor: false,
+    planted: false
   };
+  let casesProvided = false;
 
   // Require a present, non-flag value for a value-taking flag. A missing value
   // or one that starts with '--' (i.e. the next flag) is a usage error.
@@ -86,6 +101,7 @@ function parseArgs(args: string[]): CLIOptions {
     switch (arg) {
       case '--cases':
         options.cases = requireValue('--cases', next);
+        casesProvided = true;
         i++;
         break;
       case '--schema':
@@ -115,6 +131,9 @@ function parseArgs(args: string[]): CLIOptions {
       case '--no-color':
         options.noColor = true;
         break;
+      case '--planted':
+        options.planted = true;
+        break;
       case '--help':
       case '-h':
         printHelp();
@@ -128,6 +147,10 @@ function parseArgs(args: string[]): CLIOptions {
         // Bare positional args are not supported; flag them too.
         failFatal(`Unexpected argument: ${arg}`);
     }
+  }
+
+  if (options.planted && !casesProvided) {
+    options.cases = DEFAULT_PLANTED_CASES;
   }
 
   return options;
@@ -145,17 +168,18 @@ Usage:
   node dist/index.js [options]
 
 Options:
-  --cases <path>     Path to JSONL file with test cases (default: data/evals.jsonl)
+  --cases <path>     Path to JSONL file with test cases (default: data/evals.jsonl; data/planted-theater.jsonl with --planted)
   --schema <path>    Path to JSON schema (default: schemas/eval_case.schema.json)
-  --out <path>       Output path for report (default: out/report.json)
-  --fail-on <n>      Maximum allowed failures before exit code 2 (default: 0)
+  --out <path>       Output path for report (default: out/report.json; unused with --planted)
+  --fail-on <n>      Maximum allowed failures before exit code 2 (default: 0; unused with --planted)
   --explain          Extra foil: dump per-case claims and non_claims (limits also print on the default TTY)
   --no-color         Disable ANSI color and use ASCII glyphs (also honors NO_COLOR, FORCE_COLOR=0, TERM=dumb)
+  --planted          Inverted oracle: schema-class Ajv-RED and theater FLAG succeed; any planted GREEN exits non-zero
   --help, -h         Show this help message
 
 Exit Codes:
-  0 - All cases passed (or unexpected failures <= --fail-on threshold)
-  1 - Fatal error (bad JSONL, schema failure, missing/unwritable files)
+  0 - All cases passed (or unexpected failures <= --fail-on threshold); planted pack all RED
+  1 - Fatal error (bad JSONL, schema failure, missing/unwritable files) or planted GREEN
   2 - Unexpected failures exceed threshold
 
 Legend:
@@ -240,10 +264,80 @@ function emitSummary(report: EvalReport, explain: boolean, color: boolean): void
 }
 
 /**
+ * Inverted-oracle CLI path. Does not call loadCases (Ajv-RED would abort a mixed pack).
+ * Exits 1 if any planted row is GREEN or the pack is malformed.
+ */
+function runPlantedCli(options: CLIOptions): void {
+  cliLog('Synthesis - Planted inverted-oracle');
+  cliLog(`Loading planted rows from: ${options.cases}`);
+  cliLog(`Using schema: ${options.schema}`);
+
+  let planted;
+  try {
+    planted = evaluatePlanted(options.cases, options.schema);
+  } catch (error) {
+    failFatal(`Failed to load planted rows: ${(error as Error).message}`);
+  }
+
+  for (const row of planted.rows) {
+    if (row.klass === 'schema') {
+      cliLog(row.plantedGreen ? `${row.id} schema GREEN (harness bug)` : `${row.id} schema RED (ok)`);
+    } else if (row.klass === 'theater') {
+      if (!row.ajvValid) {
+        cliLog(`${row.id} theater Ajv RED (harness bug)`);
+      } else if (row.plantedRed) {
+        cliLog(`${row.id} theater FLAG ${(row.flaggedChecks ?? []).join(',')} (ok)`);
+      } else {
+        cliLog(`${row.id} theater GREEN (harness bug)`);
+      }
+    } else {
+      cliLog(`${row.id} ${row.reason}`);
+    }
+  }
+
+  cliLog(
+    `eval:planted: schema RED ${planted.schemaRed} GREEN ${planted.schemaGreen}; ` +
+      `theater FLAG ${planted.theaterFlag} GREEN ${planted.theaterGreen} Ajv-RED ${planted.theaterAjvRed}; ` +
+      `other ${planted.other}`
+  );
+
+  if (planted.bugs.length > 0) {
+    console.error('eval:planted: planted GREEN / pack errors:');
+    for (const b of planted.bugs) {
+      console.error(`  - ${b}`);
+    }
+    failFatal(`eval:planted: ${planted.bugs.length} planted GREEN / pack error(s)`);
+  }
+
+  if (isJsonOutput()) {
+    console.log(JSON.stringify({
+      type: 'planted-oracle',
+      ok: true,
+      cases: options.cases,
+      schemaRed: planted.schemaRed,
+      schemaGreen: planted.schemaGreen,
+      theaterFlag: planted.theaterFlag,
+      theaterGreen: planted.theaterGreen,
+      theaterAjvRed: planted.theaterAjvRed,
+      other: planted.other,
+      bugs: planted.bugs,
+    }));
+  }
+
+  cliLog('eval:planted: all planted rows RED (ok)');
+  process.exit(0);
+}
+
+/**
  * Main entry point
  */
 async function main(): Promise<void> {
   const options = parseArgs(process.argv.slice(2));
+
+  if (options.planted) {
+    runPlantedCli(options);
+    return;
+  }
 
   cliLog('Synthesis - Deterministic Empathy Evaluations');
   cliLog(`Loading cases from: ${options.cases}`);
