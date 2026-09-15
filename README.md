@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="README.ja.md">日本語</a> | <a href="README.zh.md">中文</a> | <a href="README.es.md">Español</a> | <a href="README.fr.md">Français</a> | <a href="README.hi.md">हिन्दी</a> | <a href="README.it.md">Italiano</a> | <a href="README.pt-BR.md">Português (BR)</a>
+  <a href="README.md">English</a> | <a href="README.ja.md">日本語</a> | <a href="README.zh.md">中文</a> | <a href="README.es.md">Español</a> | <a href="README.fr.md">Français</a> | <a href="README.hi.md">हिन्दी</a> | <a href="README.it.md">Italiano</a> | <a href="README.pt-BR.md">Português (BR)</a>
 </p>
 
 <p align="center">
@@ -79,17 +79,22 @@ This loads the bundled test cases from `data/evals.jsonl`, runs all five checker
 synthesis [options]
 
 Options:
-  --cases <path>     Path to JSONL test cases     (default: data/evals.jsonl)
+  --cases <path>     Path to JSONL test cases     (default: data/evals.jsonl; data/planted-theater.jsonl with --planted)
   --schema <path>    Path to JSON schema           (default: schemas/eval_case.schema.json)
   --out <path>       Output path for JSON report   (default: out/report.json)
   --fail-on <n>      Max allowed unexpected failures before exit code 2 (default: 0)
+  --explain          Extra foil: dump per-case claims and non_claims
+  --no-color         Disable ANSI color (also honors NO_COLOR)
+  --planted          Inverted oracle on the planted-RED pack (GREEN planted row = exit 1)
   --help, -h         Show help message
 ```
+
+Requires **Node.js 22+**.
 
 ### Examples
 
 ```bash
-# Run with defaults
+# Run with defaults (GREEN pack)
 npm run eval
 
 # Point to custom cases
@@ -97,6 +102,10 @@ node dist/index.js --cases my_cases.jsonl
 
 # Allow up to 3 unexpected failures before failing CI
 node dist/index.js --fail-on 3
+
+# Planted-RED inverted oracle (do not mix into data/evals.jsonl)
+npm run eval:planted
+# or: node dist/index.js --planted
 
 # Development mode (no build step, uses tsx)
 npm run dev
@@ -106,8 +115,8 @@ npm run dev
 
 | Code | Meaning |
 |------|---------|
-| `0` | All checks passed (unexpected failures within `--fail-on` threshold) |
-| `1` | Fatal error (invalid JSONL, schema validation failure, missing files) |
+| `0` | All checks passed (unexpected failures within `--fail-on` threshold); planted pack all RED |
+| `1` | Fatal error (invalid JSONL, schema validation failure, missing files) or planted GREEN |
 | `2` | Unexpected failures exceed `--fail-on` threshold |
 
 **Note:** Expected failures (negative examples) never affect the exit code. They are regression tests that confirm the checkers correctly catch bad patterns.
@@ -161,7 +170,38 @@ Every run produces a structured JSON report:
 | `unexpected_failures` | Same as `strict_failed`. Drives the exit code. |
 | `label_accuracy` | How well computed results match ground-truth `expected` labels. N/A checks (where a checker does not apply to a case) are excluded from the denominator, so accuracy reflects only cases the checker actually evaluated. |
 | `by_check` | Per-checker pass/fail/N/A breakdown. For `performative_empathy`, which has no pass state, `failed` is the count **flagged** as empathy-theater and `not_applicable` is the count it **abstained** on; `passed` is always `0`. For `grounded_uptake`, a positive witness, `passed` is the count **verified**, `failed` is **not verified** (never a defect — it can't fail a case), and `not_applicable` is **abstained**. |
-| `results[].relational_posture` | Composed case-level posture with `state`, `claims`, and `non_claims`. The `non_claims` list states what a verdict does NOT assert (e.g. `grounded_uptake_verified` does not certify sincerity). |
+| `results[].relational_posture` | Composed case-level posture with `state`, `claims`, and `non_claims`. Always present. The `non_claims` list states what a verdict does NOT assert (e.g. `grounded_uptake_verified` does not certify sincerity). |
+| `fpr_brief_care` / `fpr_dialect_like` | False-positive rate on tagged genuine-care slices. Not a quality score. `null` / N/A when `n_*` is 0 — never a numeric 0. Not folded into `label_accuracy`. |
+| `n_brief_care` / `n_dialect_like` | Count of tagged fairness-slice cases in this run. |
+
+The report envelope is closed by [`schemas/eval_report.schema.json`](schemas/eval_report.schema.json) (draft-07). Gold `schemas/report.fail.json` is an **illegal envelope**, not a failed eval.
+
+---
+
+## Library
+
+```js
+import {
+  loadCases,
+  runAllCases,
+  writeReport,
+  computeRelationalPosture,
+} from '@mcptoolshop/synthesis';
+```
+
+Public value exports: `loadCases`, `validateCase`, `runCase`, `runAllCases`, `writeReport`, `printSummary`, `formatArtifact`, `computeRelationalPosture`, `SUMMARY_FOIL`. Named checkers (`checkAgency`, `checkPivot`, …) are **internal** — do not import them from `"."`.
+
+---
+
+## Eval dataset
+
+| Pack | File | Polarity |
+|------|------|----------|
+| GREEN suite | `data/evals.jsonl` | unexpected failures drive exit 2 |
+| Fairness FPR | `data/fairness.jsonl` | tagged `brief_care` / `dialect_like`; expected not-flagged. See [`data/DATASHEET.md`](data/DATASHEET.md). |
+| Planted-RED | `data/planted-theater.jsonl` | schema-invalid must Ajv-RED; theater must FLAG. GREEN planted = harness bug. |
+
+Do **not** mix planted RED into `data/evals.jsonl`. `dialect_like` is informal-register genuine care, not a race or demographic classifier.
 
 ---
 
@@ -195,7 +235,7 @@ Each line in your JSONL file is one eval case:
 | Field | Type | Description |
 |-------|------|-------------|
 | `expected` | object | Ground-truth labels for validation (`{ "agency_language": true }`) |
-| `tags` | string[] | Categorization and negative-example markers |
+| `tags` | string[] | Categorization and negative-example markers. Reserved FPR slices: `brief_care`, `dialect_like` (underscore). Do not enum-limit other tags. |
 | `notes` | string | Why this case exists |
 
 ### Negative Examples
@@ -226,7 +266,7 @@ Add Synthesis to your CI pipeline to catch empathy regressions on every push:
 name: Empathy Eval
 on:
   push:
-    paths: ['data/**', 'src/**', 'schemas/**']
+    paths: ['data/**', 'src/**', 'schemas/**', 'tests/**', 'scripts/**']
 
 jobs:
   eval:
@@ -235,10 +275,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '22'
       - run: npm ci
-      - run: npm run build
-      - run: npm run eval
+      - run: npm run verify          # GREEN on data/evals.jsonl
+      - run: npm run eval:planted    # inverted; planted pack must stay RED
 ```
 
 The eval step exits with code 2 if `unexpected_failures > 0`, which fails the CI job. Expected failures (negative examples) do not affect the exit code.
@@ -329,19 +369,24 @@ Grounding: MISC simple-vs-complex reflection; EPITOME weak/strong empathy (Sharm
 ```
 synthesis/
   data/
-    evals.jsonl              # Bundled test cases (41 cases)
+    evals.jsonl              # GREEN suite (41 cases)
+    fairness.jsonl           # FPR slices (brief_care / dialect_like)
+    planted-theater.jsonl    # inverted-oracle RED pack
+    DATASHEET.md             # Gebru-style datasheet for the eval packs
   schemas/
     eval_case.schema.json    # JSON Schema for case validation
+    eval_report.schema.json  # Closed JSON Schema for out/report.json
   src/
-    index.ts                 # CLI entry point
+    index.ts                 # CLI + public barrel (not named checkers)
     load.ts                  # JSONL loader + AJV schema validation
+    planted.ts               # inverted-oracle loader for --planted
     runner.ts                # Runs checks, computes metrics, compares labels
     report.ts                # JSON report + console summary output
     types.ts                 # TypeScript type definitions
     checks/
-      agency.ts              # Agency language checker
-      reassurance.ts         # Unverifiable reassurance checker
-      pivot.ts               # Topic pivot checker
+      agency.ts              # Agency language checker (internal)
+      reassurance.ts         # Unverifiable reassurance checker (internal)
+      pivot.ts               # Topic pivot checker (internal)
       performative.ts        # Performative-empathy detector (flag / abstain)
       similarity.ts          # Token cosine similarity (bag-of-words)
       lexicons/              # Closed, auditable word lists (filler, concreteness)
@@ -384,11 +429,12 @@ See [SECURITY.md](SECURITY.md) for vulnerability reporting.
 | E. Identity (soft) | 10 |
 | **Overall** | **50/50** |
 
-> All gates PASS: `package.json` is `1.1.0`, the `v1.1.0` tag is published, and the
-> release shipped to npm via Trusted Publishing (OIDC).
+> All gates PASS. `package.json` is `1.3.0`. Release ships to npm via Trusted Publishing (OIDC).
 
 > Full audit: [SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 
 ## License
 
 MIT
+
+Built by [MCP Tool Shop](https://mcp-tool-shop.github.io/).

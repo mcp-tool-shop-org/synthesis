@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.0] - 2026-09-15
+
+Dogfood-swarm feature pass: a published library contract, a fairness FPR audit pack, a planted-RED inverted oracle, and a closed report schema. Checkers stay frozen and zero-LLM.
+
+### Added
+- **Public library contract** — `package.json` `"exports"` maps `"."` to `dist/index.js` (plus `"./package.json"`). The barrel is runner + report helpers (`loadCases`, `validateCase`, `runCase`, `runAllCases`, `writeReport`, `printSummary`, `formatArtifact`, `computeRelationalPosture`, `SUMMARY_FOIL`) and result types. Named checkers are **not** on `"."`. `tests/exports.test.ts` snapshots `Object.keys`. Copy-paste example: `scripts/example-run-fixture.mjs` (`npm run example`).
+- **Fairness FPR pack** — `data/fairness.jsonl` (32 rows: `brief_care` / `dialect_like`, expected not-flagged) with Gebru-style `data/DATASHEET.md`. Report/CLI columns `fpr_brief_care`, `fpr_dialect_like`, `n_brief_care`, `n_dialect_like`. Empty slice is `null` / N/A, never a numeric 0. Not folded into `label_accuracy`. `dialect_like` is informal-register genuine care, not a demographic classifier.
+- **Planted-RED inverted oracle** — `data/planted-theater.jsonl` (schema-invalid Ajv RED vs theater FLAG). `npm run eval:planted` and CLI `--planted`. A GREEN planted row is a harness bug (exit 1). Default `data/evals.jsonl` stays GREEN and unmixed.
+- **Closed report schema** — `schemas/eval_report.schema.json` (draft-07, `additionalProperties: false`, required `relational_posture`). Gold `schemas/report.good.json` / `report.fail.json` (fail = illegal envelope, not a failed eval). `npm run check:report-schema` is part of `verify`. Every `results[]` row always emits `relational_posture` (`unresolved_abstain` when no check ran).
+- CLI `--explain`, `--no-color` (honors `NO_COLOR`), TTY wrap, ASCII fallback.
+
+### Changed
+- `engines.node` is `>=22`. `npm run verify` is `test && build && eval && check:report-schema`.
+- Handbook Exported API lists the public barrel only; named checkers are internal.
+
 ## [1.2.0] - 2026-06-16
 
 The positive-capability release: a fifth checker that certifies what `performative_empathy`
@@ -171,7 +186,9 @@ existing code and docs honest.
 - Embedding adapter interface for future extensibility
 - JSON Schema for test case validation (`schemas/eval_case.schema.json`)
 
-[Unreleased]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.1.0...v1.2.0
 [1.1.0]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.0.2...v1.1.0
 [1.0.2]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/mcp-tool-shop-org/synthesis/compare/v1.0.0...v1.0.1
