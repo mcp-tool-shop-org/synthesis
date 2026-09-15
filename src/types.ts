@@ -11,6 +11,12 @@ export type CheckType =
   | 'grounded_uptake';
 
 /**
+ * Tagged genuine-care slices for fairness FPR.
+ * Informal-register care, not a race/demographic classifier.
+ */
+export type FairnessTag = 'brief_care' | 'dialect_like';
+
+/**
  * A single evaluation case from the JSONL file
  */
 export interface EvalCase {
@@ -282,6 +288,26 @@ export interface ReportSummary {
 
   /** Per-check label accuracy breakdown */
   label_accuracy_by_check?: Partial<Record<CheckType, CheckLabelAccuracy>>;
+
+  /**
+   * False-positive rate on `brief_care` tagged genuine-care cases (flagged / n).
+   * `null` when n_brief_care === 0 — empty slice is N/A, never a numeric 0.
+   * Not a quality score; not folded into label_accuracy.
+   */
+  fpr_brief_care: number | null;
+
+  /**
+   * False-positive rate on `dialect_like` tagged genuine-care cases (flagged / n).
+   * `null` when n_dialect_like === 0 — empty slice is N/A, never a numeric 0.
+   * Not a quality score; not folded into label_accuracy.
+   */
+  fpr_dialect_like: number | null;
+
+  /** Count of expected-not-flagged `brief_care` cases in this run. */
+  n_brief_care: number;
+
+  /** Count of expected-not-flagged `dialect_like` cases in this run. */
+  n_dialect_like: number;
 }
 
 /**

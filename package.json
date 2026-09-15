@@ -28,6 +28,13 @@
   "bin": {
     "synthesis": "dist/index.js"
   },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./package.json": "./package.json"
+  },
   "files": [
     "dist",
     "data",
@@ -41,8 +48,10 @@
     "build": "tsc -p tsconfig.json",
     "prepublishOnly": "npm run build",
     "eval": "node dist/index.js --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
+    "eval:planted": "node scripts/eval-planted.mjs",
+    "check:report-schema": "node scripts/check-report-schema.mjs",
     "dev": "node --import tsx src/index.ts --cases data/evals.jsonl --schema schemas/eval_case.schema.json --out out/report.json",
-    "verify": "npm test && npm run build && npm run eval"
+    "verify": "npm test && npm run build && npm run eval && npm run check:report-schema"
   },
   "dependencies": {
     "ajv": "^8.17.1",

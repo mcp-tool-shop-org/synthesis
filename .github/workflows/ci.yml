@@ -51,8 +51,14 @@ jobs:
     - name: Install dependencies
       run: npm ci
 
-    - name: Verify (test + build + eval)
+    - name: Verify (test + build + eval + report schema)
       run: npm run verify
+
+    - name: Check eval_report schema gold instances
+      run: npm run check:report-schema
+
+    - name: Eval planted-RED pack
+      run: npm run eval:planted
 
   lint:
     runs-on: ubuntu-latest

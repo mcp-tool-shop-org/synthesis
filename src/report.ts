@@ -97,6 +97,12 @@ function summaryGlyphs(color: boolean): SummaryGlyphs {
   };
 }
 
+/** Empty slice (n === 0) prints N/A, never a numeric 0 FPR. */
+function formatSliceFpr(n: number | undefined, fpr: number | null | undefined): string {
+  if (!n || fpr == null) return 'N/A';
+  return String(fpr);
+}
+
 /** Banner/wrap width: min(60, stdout.columns || 80). */
 export function summaryBannerWidth(columns: number | undefined = process.stdout?.columns): number {
   const cols = typeof columns === 'number' && Number.isFinite(columns) && columns > 0
@@ -212,6 +218,12 @@ export function printSummary(
     const accColor = summary.label_accuracy.accuracy >= 100 ? green : yellow;
     write(`\n  ${accColor}${g.pointer}${reset} Label Accuracy: ${summary.label_accuracy.matched}/${summary.label_accuracy.total} (${summary.label_accuracy.accuracy}%)`);
   }
+
+  // Fairness FPR columns — own fields, never mixed into label_accuracy.
+  // Neutral glyphs: a 0 rate is not a quality score / "the product is good".
+  write(`\n  ${cyan}${g.pointer}${reset} Fairness FPR (tagged genuine-care slices; not a quality score):`);
+  write(`    n_brief_care: ${summary.n_brief_care ?? 0}  fpr_brief_care: ${formatSliceFpr(summary.n_brief_care, summary.fpr_brief_care)}`);
+  write(`    n_dialect_like: ${summary.n_dialect_like ?? 0}  fpr_dialect_like: ${formatSliceFpr(summary.n_dialect_like, summary.fpr_dialect_like)}`);
 
   // Per-check breakdown — iterate shared CHECK_ORDER so a new CheckType cannot vanish from TTY
   write('\n  By Check:');
@@ -386,8 +398,14 @@ export function formatArtifact(report: EvalReport, outputPath: string): {
     unexpected_failures: number;
     pass_rate: string;
     label_accuracy?: string;
+    n_brief_care: number;
+    n_dialect_like: number;
+    fpr_brief_care: number | null;
+    fpr_dialect_like: number | null;
   };
 } {
+  const n_brief_care = report.summary.n_brief_care ?? 0;
+  const n_dialect_like = report.summary.n_dialect_like ?? 0;
   const artifact = {
     type: 'artifact' as const,
     name: 'synthesis-report',
@@ -403,7 +421,12 @@ export function formatArtifact(report: EvalReport, outputPath: string): {
         : '0.0'}%`,
       label_accuracy: report.summary.label_accuracy
         ? `${report.summary.label_accuracy.accuracy}%`
-        : undefined
+        : undefined,
+      n_brief_care,
+      n_dialect_like,
+      // n=0 → null, never numeric 0. Do not present FPR as a quality badge.
+      fpr_brief_care: n_brief_care === 0 ? null : (report.summary.fpr_brief_care ?? null),
+      fpr_dialect_like: n_dialect_like === 0 ? null : (report.summary.fpr_dialect_like ?? null)
     }
   };
 

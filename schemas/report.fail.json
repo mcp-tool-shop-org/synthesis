@@ -1,0 +1,20 @@
+{
+  "summary": {
+    "cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "strict_passed": 1,
+    "strict_failed": 0,
+    "expected_failures": 0,
+    "unexpected_failures": 0,
+    "by_check": {}
+  },
+  "failures": [],
+  "results": [
+    {
+      "id": "GOLD-1",
+      "checks": {}
+    }
+  ],
+  "not_a_report_key": true
+}

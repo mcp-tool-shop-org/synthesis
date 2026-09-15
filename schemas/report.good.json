@@ -1,0 +1,26 @@
+{
+  "summary": {
+    "cases": 1,
+    "passed": 1,
+    "failed": 0,
+    "strict_passed": 1,
+    "strict_failed": 0,
+    "expected_failures": 0,
+    "unexpected_failures": 0,
+    "by_check": {}
+  },
+  "failures": [],
+  "results": [
+    {
+      "id": "GOLD-1",
+      "checks": {},
+      "relational_posture": {
+        "state": "unresolved_abstain",
+        "claims": [],
+        "non_claims": [
+          "no failure detected AND no grounded uptake verified — the tool abstains (N/A is not a clean bill)"
+        ]
+      }
+    }
+  ]
+}

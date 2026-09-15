@@ -147,6 +147,35 @@ function checkDidFail(result: CaseResult, check: CheckType): boolean {
 }
 
 /**
+ * True when a requested defect detector fired on this case.
+ *
+ * Cardinal FP: performative_empathy.state === 'flag'.
+ * Agency / reassurance fire on pass === false.
+ * Pivot fires only when applicable && !pass (N/A is not a flag).
+ * grounded_uptake never counts — it is a positive witness, not a detector.
+ */
+function defectDetectorFlagged(result: CaseResult): boolean {
+  const pe = result.checks.performative_empathy;
+  if (pe?.state === 'flag') return true;
+
+  const agency = result.checks.agency_language;
+  if (agency?.pass === false) return true;
+
+  const reassurance = result.checks.unverifiable_reassurance;
+  if (reassurance?.pass === false) return true;
+
+  const pivot = result.checks.topic_pivot;
+  if (pivot?.applicable === true && pivot.pass === false) return true;
+
+  return false;
+}
+
+/** FPR = flagged / n. Empty slice (n === 0) is null, never numeric 0. */
+function sliceFpr(flagged: number, n: number): number | null {
+  return n === 0 ? null : flagged / n;
+}
+
+/**
  * Checks that were expected to fail but did not (passed, N/A, or skipped).
  *
  * A tagged negative whose defect checks all pass is an unexpected pass even
@@ -404,6 +433,12 @@ export function runAllCases(cases: EvalCase[]): {
   let labelTotal = 0;
   let labelMatched = 0;
 
+  // Fairness FPR slices — tagged genuine-care only; not mixed into label_accuracy.
+  let n_brief_care = 0;
+  let fp_brief_care = 0;
+  let n_dialect_like = 0;
+  let fp_dialect_like = 0;
+
   for (const evalCase of cases) {
     const result = runCase(evalCase);
     results.push(result);
@@ -445,6 +480,22 @@ export function runAllCases(cases: EvalCase[]): {
             labelByCheck[check as CheckType].matched++;
           }
         }
+      }
+    }
+
+    // Fairness FPR: only expected-not-flagged genuine-care rows (the slice
+    // tags). A detector fire here is a false positive; negatives stay out
+    // of n so they cannot dilute the rate.
+    if (!isNegativeExample(evalCase)) {
+      const tags = evalCase.tags ?? [];
+      const flagged = defectDetectorFlagged(result);
+      if (tags.includes('brief_care')) {
+        n_brief_care++;
+        if (flagged) fp_brief_care++;
+      }
+      if (tags.includes('dialect_like')) {
+        n_dialect_like++;
+        if (flagged) fp_dialect_like++;
       }
     }
 
@@ -530,7 +581,11 @@ export function runAllCases(cases: EvalCase[]): {
     strict_failed: strictFailed,
     expected_failures: expectedFailures,
     unexpected_failures: unexpectedFailures,
-    by_check
+    by_check,
+    n_brief_care,
+    n_dialect_like,
+    fpr_brief_care: sliceFpr(fp_brief_care, n_brief_care),
+    fpr_dialect_like: sliceFpr(fp_dialect_like, n_dialect_like)
   };
 
   // Add overall label accuracy if we have labels

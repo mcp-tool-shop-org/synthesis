@@ -1,0 +1,431 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/mcp-tool-shop-org/synthesis/schemas/eval_report.schema.json",
+  "title": "Synthesis Eval Report",
+  "description": "Closed contract for writeReport JSON (out/report.json). additionalProperties is false at the report root. relational_posture.state enumerates the five live RelationalPosture values; unresolved_abstain is the N/A-is-not-clean posture. not_applicable is not a posture member this wave.",
+  "type": "object",
+  "required": ["summary", "failures", "results"],
+  "additionalProperties": false,
+  "properties": {
+    "summary": { "$ref": "#/definitions/reportSummary" },
+    "failures": {
+      "type": "array",
+      "description": "Failure records. Always emitted (empty array when none).",
+      "items": { "$ref": "#/definitions/failureRecord" }
+    },
+    "results": {
+      "type": "array",
+      "description": "Per-case results. Each item requires relational_posture.",
+      "items": { "$ref": "#/definitions/caseResult" }
+    }
+  },
+  "definitions": {
+    "checkType": {
+      "type": "string",
+      "enum": [
+        "agency_language",
+        "unverifiable_reassurance",
+        "topic_pivot",
+        "performative_empathy",
+        "grounded_uptake"
+      ]
+    },
+    "stringArray": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "numberOrNull": {
+      "type": ["number", "null"]
+    },
+    "booleanOrNull": {
+      "type": ["boolean", "null"]
+    },
+    "checkSummary": {
+      "type": "object",
+      "required": ["passed", "failed", "not_applicable"],
+      "additionalProperties": false,
+      "properties": {
+        "passed": { "type": "number" },
+        "failed": { "type": "number" },
+        "not_applicable": {
+          "type": "number",
+          "description": "Abstain count. N/A is not a pass."
+        }
+      }
+    },
+    "checkLabelAccuracy": {
+      "type": "object",
+      "required": ["total", "matched", "accuracy"],
+      "additionalProperties": false,
+      "properties": {
+        "total": { "type": "number" },
+        "matched": { "type": "number" },
+        "accuracy": { "type": "number" }
+      }
+    },
+    "byCheckMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agency_language": { "$ref": "#/definitions/checkSummary" },
+        "unverifiable_reassurance": { "$ref": "#/definitions/checkSummary" },
+        "topic_pivot": { "$ref": "#/definitions/checkSummary" },
+        "performative_empathy": { "$ref": "#/definitions/checkSummary" },
+        "grounded_uptake": { "$ref": "#/definitions/checkSummary" }
+      }
+    },
+    "labelAccuracyByCheckMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agency_language": { "$ref": "#/definitions/checkLabelAccuracy" },
+        "unverifiable_reassurance": { "$ref": "#/definitions/checkLabelAccuracy" },
+        "topic_pivot": { "$ref": "#/definitions/checkLabelAccuracy" },
+        "performative_empathy": { "$ref": "#/definitions/checkLabelAccuracy" },
+        "grounded_uptake": { "$ref": "#/definitions/checkLabelAccuracy" }
+      }
+    },
+    "reportSummary": {
+      "type": "object",
+      "required": [
+        "cases",
+        "passed",
+        "failed",
+        "strict_passed",
+        "strict_failed",
+        "expected_failures",
+        "unexpected_failures",
+        "by_check"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cases": { "type": "number", "description": "Total cases evaluated" },
+        "passed": { "type": "number" },
+        "failed": { "type": "number" },
+        "strict_passed": { "type": "number" },
+        "strict_failed": { "type": "number" },
+        "expected_failures": { "type": "number" },
+        "unexpected_failures": { "type": "number" },
+        "by_check": { "$ref": "#/definitions/byCheckMap" },
+        "label_accuracy": {
+          "type": "object",
+          "required": ["total", "matched", "accuracy"],
+          "additionalProperties": false,
+          "properties": {
+            "total": { "type": "number" },
+            "matched": { "type": "number" },
+            "accuracy": { "type": "number" }
+          }
+        },
+        "label_accuracy_by_check": { "$ref": "#/definitions/labelAccuracyByCheckMap" },
+        "fpr_brief_care": {
+          "$ref": "#/definitions/numberOrNull",
+          "description": "Optional FPR on the brief_care slice. Null when the slice is empty."
+        },
+        "fpr_dialect_like": {
+          "$ref": "#/definitions/numberOrNull",
+          "description": "Optional FPR on the dialect_like slice. dialect_like is an informal-register genuine-care slice, not a demographic classifier. Null when the slice is empty."
+        },
+        "n_brief_care": {
+          "$ref": "#/definitions/numberOrNull",
+          "description": "Optional count of brief_care-tagged cases."
+        },
+        "n_dialect_like": {
+          "$ref": "#/definitions/numberOrNull",
+          "description": "Optional count of dialect_like-tagged cases."
+        }
+      }
+    },
+    "relationalPosture": {
+      "type": "object",
+      "required": ["state", "claims", "non_claims"],
+      "additionalProperties": false,
+      "properties": {
+        "state": {
+          "type": "string",
+          "description": "Five live RelationalPosture values. unresolved_abstain is the N/A-is-not-clean posture. not_applicable is not a member until wave 2 runtime emit.",
+          "enum": [
+            "hollow_warmth_flagged",
+            "unsafe_comfort",
+            "pivot_or_abandonment",
+            "grounded_uptake_verified",
+            "unresolved_abstain"
+          ]
+        },
+        "claims": {
+          "$ref": "#/definitions/stringArray",
+          "description": "What the verdict asserts. Semantic consistency is a code verifier, not an in-schema assertion."
+        },
+        "non_claims": {
+          "$ref": "#/definitions/stringArray",
+          "description": "What the verdict explicitly does not assert."
+        }
+      }
+    },
+    "labelComparison": {
+      "type": "object",
+      "required": ["expected", "actual", "match"],
+      "additionalProperties": false,
+      "properties": {
+        "expected": { "type": "boolean" },
+        "actual": { "type": "boolean" },
+        "match": { "type": "boolean" }
+      }
+    },
+    "labelComparisonMap": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agency_language": { "$ref": "#/definitions/labelComparison" },
+        "unverifiable_reassurance": { "$ref": "#/definitions/labelComparison" },
+        "topic_pivot": { "$ref": "#/definitions/labelComparison" },
+        "performative_empathy": { "$ref": "#/definitions/labelComparison" },
+        "grounded_uptake": { "$ref": "#/definitions/labelComparison" }
+      }
+    },
+    "agencyResult": {
+      "type": "object",
+      "required": ["pass", "score", "pos_hits", "neg_hits"],
+      "additionalProperties": false,
+      "properties": {
+        "pass": { "type": "boolean" },
+        "score": { "type": "number" },
+        "pos_hits": { "$ref": "#/definitions/stringArray" },
+        "neg_hits": { "$ref": "#/definitions/stringArray" }
+      }
+    },
+    "reassuranceResult": {
+      "type": "object",
+      "required": ["pass", "hits", "mind_reading_hits", "guarantee_hits"],
+      "additionalProperties": false,
+      "properties": {
+        "pass": { "type": "boolean" },
+        "hits": { "$ref": "#/definitions/stringArray" },
+        "mind_reading_hits": { "$ref": "#/definitions/stringArray" },
+        "guarantee_hits": { "$ref": "#/definitions/stringArray" }
+      }
+    },
+    "pivotResult": {
+      "type": "object",
+      "required": [
+        "pass",
+        "applicable",
+        "pass_strength",
+        "anchor_similarity",
+        "ack_present",
+        "anchor_text",
+        "vuln_hits",
+        "ack_hits"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pass": { "type": "boolean" },
+        "applicable": { "type": "boolean" },
+        "pass_strength": {
+          "type": "string",
+          "enum": ["clear_pass", "borderline_pass", "clear_fail", "not_applicable"],
+          "description": "not_applicable is abstain, not a pass."
+        },
+        "anchor_similarity": { "type": "number" },
+        "ack_present": { "type": "boolean" },
+        "anchor_text": { "type": "string" },
+        "vuln_hits": { "$ref": "#/definitions/stringArray" },
+        "ack_hits": { "$ref": "#/definitions/stringArray" },
+        "follow_up_present": { "type": "boolean" },
+        "follow_up_hits": { "$ref": "#/definitions/stringArray" },
+        "pivot_indicator": { "type": "boolean" },
+        "pivot_hits": { "$ref": "#/definitions/stringArray" },
+        "response_similarity": { "type": "number" },
+        "thresholds": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "similarity": { "type": "number" },
+            "borderline_similarity": { "type": "number" }
+          }
+        }
+      }
+    },
+    "performativeResult": {
+      "type": "object",
+      "required": [
+        "pass",
+        "applicable",
+        "state",
+        "warmth_present",
+        "genericness",
+        "template_density",
+        "filler_ratio",
+        "particularity",
+        "grounded_overlap",
+        "verbatim_ratio",
+        "concreteness",
+        "hollow_margin",
+        "user_content_count",
+        "template_hits",
+        "missing_user_content",
+        "echoed_spans",
+        "thresholds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pass": { "type": "boolean" },
+        "applicable": { "type": "boolean" },
+        "state": {
+          "type": "string",
+          "enum": ["flag", "not_applicable"],
+          "description": "not_applicable is abstain, not a pass. There is no genuine/sincere verdict."
+        },
+        "warmth_present": { "type": "boolean" },
+        "genericness": { "type": "number" },
+        "template_density": { "type": "number" },
+        "filler_ratio": { "type": "number" },
+        "particularity": { "type": "number" },
+        "grounded_overlap": { "type": "number" },
+        "verbatim_ratio": { "type": "number" },
+        "concreteness": { "$ref": "#/definitions/numberOrNull" },
+        "hollow_margin": { "type": "number" },
+        "user_content_count": { "type": "number" },
+        "template_hits": { "$ref": "#/definitions/stringArray" },
+        "missing_user_content": { "$ref": "#/definitions/stringArray" },
+        "echoed_spans": { "$ref": "#/definitions/stringArray" },
+        "thresholds": {
+          "type": "object",
+          "required": ["genericness_flag", "particularity_floor", "min_margin"],
+          "additionalProperties": false,
+          "properties": {
+            "genericness_flag": { "type": "number" },
+            "particularity_floor": { "type": "number" },
+            "min_margin": { "type": "number" }
+          }
+        }
+      }
+    },
+    "groundedUptakeResult": {
+      "type": "object",
+      "required": [
+        "pass",
+        "applicable",
+        "state",
+        "grounded_anchors",
+        "support_moves",
+        "genericness",
+        "grounded_overlap",
+        "verbatim_ratio",
+        "user_content_count",
+        "witnesses",
+        "safety",
+        "directive_hits",
+        "guarantee_hits",
+        "reason",
+        "thresholds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pass": { "type": "boolean" },
+        "applicable": { "type": "boolean" },
+        "state": {
+          "type": "string",
+          "enum": ["verified_uptake", "no_verified_uptake", "not_applicable"],
+          "description": "not_applicable is abstain, not a pass. no_verified_uptake is not a defect."
+        },
+        "grounded_anchors": { "$ref": "#/definitions/stringArray" },
+        "support_moves": { "$ref": "#/definitions/stringArray" },
+        "genericness": { "type": "number" },
+        "grounded_overlap": { "type": "number" },
+        "verbatim_ratio": { "type": "number" },
+        "user_content_count": { "type": "number" },
+        "witnesses": {
+          "type": "object",
+          "required": [
+            "grounded_anchor",
+            "non_parroting",
+            "support_move",
+            "template_contained",
+            "safety_compatible"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "grounded_anchor": { "$ref": "#/definitions/booleanOrNull" },
+            "non_parroting": { "$ref": "#/definitions/booleanOrNull" },
+            "support_move": { "$ref": "#/definitions/booleanOrNull" },
+            "template_contained": { "$ref": "#/definitions/booleanOrNull" },
+            "safety_compatible": { "$ref": "#/definitions/booleanOrNull" }
+          }
+        },
+        "safety": {
+          "type": "object",
+          "required": ["agency", "reassurance"],
+          "additionalProperties": false,
+          "properties": {
+            "agency": { "$ref": "#/definitions/booleanOrNull" },
+            "reassurance": { "$ref": "#/definitions/booleanOrNull" }
+          }
+        },
+        "directive_hits": { "$ref": "#/definitions/stringArray" },
+        "guarantee_hits": { "$ref": "#/definitions/stringArray" },
+        "reason": { "type": "string" },
+        "thresholds": {
+          "type": "object",
+          "required": ["genericness_ceiling", "min_user_content"],
+          "additionalProperties": false,
+          "properties": {
+            "genericness_ceiling": { "type": "number" },
+            "min_user_content": { "type": "number" }
+          }
+        },
+        "agency_neg_hits": { "$ref": "#/definitions/stringArray" },
+        "reassurance_hits": { "$ref": "#/definitions/stringArray" }
+      }
+    },
+    "caseChecks": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "agency_language": { "$ref": "#/definitions/agencyResult" },
+        "unverifiable_reassurance": { "$ref": "#/definitions/reassuranceResult" },
+        "topic_pivot": { "$ref": "#/definitions/pivotResult" },
+        "performative_empathy": { "$ref": "#/definitions/performativeResult" },
+        "grounded_uptake": { "$ref": "#/definitions/groundedUptakeResult" }
+      }
+    },
+    "caseResult": {
+      "type": "object",
+      "required": ["id", "checks", "relational_posture"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "description": "Case identifier" },
+        "checks": { "$ref": "#/definitions/caseChecks" },
+        "pass": { "type": "boolean" },
+        "label_comparison": { "$ref": "#/definitions/labelComparisonMap" },
+        "is_negative_example": { "type": "boolean" },
+        "unexpected_pass": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/checkType" }
+        },
+        "relational_posture": { "$ref": "#/definitions/relationalPosture" }
+      }
+    },
+    "failureRecord": {
+      "type": "object",
+      "required": ["id", "failed", "evidence"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "failed": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/checkType" }
+        },
+        "evidence": {
+          "type": "object",
+          "description": "Checker-specific evidence bag. Keys vary by failed check."
+        },
+        "expected_failure": { "type": "boolean" },
+        "unexpected_pass": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/checkType" }
+        }
+      }
+    }
+  }
+}
