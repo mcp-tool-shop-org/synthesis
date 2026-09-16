@@ -14,10 +14,26 @@
  * it, or is good. The construct is OBSERVABLE BEHAVIOR, not inner state, so it is honest where
  * "sincere" could not be (Jacobs & Wallach 2021): we never collapse a proxy into the construct.
  *
- * Robust BY CONSTRUCTION: the only way to fake `verified_uptake` is to actually perform the
- * observable work (reference the user's specifics, recombine them, make a grounded move,
- * stay safe) — at which point the verdict is simply correct, not gamed. This is why the
- * positive verdict survives where a sincerity verdict could not.
+ * NOT ROBUST TO OPTIMIZATION — measured 2026-09-15 (`research/template-saturation-test.cjs`).
+ * This block previously claimed the verdict was "robust BY CONSTRUCTION: the only way to fake
+ * `verified_uptake` is to actually perform the observable work." That claim is FALSE and has
+ * been retracted. A ~20-line template that slots two regex-extracted user stems into a fixed
+ * frame and appends one support-move phrase earns `verified_uptake` on 30/41 (73.2%) of the
+ * eval pack while performing no comprehension whatsoever — e.g. "It sounds like fired and
+ * today are part of what you're carrying right now. What do you need most at this point?"
+ * The same template rewritten as love-bombing scores HIGHER (31/41, 75.6%); rewritten as a
+ * dismissive reframe it ties (30/41, 73.2%).
+ *
+ * The conjunction does bind — the controls confirm it: pure warmth with no anchors scores
+ * 0/41 (and draws 34 theater flags), and anchors with no support move score 0/41. But once
+ * the five witnesses are mechanically satisfied, the CONTENT is unconstrained. "Faking it is
+ * doing the work" does not hold: the work can be faked by string substitution.
+ *
+ * What survives: `verified_uptake` is still an honest report of the observable features it
+ * names, and observable behavior is still the right shape for a positive witness where a
+ * sincerity verdict was impossible. What does NOT survive: any reading of the verdict as
+ * evidence that a reply is good, sincere, or relationally competent — and any use of it as
+ * an optimization target. See MAINTAINER GUARDRAIL 3 below.
  *
  * THREE states:
  *   - verified_uptake     (state): all five witnesses agree (the conjunction is the robustness)
@@ -56,6 +72,23 @@
  *     sound or non-dismissive. Do NOT chase the residual with fragile phrase detectors.
  *   - Accepts false-negatives (pure reflections with no support move; heavily paraphrased
  *     anchors that don't stem-match). A missed positive is safe; a false positive is the harm.
+ *
+ * MAINTAINER GUARDRAILS (non-negotiable):
+ *   1. Do NOT chase the documented residual (dismissive reframes, prescription-as-description)
+ *      with fragile phrase detectors. That is the blocklist whack-a-mole that failed
+ *      performative_empathy — an open, productive class of English that diverges rather than
+ *      converges.
+ *   2. Do NOT weaken the conjunction to raise the verified_uptake rate. The controls above are
+ *      the only thing keeping content-free warmth at 0%; each witness you relax moves the
+ *      floor toward the template.
+ *   3. Do NOT use `verified_uptake` as a TRAINING TARGET or a RANKING SIGNAL. Guardrails 1-2
+ *      protect against weakening the gates; this one protects against OPTIMIZING them, which
+ *      is the failure the 2026-09-15 measurement found. Training a generator to maximize this
+ *      verdict teaches the five witnesses, not the behavior (proxy optimization — Skalse et al.
+ *      NeurIPS 2022 arXiv:2209.13085; Gao/Schulman/Hilton arXiv:2210.10760 — NOT weak
+ *      supervision, because the policy authors the text being scored). Ranking candidate
+ *      replies by this verdict at inference is worse than not ranking: love-bombing scores
+ *      highest of every arm measured. This checker may forbid; it may not anoint.
  *
  * Fully deterministic: no LLM, no network, no clock, no randomness.
  */

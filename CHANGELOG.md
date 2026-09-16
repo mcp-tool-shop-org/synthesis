@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.2] - 2026-09-15
+
+Documentation-only release. **No checker logic changed — behavior is byte-identical to 1.3.1.**
+
+### Changed
+- **Retracted the `grounded_uptake` "robust by construction" claim.** The checker source, `HANDBOOK.md`, the landing page and the test header all stated that *"the only way to earn `verified_uptake` is to actually perform the observable work."* That claim was false. Measured against the 41 user-bearing cases in `data/evals.jsonl`: a ~20-line template that slots two regex-extracted user stems into a fixed frame and appends one support-move phrase earns `verified_uptake` on **30/41 (73.2%)** while performing no comprehension — e.g. *"It sounds like fired and today are part of what you're carrying right now. What do you need most at this point?"* A love-bombing rewrite scores **higher (31/41, 75.6%)**; a dismissive reframe ties (30/41, 73.2%). Controls confirm each witness still binds individually — pure warmth with no anchors scores 0/41 (34 theater flags), anchors without a support move score 0/41 — so the conjunction is real; what fails is the claim that satisfying it requires comprehension. Reproduce: `node research/template-saturation-test.cjs`.
+- `docs/KNOWN-LIMITATIONS.md` gains **Limitation 0** with the full five-arm table. Limitations 1 and 2 now carry measured rates instead of describing the manipulation and dismissive-reframe cases as rare residuals — they are the modal outcome of mechanical satisfaction.
+- Landing page and handbook now state plainly that `verified_uptake` is not a quality score.
+
+### Added
+- **Third maintainer guardrail** in `src/checks/grounded_uptake.ts`: `verified_uptake` must never be used as a **training target or ranking signal**. Guardrails 1–2 protect against *weakening* the gates; this one protects against *optimizing* them. Training a generator on this verdict teaches the five witnesses, not the behavior — proxy optimization (Skalse et al., NeurIPS 2022, arXiv:2209.13085; Gao/Schulman/Hilton, arXiv:2210.10760), not weak supervision, since the policy authors the text being scored. Ranking candidates by it at inference is worse than useless: the love-bombing arm scores highest. The checker may forbid; it may not anoint.
+- `research/template-saturation-test.cjs` + `research/template-saturation-result.txt` — the reproducible receipt behind every number above.
+
+### Unchanged
+- All five checkers, their thresholds, lexicons and verdicts. 198 tests pass; the GREEN eval pack and the planted inverted oracle are both unaffected. `verified_uptake` remains an honest report of the observable features it names — only the anti-gaming claim was retracted, not the honesty claim (Jacobs & Wallach 2021), and not `performative_empathy`'s register-neutrality.
+
 ## [1.3.1] - 2026-09-15
 
 ### Fixed

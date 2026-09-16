@@ -429,7 +429,7 @@ See [SECURITY.md](SECURITY.md) for vulnerability reporting.
 | E. Identity (soft) | 10 |
 | **Overall** | **50/50** |
 
-> All gates PASS. `package.json` is `1.3.1`. Release ships to npm via Trusted Publishing (OIDC).
+> All gates PASS. `package.json` is `1.3.2`. Release ships to npm via Trusted Publishing (OIDC).
 
 > Full audit: [SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 

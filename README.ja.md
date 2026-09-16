@@ -429,7 +429,7 @@ synthesis/
 | E. 識別（ソフト） | 10 |
 | **Overall** | **50/50** |
 
-> すべてのゲートはPASS。`package.json`は`1.3.1`である。リリースは、信頼できる公開（OIDC）を介してnpmに公開される。
+> すべてのゲートはPASS。`package.json`は`1.3.2`である。リリースは、信頼できる公開（OIDC）を介してnpmに公開される。
 
 > 完全な監査：[SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 

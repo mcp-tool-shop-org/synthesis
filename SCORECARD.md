@@ -37,10 +37,12 @@
 
 D. Shipping Hygiene reached 10/10 when the `v1.1.0` release was cut:
 
-- **Version in manifest matches git tag — PASS.** `package.json` is `1.3.1` and the
-  `v1.3.1` tag is the current release (Trusted Publishing / OIDC). First satisfied at
-  `v1.1.0`; remains PASS through `v1.2.0` and `v1.3.1` (library exports, fairness FPR pack,
-  planted-RED oracle, closed report schema). `v1.3.0` never reached npm.
+- **Version in manifest matches git tag — PASS.** `package.json` is `1.3.2` and the
+  `v1.3.2` tag is the current release (Trusted Publishing / OIDC). First satisfied at
+  `v1.1.0`; remains PASS through `v1.2.0`, `v1.3.1` (library exports, fairness FPR pack,
+  planted-RED oracle, closed report schema) and `v1.3.2` (retraction of the
+  `grounded_uptake` robustness claim; docs only, no checker logic changed).
+  `v1.3.0` never reached npm.
 
 Everything else in D is genuinely PASS, including npm packaging: `package.json`
 now declares `main`, `types`, a `bin` (the `synthesis` CLI), a `files` allowlist,

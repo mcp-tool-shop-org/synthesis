@@ -43,7 +43,7 @@
 ## D. Shipping Hygiene
 
 - [x] `[all]` `verify` script exists (test + build + smoke in one command) — npm test + npm run build
-- [x] `[all]` Version in manifest matches git tag — package.json is 1.3.1; `v1.3.1` is the release tag (Trusted Publishing / OIDC). `v1.3.0` never reached npm.
+- [x] `[all]` Version in manifest matches git tag — package.json is 1.3.2; `v1.3.2` is the release tag (Trusted Publishing / OIDC). `v1.3.0` never reached npm.
 - [x] `[all]` Dependency scanning runs in CI (ecosystem-appropriate)
 - [x] `[all]` Automated dependency update mechanism exists
 - [x] `[npm]` `npm pack --dry-run` includes: dist/, README.md, CHANGELOG.md, LICENSE — package.json declares `main`, `types`, `bin` (synthesis CLI), and a `files` allowlist (dist, data, schemas, README, LICENSE, CHANGELOG); `prepublishOnly` builds dist before publish, so `npm install` works and the CLI is exposed

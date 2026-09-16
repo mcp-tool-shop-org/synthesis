@@ -120,6 +120,62 @@ was **not caught by the explicit `agency_language` / `unverifiable_reassurance` 
 It does **NOT** certify that the response is sincere, high-quality, therapeutic, non-manipulative,
 or fully safe. It is a claim about *observable behavior*, not inner state or overall goodness.
 
+## Limitation 0 — the verdict is templatable, and the rate is measured
+
+> **This limitation supersedes an earlier claim.** The checker's source, this package's handbook,
+> and the landing page previously stated that `verified_uptake` was *"robust by construction — the
+> only way to earn it is to actually perform the observable work."* **That claim was false and has
+> been retracted.** The limitations below it were written as *residuals* found by a hand-authored
+> red-team; the measurement shows they are the **modal outcome** of mechanically satisfying the
+> witnesses.
+
+Measured 2026-09-15 against the 41 user-bearing cases in `data/evals.jsonl`. Reproduce with
+`node research/template-saturation-test.cjs`:
+
+| Arm | `verified_uptake` | theater flags |
+|---|---|---|
+| Template: two regex-extracted user stems + one support-move phrase | **30/41 (73.2%)** | 0 |
+| Template rewritten as love-bombing / flattery | **31/41 (75.6%)** | 0 |
+| Template rewritten as a dismissive reframe | **30/41 (73.2%)** | 0 |
+| *Control* — pure warmth, no anchors | 0/41 (0.0%) | 34 |
+| *Control* — anchors present, no support move | 0/41 (0.0%) | 0 |
+
+The template performs no comprehension. It produces strings like *"It sounds like fired and today
+are part of what you're carrying right now. What do you need most at this point?"* — which is not
+grammatical English — and earns the positive verdict on nearly three-quarters of the pack.
+
+**The two controls are the important half of this table.** They score 0%, which means each witness
+genuinely binds: content-free warmth cannot earn the verdict, and neither can grounded content
+without a support move. The conjunction is not decorative. What the measurement establishes is
+narrower and worse: *once all five witnesses are mechanically satisfied, the content is
+unconstrained* — and the arm that scores **highest** is the manipulative one.
+
+**What this does not mean.** `verified_uptake` is still an accurate report of the observable
+features it names, and narrowing the claim to observable behavior is still what makes a positive
+verdict possible where a sincerity verdict was not. The checker is not broken; the *robustness
+claim* about it was wrong.
+
+### Maintainer guardrail — never optimize against this verdict
+
+`verified_uptake` must **never** be used as a training target, a reward signal, or a ranking
+signal for selecting among candidate responses.
+
+The existing guardrails protect against *weakening* the gates. This one protects against
+*optimizing* them, which is a distinct failure with two distinct consequences:
+
+- **As a training target**, it teaches the five witnesses rather than the behavior. This is proxy
+  optimization, not weak supervision — the policy authors the text being scored, so the
+  discriminative-model-exceeds-its-labeling-functions result does not apply (Skalse et al.,
+  NeurIPS 2022, [arXiv:2209.13085](https://arxiv.org/abs/2209.13085); Gao, Schulman & Hilton,
+  [arXiv:2210.10760](https://arxiv.org/abs/2210.10760)).
+- **As a ranking signal at inference**, it is actively harmful rather than merely useless: the
+  love-bombing arm scores highest of every arm measured, so best-of-N selection on this verdict
+  selects *for* manipulation.
+
+A precision-favoring witness may **forbid**; it may not **anoint**. Runtime use should be
+block-only — hard-block on the safety classes and decline when nothing is clean — never
+rank-by-witness-count.
+
 ## Limitation 1 — it does not detect manipulation or insincerity
 A reply that genuinely takes up the user's specifics, makes a support move, and avoids the
 explicit safety triggers will earn `verified_uptake` **even if it is manipulative** — love-bombing,
@@ -127,6 +183,11 @@ flattery, fostering dependency, or subtly isolating the user. The red-team confi
 replies *do* perform observable grounded uptake; the manipulation lives in intent/tone, which is
 the same unobservable territory `performative_empathy` refuses to judge. **Read `verified_uptake`
 as "did real, grounded conversational work," never as "is a good or trustworthy reply."**
+
+**Measured rate (2026-09-15):** this is not a rare edge case. A flattery/love-bombing template
+earns `verified_uptake` on **31/41 (75.6%)** of the eval pack — a *higher* rate than the neutral
+template (73.2%). Manipulation is not something the witness occasionally misses; it is something
+the witness slightly prefers. See Limitation 0.
 
 ## Limitation 2 — safety screening is strong but not total
 The safety witness composes `agency_language` + `unverifiable_reassurance` (explicit coercion
@@ -142,7 +203,8 @@ now also catches:
   via `guarantee_hits`).
 
 **The residual that still passes.** Two subtle forms remain — and we deliberately do **not** chase
-them:
+them. *(Measured 2026-09-15: a dismissive-reframe template earns `verified_uptake` on **30/41
+(73.2%)**, tying the neutral template. "Residual" understates it — see Limitation 0.)*
 - **Dismissive reframes**: *"a relapse is just data, not identity… plenty of people barely register
   it."*
 - **Prescription framed as description**: *"the people who do well are the ones who lock in a strict

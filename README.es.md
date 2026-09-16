@@ -429,7 +429,7 @@ Consulte [SECURITY.md](SECURITY.md) para informar sobre vulnerabilidades.
 | E. Identidad (suave) | 10 |
 | **Overall** | **50/50** |
 
-> Todas las puertas PASAN. `package.json` es `1.3.1`. El lanzamiento se envía a npm a través de la publicación confiable (OIDC).
+> Todas las puertas PASAN. `package.json` es `1.3.2`. El lanzamiento se envía a npm a través de la publicación confiable (OIDC).
 
 > Auditoría completa: [SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 

@@ -89,6 +89,12 @@ A genuine, specific reply makes `performative_empathy` **abstain** — it never 
 
 The fifth checker and the **positive witness** — the companion to `performative_empathy`. Where `performative_empathy` flags what is hollow, `grounded_uptake` certifies what is observable. Instead of trying to certify the undecidable ("this reply is sincere"), it certifies the observable: **grounded uptake was performed**. It measures behavior, not inner state — honest by construction (Jacobs & Wallach 2021).
 
+:::caution[The verdict is templatable — do not optimize against it]
+An earlier version of these docs claimed `verified_uptake` was *"robust by construction."* **That claim has been retracted.** Measured 2026-09-15: a ~20-line template that slots two regex-extracted user stems into a fixed frame and appends one support-move phrase earns `verified_uptake` on **30/41 (73.2%)** of the eval pack without performing any comprehension. A love-bombing rewrite of the same template scores **higher** (75.6%).
+
+The witnesses do bind individually — content-free warmth scores 0%, and grounded content with no support move scores 0% — but once all five are mechanically satisfied, the content is unconstrained. `verified_uptake` remains an honest report of the features it names; it is **not** a quality score, and it must never be used as a training target or a ranking signal. Full table and guardrails: [`docs/KNOWN-LIMITATIONS.md`](https://github.com/mcp-tool-shop-org/synthesis/blob/main/docs/KNOWN-LIMITATIONS.md).
+:::
+
 **`pass` is always `true`.** `grounded_uptake` is a positive witness, never a failure checker — it never fails a case and never affects the exit code. The verdict lives entirely in the `state` field.
 
 | `state` | Meaning |

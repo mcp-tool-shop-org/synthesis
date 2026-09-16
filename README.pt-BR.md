@@ -429,7 +429,7 @@ Consulte [SECURITY.md](SECURITY.md) para relatar vulnerabilidades.
 | E. Identidade (suave) | 10 |
 | **Overall** | **50/50** |
 
-> Todos os filtros PASSAM. `package.json` é `1.3.1`. O lançamento é enviado para o npm por meio de Publicação Confiável (OIDC).
+> Todos os filtros PASSAM. `package.json` é `1.3.2`. O lançamento é enviado para o npm por meio de Publicação Confiável (OIDC).
 
 > Auditoria completa: [SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 

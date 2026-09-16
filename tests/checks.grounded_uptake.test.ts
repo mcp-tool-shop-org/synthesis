@@ -2,9 +2,15 @@
  * Grounded Uptake Checker Tests (the proof-carrying positive witness)
  *
  * Tests for src/checks/grounded_uptake.ts. Every fixture's verdict was verified against the
- * actual checker before the assertion was written — no vacuous tests. The through-line: a
- * positive verdict (verified_uptake) is robust BY CONSTRUCTION — each test shows that the
- * only way past a witness is to actually perform the observable work.
+ * actual checker before the assertion was written — no vacuous tests. The through-line: each
+ * witness genuinely binds — every test shows a specific way to fail a specific witness.
+ *
+ * NOTE (2026-09-15): these tests demonstrate that the witnesses bind INDIVIDUALLY. They do NOT
+ * demonstrate that the conjunction resists optimization, and an earlier version of this header
+ * claimed the verdict was "robust BY CONSTRUCTION" on their strength. It is not: a template
+ * that mechanically satisfies all five witnesses earns verified_uptake on 73.2% of the eval
+ * pack without comprehension (research/template-saturation-test.cjs). Binding individually and
+ * resisting optimization jointly are different properties; only the first is tested here.
  */
 
 import { describe, it, expect } from 'vitest';

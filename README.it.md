@@ -429,7 +429,7 @@ Per la segnalazione di vulnerabilità, vedere [SECURITY.md](SECURITY.md).
 | E. Identità (soft) | 10 |
 | **Overall** | **50/50** |
 
-> Tutti i controlli superati. `package.json` è `1.3.1`. Il rilascio viene inviato a npm tramite Trusted Publishing (OIDC).
+> Tutti i controlli superati. `package.json` è `1.3.2`. Il rilascio viene inviato a npm tramite Trusted Publishing (OIDC).
 
 > Audit completo: [SHIP_GATE.md](SHIP_GATE.md) · [SCORECARD.md](SCORECARD.md)
 

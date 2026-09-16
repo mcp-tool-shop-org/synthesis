@@ -1,0 +1,6 @@
+A authored (confounded)     verified= 7/41 ( 17.1%)  no_verified=27  N/A=7  theater_flag=2
+B template (stems+move)     verified=30/41 ( 73.2%)  no_verified= 4  N/A=7  theater_flag=0
+C NEG-CTRL pure warmth      verified= 0/41 (  0.0%)  no_verified=34  N/A=7  theater_flag=34
+D NEG-CTRL no move          verified= 0/41 (  0.0%)  no_verified=34  N/A=7  theater_flag=0
+E ADVERSARIAL flattery      verified=31/41 ( 75.6%)  no_verified= 3  N/A=7  theater_flag=0
+F ADVERSARIAL dismissive    verified=30/41 ( 73.2%)  no_verified= 4  N/A=7  theater_flag=0

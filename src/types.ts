@@ -109,7 +109,10 @@ export interface PerformativeEmpathyResult {
  * response is sincere, emotionally correct, therapeutic, or good. The construct is observable
  * BEHAVIOR, not inner state — which is exactly why it is honest where a "sincere" verdict
  * could not be (Jacobs & Wallach 2021, measurement-modeling: never collapse a proxy into the
- * construct). It is robust by construction: the only way to earn it is to perform the work.
+ * construct). It is NOT robust to optimization: a ~20-line template that slots user stems into
+ * a fixed frame earns it on 73.2% of the eval pack, and a love-bombing variant scores higher
+ * (measured 2026-09-15). Never use this verdict as a training target or ranking signal — see
+ * the MAINTAINER GUARDRAILS in src/checks/grounded_uptake.ts.
  *
  * `pass` is ALWAYS true — grounded_uptake is a positive witness, not a defect detector, so it
  * never fails a case or drives the exit code. The verdict lives in `state`.

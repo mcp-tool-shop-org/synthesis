@@ -359,10 +359,30 @@ writer felt -- which is exactly why it can stand behind its verdict where a sinc
 could not (Jacobs & Wallach 2021: never collapse a proxy into the construct -- the evidence
 reports "a grounded anchor in a declarative clause," never "real empathy").
 
-It is robust **by construction**: the only way to earn `verified_uptake` is to actually perform
-the observable work. There is no surface trick that satisfies all five witnesses without doing
-the underlying engagement, because the witnesses were hardened against exactly those tricks in
-the red-team.
+**It is not robust to optimization, and an earlier version of this handbook said otherwise.**
+This section used to claim there was "no surface trick that satisfies all five witnesses without
+doing the underlying engagement." That was wrong, and it was measured wrong on 2026-09-15
+(`research/template-saturation-test.cjs`, reproducible).
+
+A roughly twenty-line template — extract two content stems from the user's message with a regex,
+slot them into a fixed frame, append one support-move phrase, avoid the unsafe lexicon — earns
+`verified_uptake` on **30 of 41** eval cases (73.2%) while performing no comprehension at all.
+It produces sentences like *"It sounds like fired and today are part of what you're carrying
+right now. What do you need most at this point?"*, which is not even grammatical. Rewritten as
+love-bombing, the same template scores **higher** (75.6%). Rewritten as a dismissive reframe, it
+ties (73.2%).
+
+The conjunction is doing real work — the controls confirm it. Pure warmth with no anchors scores
+**0%** and correctly draws 34 theater flags; anchors with no support move score **0%**. So each
+witness binds. What the measurement shows is that once all five are *mechanically* satisfied,
+the content is unconstrained.
+
+What this changes and what it does not: `verified_uptake` remains an honest report of the
+observable features it names, and certifying observable behavior instead of inner state is still
+the design move that makes a positive verdict possible at all. What it cannot support is any
+reading of the verdict as evidence that a reply is good, sincere, or relationally competent —
+and it must never be used as a training target or a ranking signal. See
+[Known Limitations](docs/KNOWN-LIMITATIONS.md) for the full table and the maintainer guardrails.
 
 #### When it applies
 
