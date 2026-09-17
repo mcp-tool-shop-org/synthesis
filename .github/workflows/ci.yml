@@ -13,18 +13,17 @@ on:
       - "package-lock.json"
       - "tsconfig.json"
       - ".github/workflows/**"
+  # NOT paths-gated, and it must stay that way. All three jobs below publish
+  # REQUIRED status checks on main. A paths filter that skips this workflow
+  # produces no check run at all, so branch protection waits on a report that
+  # will never come and the PR is BLOCKED with no exit but --admin. site/** is
+  # not in the push list above and never was, so every Dependabot PR against the
+  # handbook -- #14 through #19 on 2026-09-17, six of them -- received exactly
+  # zero checks and sat unmergeable. To skip work on a PR, gate inside a job
+  # with `if:`: a skipped job still reports, and protection counts a skipped
+  # required check as passing. This repo is public; Actions minutes are free.
   pull_request:
     branches: [ main ]
-    paths:
-      - "src/**"
-      - "data/**"
-      - "schemas/**"
-      - "tests/**"
-      - "scripts/**"
-      - "package.json"
-      - "package-lock.json"
-      - "tsconfig.json"
-      - ".github/workflows/**"
   workflow_dispatch:
 
 concurrency:
