@@ -13,6 +13,9 @@ on:
       - "package-lock.json"
       - "tsconfig.json"
       - ".github/workflows/**"
+      - "site/package.json"
+      - "site/package-lock.json"
+      - "site/astro.config.mjs"
   # NOT paths-gated, and it must stay that way. All three jobs below publish
   # REQUIRED status checks on main. A paths filter that skips this workflow
   # produces no check run at all, so branch protection waits on a report that
