@@ -1,0 +1,240 @@
+{
+  "authored": [
+    ".claude/",
+    ".github/",
+    "assets/",
+    "data/",
+    "docs/",
+    "research/",
+    "root",
+    "schemas/",
+    "site/"
+  ],
+  "breaks": [
+    {
+      "doors": 2,
+      "importedBy": [
+        "scripts"
+      ],
+      "importedByTests": [
+        "tests"
+      ],
+      "kind": "part",
+      "name": "src"
+    },
+    {
+      "doors": 2,
+      "importedBy": [],
+      "importedByTests": [],
+      "kind": "part",
+      "name": "scripts"
+    },
+    {
+      "doors": 2,
+      "importedBy": [],
+      "importedByTests": [],
+      "kind": "part",
+      "name": "tests"
+    }
+  ],
+  "changes": {
+    "first": true
+  },
+  "changesTogether": [
+    {
+      "a": "src/report.ts",
+      "b": "src/runner.ts",
+      "either": 10,
+      "partLabels": [
+        "src",
+        "src"
+      ],
+      "parts": [
+        "src",
+        "src"
+      ],
+      "relation": "inside",
+      "shared": 8
+    },
+    {
+      "a": "src/checks/performative.ts",
+      "b": "tests/checks.performative.test.ts",
+      "either": 10,
+      "partLabels": [
+        "src",
+        "tests"
+      ],
+      "parts": [
+        "src",
+        "tests"
+      ],
+      "relation": "b-imports-a",
+      "shared": 6
+    },
+    {
+      "a": "src/report.ts",
+      "b": "src/types.ts",
+      "either": 16,
+      "partLabels": [
+        "src",
+        "src"
+      ],
+      "parts": [
+        "src",
+        "src"
+      ],
+      "relation": "inside",
+      "shared": 9
+    }
+  ],
+  "changesTogetherNote": [
+    "Confidence is low: fewer than 20 source files reach 10 revisions in the window.",
+    "Window: 180 days; a pair counts from 3 shared commits."
+  ],
+  "changesTogetherWithTests": 0,
+  "commit": "0128f113ec07175b96609f2a54162c5e6bdc1a93",
+  "doors": [
+    {
+      "file": ".github/workflows/ci.yml",
+      "landings": [],
+      "name": "CI",
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "scripts",
+          "depth": 0,
+          "files": 2
+        },
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 17
+        },
+        {
+          "boundary": "tests",
+          "depth": 0,
+          "files": 16
+        }
+      ],
+      "runs": [
+        "scripts/check-report-schema.mjs",
+        "scripts/eval-planted.mjs",
+        "src/",
+        "tests/"
+      ],
+      "runsCount": 4,
+      "sends": [],
+      "stages": [],
+      "triggers": [
+        "on a pull request",
+        "on a push to main touching 13 paths",
+        "or by hand"
+      ]
+    },
+    {
+      "file": ".github/workflows/release.yml",
+      "landings": [],
+      "name": "Release (npm via Trusted Publishing)",
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "scripts",
+          "depth": 0,
+          "files": 1
+        },
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 17
+        },
+        {
+          "boundary": "tests",
+          "depth": 0,
+          "files": 16
+        }
+      ],
+      "runs": [
+        "scripts/check-report-schema.mjs",
+        "src/",
+        "tests/"
+      ],
+      "runsCount": 3,
+      "sends": [
+        "publishes to npm"
+      ],
+      "stages": [],
+      "triggers": [
+        "when a release is published",
+        "or by hand"
+      ]
+    },
+    {
+      "file": ".github/workflows/pages.yml",
+      "landings": [],
+      "name": "Deploy site to GitHub Pages",
+      "pushes": false,
+      "reach": [],
+      "runs": [],
+      "runsCount": 0,
+      "sends": [
+        "deploys the site"
+      ],
+      "stages": [],
+      "triggers": [
+        "on a push to main touching 2 paths",
+        "or by hand"
+      ]
+    }
+  ],
+  "duplicates": [],
+  "duplicatesLead": null,
+  "duplicatesNote": [],
+  "generated": [
+    {
+      "place": "src/checks/lexicons/concreteness.ts",
+      "writers": [
+        "scripts/build-concreteness.mjs"
+      ]
+    }
+  ],
+  "generatedAt": "2026-09-23T17:55:02.584Z",
+  "limits": [
+    "2 import sites could not be resolved.",
+    "3 writes and 8 reads use paths built at run time and are not named here.",
+    "Statistics confidence is low: fewer than 20 source files reach 10 revisions in the window."
+  ],
+  "mainDoor": ".github/workflows/ci.yml",
+  "parts": 12,
+  "readers": [],
+  "repo": "mcp-tool-shop-org/synthesis",
+  "sequences": [],
+  "startHere": [
+    ".github/workflows/ci.yml",
+    "src/"
+  ],
+  "summary": null,
+  "summaryFrom": null,
+  "testFiles": 18,
+  "testedBy": {
+    "scripts": 0,
+    "src": 14
+  },
+  "unread": [
+    {
+      "place": "src/checks/lexicons/concreteness.ts",
+      "writers": [
+        "scripts/build-concreteness.mjs"
+      ]
+    }
+  ],
+  "unreadNote": [],
+  "untested": [
+    {
+      "part": "scripts",
+      "partLabel": "scripts",
+      "testedBy": 0
+    }
+  ],
+  "untestedNote": [],
+  "written": 1
+}

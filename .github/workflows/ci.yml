@@ -13,6 +13,7 @@ on:
       - "package-lock.json"
       - "tsconfig.json"
       - ".github/workflows/**"
+      - "atlas/**"
       - "site/package.json"
       - "site/package-lock.json"
       - "site/astro.config.mjs"
@@ -49,6 +50,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+
+    # The committed map cannot differ by Node version, so one leg checks it.
+    - name: Atlas check
+      if: matrix.node-version == '22.x'
+      run: npx --yes @dogfood-lab/atlas@1.14.0 check
 
     - name: Install dependencies
       run: npm ci
