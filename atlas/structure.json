@@ -1,0 +1,1962 @@
+{
+  "boundaries": [
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "d373b6d41d6cde16ca4f0306636ee194e13ac5726b4face758b6bf08472fe842",
+          "path": ".claude/README.md"
+        },
+        {
+          "hash": "2d964babba705c0b9f6a7296577979efc40775ad06c4112434d5ffa27c4312db",
+          "path": ".claude/agents/core/critic-reviewer.md"
+        },
+        {
+          "hash": "687b2dc77ea8bda372bd00993eab1520abaf0ef656c6580d3a0138a4924eb4c9",
+          "path": ".claude/agents/core/orchestrator.md"
+        },
+        {
+          "hash": "b4b72041103488d8562f24d4e0f41231c1634450df78c138b540336b2447207a",
+          "path": ".claude/agents/core/product-strategist.md"
+        },
+        {
+          "hash": "fb7369b4435914f8878f120c7a08121d443a500f12259a948e0d98f0091ff421",
+          "path": ".claude/agents/design/brand-guardian.md"
+        },
+        {
+          "hash": "48b8ba1cf8093e4559d15046e90abbf3b98c0383590dd4e506e6d21276bfdc09",
+          "path": ".claude/agents/design/ui-designer.md"
+        },
+        {
+          "hash": "62c975ded0f9763ad0b1b6608f11adc9a5107137006dd76a7dae81a2cf21e689",
+          "path": ".claude/agents/engineering/backend-engineer.md"
+        },
+        {
+          "hash": "1e464576cbfc8ba95c7865cc07a9eeba61e88ef5f4950baf665eea515b363be7",
+          "path": ".claude/agents/engineering/dependency-auditor.md"
+        },
+        {
+          "hash": "ef3833837a334baf524bb4df15dbd586d3664376521e98b87d87c412cb0187d9",
+          "path": ".claude/agents/engineering/frontend-developer.md"
+        },
+        {
+          "hash": "d8ea5372bd030768d59d4417d5889937003b59a872ef3c89b44bc31f9f333a03",
+          "path": ".claude/agents/engineering/performance-engineer.md"
+        },
+        {
+          "hash": "a1a23a9789640d78b136a0c249ee3aacbafb6ef0c774ea50c14bd89a25b6943e",
+          "path": ".claude/agents/engineering/refactor-engineer.md"
+        },
+        {
+          "hash": "d1cfc922932b9686ea3ba9263c9cf3a0e26f783f60eef12c86119d0f05b91999",
+          "path": ".claude/agents/engineering/security-reviewer.md"
+        },
+        {
+          "hash": "911d2c78ed9be3c5a831927c8c2a5acbddd6945f206aeecdb435b10ff5f8bda6",
+          "path": ".claude/agents/engineering/test-engineer.md"
+        },
+        {
+          "hash": "dc08071b0a3322f50ee5fa3049c465cd760289f67bcf497e11020e15a8415465",
+          "path": ".claude/agents/growth/community-manager.md"
+        },
+        {
+          "hash": "ad1d9ba7f5d1e634e9225681077cd384585ef1856a1e9b9f59b0608132ef8d1f",
+          "path": ".claude/agents/growth/content-strategist.md"
+        },
+        {
+          "hash": "05db0c02db9b053890f163dfa2a950f12b5be185ba61c24cd5a0168a5e41177b",
+          "path": ".claude/agents/growth/launch-strategist.md"
+        },
+        {
+          "hash": "337f439266a055588e2a0af068b0461b0ec8259932341a19d1cf15044c028a67",
+          "path": ".claude/agents/growth/support-triage-lead.md"
+        },
+        {
+          "hash": "22201daefd5b99ab0992dc432ba7e015771353ccde467e11e35ccf9fcb23ced1",
+          "path": ".claude/agents/marketing/launch-copywriter.md"
+        },
+        {
+          "hash": "f66c80446da64b3ccf16d50f354bbc73ebff1022b273974f0a95472be643d6c7",
+          "path": ".claude/agents/product/feedback-synthesizer.md"
+        },
+        {
+          "hash": "19b1d905b39ff4e2992fb755cda6f597fd615057052b0b38ad7c38d4858312c5",
+          "path": ".claude/agents/product/information-architect.md"
+        },
+        {
+          "hash": "d3e7bc0b3b8c45b8c704cd9d4829fe50e1043c18b672854313ff807c2cbb4e42",
+          "path": ".claude/agents/product/roadmap-prioritizer.md"
+        },
+        {
+          "hash": "b2c1626e9c18a1adf09d629234cf56bc18bbd5e13498246da35f86cc22463548",
+          "path": ".claude/agents/product/spec-writer.md"
+        },
+        {
+          "hash": "ea0a9b1e28dff6fca5c558e3323954a2dd6505d1213145e98fe6322bf47ea580",
+          "path": ".claude/agents/research/competitive-analyst.md"
+        },
+        {
+          "hash": "329fcca3c43be4f1d4458184a927029b8e136dc62b810653c0e132a2c1abdd23",
+          "path": ".claude/agents/research/trend-researcher.md"
+        },
+        {
+          "hash": "429c7b361c36d610b30b1acc5793fa24cc1997bd9841297e6a753760f981351a",
+          "path": ".claude/agents/research/user-interview-synthesizer.md"
+        },
+        {
+          "hash": "b7b2a5657a521807bb3c0b953066aea0ac6fd864305cb5bcff6f7dddc992d6d8",
+          "path": ".claude/agents/research/ux-researcher.md"
+        },
+        {
+          "hash": "7a22beaad309c64e6ea14d3107025fa06a5b10bcd2e772c76fdeb6d3b252cdfe",
+          "path": ".claude/agents/treatment/coverage-auditor.md"
+        },
+        {
+          "hash": "0d73f921bcc9a2fb49933af9551d9dbee85675d71a900627ed6eb2d636bccf2c",
+          "path": ".claude/agents/treatment/deployment-verifier.md"
+        },
+        {
+          "hash": "1a9a9ff9ea1095aab4688b19cb9e0ec48db2ca59d9f5f5e51e1f858d8d1dff7b",
+          "path": ".claude/agents/treatment/docs-architect.md"
+        },
+        {
+          "hash": "bb7a05aec44d58dcac5b36e28b8eb6b4640775eec6e9ebf069c6415e70a44b5a",
+          "path": ".claude/agents/treatment/metadata-curator.md"
+        },
+        {
+          "hash": "4cc9d0a2b158a057c6c3fc39763f57c2192f9da62e2a811d68fd839f57eaf598",
+          "path": ".claude/agents/treatment/release-engineer.md"
+        },
+        {
+          "hash": "d481658d5d6ff403aa4ddc87ab901adfbc3462d0a66935fa1009d15ae983583f",
+          "path": ".claude/agents/treatment/repo-researcher.md"
+        },
+        {
+          "hash": "8cfe4f057b3c99e101689729054a6a2a8970cd0a64cace28eb5e1defbf602dde",
+          "path": ".claude/agents/treatment/repo-translator.md"
+        },
+        {
+          "hash": "5d17bb90708504a9d472354203df30c01f32b21086f2b7ed27a66941d2e1e2dd",
+          "path": ".claude/context/brand-rules.md"
+        },
+        {
+          "hash": "cc33e731c61c1c4ca467e54031d6505414e52262a38e1e5eaad4efa9538e5490",
+          "path": ".claude/context/current-priorities.md"
+        },
+        {
+          "hash": "bd4468e3d038f46807caee557b8e1bd4d71413e6db0e33cf2bcb7423f3c617df",
+          "path": ".claude/context/product-brief.md"
+        },
+        {
+          "hash": "54b653817fb122cb251850bf6d67a701454d2911433b75807b65db6e9e0c9726",
+          "path": ".claude/context/repo-map.md"
+        },
+        {
+          "hash": "4ca89e52e89026648cddd1dcebae0ce9cd12290972323e751ca4785fdb78b7a6",
+          "path": ".claude/examples/feature-packet.md"
+        },
+        {
+          "hash": "ed14e6a5dc1d77b0ccf88428f90e5ebcf604f9c14e0fa805a6dacf2adb396c2a",
+          "path": ".claude/examples/identity-packet.md"
+        },
+        {
+          "hash": "5b1b7ead1a83ed6fb13e8342f64bae5eda5ebdf007516ff176d9fe582def19f7",
+          "path": ".claude/examples/integration-packet.md"
+        },
+        {
+          "hash": "bc22ae44f568aacc8648cc306afa88bf49ef6883c7fa12cccf811ae66986dbe9",
+          "path": ".claude/handbook.md"
+        },
+        {
+          "hash": "fa39ec3464d39e01b4f5f2dd15c69d47c8bf6d93b75daa1694eed3cd12be04dc",
+          "path": ".claude/policy/done-definition.md"
+        },
+        {
+          "hash": "682c931d8ac0745b5b8d9300370775f5d7a43be83a9397b363d560f7329701de",
+          "path": ".claude/policy/escalation-rules.md"
+        },
+        {
+          "hash": "8fe24f7551d6caa66713c98f32effcdc86a6cb4223707e25a7c5772988f83b55",
+          "path": ".claude/policy/routing-rules.md"
+        },
+        {
+          "hash": "5d55e6a21f589f1e05117ce7a0c60891a1d2bd0c3ba9f4c5a80c50e5544e7d3e",
+          "path": ".claude/policy/tool-permissions.md"
+        },
+        {
+          "hash": "16f96f8b2fe34b2167ad1a1bd65a90a8f715d170c724545a54e4e2a808f34fe9",
+          "path": ".claude/schemas/handoff.md"
+        },
+        {
+          "hash": "34ee30f440135cb3c979f036f050faa6f12afe99528db9daafe01d1ac1f434ee",
+          "path": ".claude/schemas/review-verdict.md"
+        },
+        {
+          "hash": "94fb28a919784c36612906f846800fd5def23da4807c93c45aca2c957baa9c41",
+          "path": ".claude/schemas/task-packet.md"
+        },
+        {
+          "hash": "f85e5c9f734c54c2673e0053e4b2eef8be79ac10b1ec742462af9f18782d82c7",
+          "path": ".claude/workflows/fix-bug.md"
+        },
+        {
+          "hash": "df359c5ab2c72dafcf89dc7667749c18b7a273c4bdfcfa842cfd402a4adde6e6",
+          "path": ".claude/workflows/full-treatment.md"
+        },
+        {
+          "hash": "d0da445a5980afb0e596bb7fbdf2e38e94af4a2a3b69c541a4a75dccd8b1420d",
+          "path": ".claude/workflows/launch-update.md"
+        },
+        {
+          "hash": "f8eeba2d380be3b42d5b5279459058e605c4f22523d67f2ccfed19979c16ae17",
+          "path": ".claude/workflows/protect-verdict-truth.md"
+        },
+        {
+          "hash": "77e6ad26462b2237ea062b63d9f242fae459b6c0ea51ee83888873235a048fa4",
+          "path": ".claude/workflows/ship-feature.md"
+        }
+      ],
+      "globs": [
+        ".claude/**"
+      ],
+      "importConfidence": "full",
+      "name": ".claude",
+      "origin": "authored",
+      "role": "docs",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "84eb590b9ca4a640e7bc438ae3994a5ff564d6e41f38f59cfc9371a5eecfbd9c",
+          "path": ".github/dependabot.yml"
+        },
+        {
+          "hash": "d0772e68a2c84bee22e1063f6a78c78bf0f6643ad9a99b840ce476a3c785db18",
+          "path": ".github/workflows/ci.yml"
+        },
+        {
+          "hash": "50a8e5678eb0b46caba4a4148b94475571c3f798bac8221a1869112710c6f546",
+          "path": ".github/workflows/pages.yml"
+        },
+        {
+          "hash": "6180ab0516ddba01452c56ef4e2fe84f0f40567829ccda6cb54c1ffe7fbd913a",
+          "path": ".github/workflows/release.yml"
+        }
+      ],
+      "globs": [
+        ".github/**"
+      ],
+      "importConfidence": "full",
+      "name": ".github",
+      "origin": "authored",
+      "role": "config",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "9bb3fee2a25458d5b829226f98a43e57cb490b92306333d2ae06a1ccf651e7e7",
+          "path": "assets/logo-synthesis.png"
+        }
+      ],
+      "globs": [
+        "assets/**"
+      ],
+      "importConfidence": "full",
+      "name": "assets",
+      "origin": "authored",
+      "role": "config",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "e18d7ec3cec8bccc680997740eac981f47661341e0c9b14b55f21b26d46716f0",
+          "path": "data/DATASHEET.md"
+        },
+        {
+          "hash": "b0b32ac0ff0c5f21b1e92868bc3e7050b10d5bec8597fe3456589dc0c93b3cc6",
+          "path": "data/evals.jsonl"
+        },
+        {
+          "hash": "1a6a523b1bad9f7dfe7190971d4c2054af9fdb806481facabc9c1583576e8ce3",
+          "path": "data/fairness.jsonl"
+        },
+        {
+          "hash": "1f250d6471e862eca60e8225b67e9283b07b5546fadf6789fd5605cc4251476b",
+          "path": "data/planted-theater.jsonl"
+        }
+      ],
+      "globs": [
+        "data/**"
+      ],
+      "importConfidence": "full",
+      "name": "data",
+      "origin": "authored",
+      "role": "config",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [
+        "docs/index.md"
+      ],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "87e48cbb910df1d5728c58f5d2c3f70940e26216ec44a4d78dc6597c8e266a2c",
+          "path": "docs/KNOWN-LIMITATIONS.md"
+        },
+        {
+          "hash": "bd9a3c33c5069a0be6bc06585939e52fe73dfe869ad5c72bb3fb97bb1982ee30",
+          "path": "docs/index.md"
+        },
+        {
+          "hash": "cb9d9f1e65c404a2b5cf00e6cec57d70b529ac30709630a986ce4da07a4a20a2",
+          "path": "docs/study-grounding.md"
+        }
+      ],
+      "globs": [
+        "docs/**"
+      ],
+      "importConfidence": "full",
+      "name": "docs",
+      "origin": "authored",
+      "role": "docs",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "53722463d9e19ddfe436f7f579f27a4827c658378779b7fdfc31442da680541b",
+          "path": "research/gemini-brief-license-friendly-sources.md"
+        },
+        {
+          "hash": "0c962c66c87e4948d24a96ccd62c0c99153bce52aff21f9ae5f4899c93898796",
+          "path": "research/grok-consult-brief.md"
+        },
+        {
+          "hash": "88c59b9ceea08620c52c8d1eccb51f13994aef933db179ba1a3f04d95ae7da43",
+          "path": "research/sourcing-decision-record.md"
+        },
+        {
+          "hash": "cbbe8c6f138eee4b7899d688ed6bb5656807196c83557058d06e3747dd86cf8b",
+          "path": "research/template-saturation-result.txt"
+        },
+        {
+          "hash": "4bad42c31961ad83628cd926a1549a7b224c450cc86b0cd40ef45b152c5792b0",
+          "path": "research/template-saturation-test.cjs"
+        }
+      ],
+      "globs": [
+        "research/**"
+      ],
+      "importConfidence": "full",
+      "name": "research",
+      "origin": "authored",
+      "role": "docs",
+      "testedBy": 0,
+      "unresolvedSites": 1
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "25b5e9fdbd7223c04f2290c8e05fde9045781233912185e6b9fac60076949e6e",
+          "path": ".gitignore"
+        },
+        {
+          "hash": "9291ec051e226273e26cf40793b46edb78c0aad31165817fef239deb8d89c801",
+          "path": ".polyglot-cache.json"
+        },
+        {
+          "hash": "69c0f2d512ff20b78a309349362f1ceaea60db16bf794d4affc404c1f204216c",
+          "path": "CHANGELOG.md"
+        },
+        {
+          "hash": "8543ed6be7150d5366d10ca1ed4155fcfc472a20b86df09f6936cc67515a5319",
+          "path": "CODER_HANDOFF.md"
+        },
+        {
+          "hash": "537bec1a428426e2fa0a4c53f46757b5b741e4b5f19096c5bbd3e3f660c546a2",
+          "path": "CODE_OF_CONDUCT.md"
+        },
+        {
+          "hash": "e2e3ec722daf5d88cec317d1052fb01a555fb0dd7c50a58abd57759b3c709005",
+          "path": "CONTRIBUTING.md"
+        },
+        {
+          "hash": "5f3af742bbe038267a40f824dc91249b4ecd2bad28b9ba116230727116b474a4",
+          "path": "HANDBOOK.md"
+        },
+        {
+          "hash": "5ae6b3c8f446f0a7cb95176e4dadb91b68aaffb16b3be09f64f5de248b6a973a",
+          "path": "LICENSE"
+        },
+        {
+          "hash": "aabee5bcd4b1dd482fd5c84a8e0e7dda8eea031efc29adb32c74fd68711199ad",
+          "path": "README.es.md"
+        },
+        {
+          "hash": "4c7bbad48813e519aa0965b1b01a640d34bc381e06fd6ee38ac5aab359ab9caf",
+          "path": "README.fr.md"
+        },
+        {
+          "hash": "4b7686af9870790ec975ac5589c5f4b4187ce933961e7bf0db48efb28c4119b7",
+          "path": "README.hi.md"
+        },
+        {
+          "hash": "2e3d5cd62990d6dd59d62fc6a580fafd135a34450e9150626e21e9dd9d6dac10",
+          "path": "README.it.md"
+        },
+        {
+          "hash": "84ce706f0bea53f70de09bd6cdc9986d82b60beeebcbbe9aac6e5c681d95006e",
+          "path": "README.ja.md"
+        },
+        {
+          "hash": "5520729b1b3e7e021e18a9149d6df2f743c089ed25ac3caf7b8f52fd90e1bf09",
+          "path": "README.md"
+        },
+        {
+          "hash": "a794eb52b4a93cb85547a75d1e1a9d2ed2f152255ddc963a5c91feb9427599e3",
+          "path": "README.pt-BR.md"
+        },
+        {
+          "hash": "3f6a9e6b65197d2ccefdfc659170671735842413560a4faa3fb29db66c89b932",
+          "path": "README.zh.md"
+        },
+        {
+          "hash": "c43f511a00fcd294f1832ac39061f806d7c3a0fc010c6f72bf7f8e85e0882e61",
+          "path": "SCORECARD.md"
+        },
+        {
+          "hash": "e68ca9f44b6cbcff3c4bb8849372493c3d97fdf5ae32c597a0ec937052f25406",
+          "path": "SECURITY.md"
+        },
+        {
+          "hash": "515ad9d825c21fc2ff4faae17dbb856c3d31429a28e8708985de8d946dd5ac6b",
+          "path": "SHIP_GATE.md"
+        },
+        {
+          "hash": "9bb3fee2a25458d5b829226f98a43e57cb490b92306333d2ae06a1ccf651e7e7",
+          "path": "logo.png"
+        },
+        {
+          "hash": "28a83a0f27dbcacc11310711aa47ec560f74661258906106a1bd8c7a43d71582",
+          "path": "package-lock.json"
+        },
+        {
+          "hash": "8b39024e4bb55089285d57a1a3db9ed31d1e40652ce1755f93fbe81280abff8f",
+          "path": "package.json"
+        },
+        {
+          "hash": "f9642a93fd752f602ada1aa4b6c23a093009730dc7c6f47c6aa5658827f71c4b",
+          "path": "tsconfig.json"
+        },
+        {
+          "hash": "032d04b2790f4cb23f467c1db05058ca51eea42cc04374bf9f391219809e2f5c",
+          "path": "vitest.config.ts"
+        }
+      ],
+      "globs": [
+        "*"
+      ],
+      "importConfidence": "full",
+      "name": "root",
+      "origin": "authored",
+      "role": "docs",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "198186d96579070cda91a8559e5a7b98368ef230e3d7a608b40c57a1ccf83e1f",
+          "path": "schemas/eval_case.schema.json"
+        },
+        {
+          "hash": "5d93599ab00f1e647f59bbb5f177e2bc90bdc9fa12cdabeb001810c9d8347f97",
+          "path": "schemas/eval_report.schema.json"
+        },
+        {
+          "hash": "40f4b7573bbe297f21ec0e85368d5144ad6e73ff416598d519414d5ab10869ab",
+          "path": "schemas/report.fail.json"
+        },
+        {
+          "hash": "3158c593d7b8aaece181690c98b611cf215ce4f707388fb5a8bc1781c0eaed49",
+          "path": "schemas/report.good.json"
+        }
+      ],
+      "globs": [
+        "schemas/**"
+      ],
+      "importConfidence": "full",
+      "name": "schemas",
+      "origin": "authored",
+      "role": "config",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 3,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "61314108b2923dc9fde28435aea09c0103e2695ce62719a77f891054d721456b",
+          "path": "scripts/build-concreteness.mjs"
+        },
+        {
+          "entry": "loadJson",
+          "entryRule": 1,
+          "hash": "70284d64b67c442523d11fa03dbe9311f0dc21850a69f39eebbbf94f44373fcc",
+          "path": "scripts/check-report-schema.mjs",
+          "sequences": []
+        },
+        {
+          "entry": "die",
+          "entryRule": 1,
+          "hash": "0b272c695ff7fa2b2e21d5d2b8b06d61121b91f1c88af82dedbca522472d02de",
+          "path": "scripts/eval-planted.mjs",
+          "sequences": []
+        },
+        {
+          "hash": "696480083b016ad6af6f408f9187982092ac51e07f2caba353251dedb10ffd27",
+          "importsFiles": [
+            "src/index.ts"
+          ],
+          "path": "scripts/example-run-fixture.mjs"
+        }
+      ],
+      "globs": [
+        "scripts/**"
+      ],
+      "importConfidence": "full",
+      "name": "scripts",
+      "origin": "authored",
+      "role": "code",
+      "testedBy": 0,
+      "unresolvedSites": 1
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "b56bfeeecb1d6f9cebe5f2b42b468103e5e6f44b6a317a88e6e23079170eae5c",
+          "path": "site/astro.config.mjs"
+        },
+        {
+          "hash": "0bb6f32cb7bbac4c93c12815433e6937a138964182311ab3e2e4bf6fb8ee3038",
+          "path": "site/package-lock.json"
+        },
+        {
+          "hash": "ddc61b3115bd9e4e5ca75c151eea6f232dfe3d62f4e2dd7407a0ae8c13d93082",
+          "path": "site/package.json"
+        },
+        {
+          "hash": "ec030f2e4bf6dc57eaca075d390c228b3212cf29db267e32ef92e110de1acdcc",
+          "path": "site/src/content.config.ts"
+        },
+        {
+          "hash": "46e3676defbd547bf994bd3437bd7854f03fda6206ed5fbe9f29ca96987f9fcb",
+          "path": "site/src/content/docs/handbook/beginners.md"
+        },
+        {
+          "hash": "d046a6b377ee9b7fc3e7d4b628b2fa61fffa9b0ac95242416e41325dce13d60e",
+          "path": "site/src/content/docs/handbook/checkers.md"
+        },
+        {
+          "hash": "2f630112b0fe037701667a8814491ce8a62923b2f3de2053c2ab2ef88d6445aa",
+          "path": "site/src/content/docs/handbook/ci.md"
+        },
+        {
+          "hash": "1ad8b5abb0063d1fc7f10cd13b888e1f886b05e76ea8923125cf8acebcfd8fb4",
+          "path": "site/src/content/docs/handbook/getting-started.md"
+        },
+        {
+          "hash": "4185e7bebbbf664c897bde35265b15b2876f63f6d108a2c22fc2e8886853be11",
+          "path": "site/src/content/docs/handbook/index.md"
+        },
+        {
+          "hash": "7cd28eda01e3abecffe014b1fe96090fee206ae8edf40b587c7e2ee2925d1d56",
+          "path": "site/src/content/docs/handbook/reference.md"
+        },
+        {
+          "hash": "8b713ef1d989919bd2484360b44046ecb5dfaaa67c8836c13b93ccd218e9b7c2",
+          "path": "site/src/content/docs/handbook/test-cases.md"
+        },
+        {
+          "hash": "2569a015b74eba3d84f4015e6d3abea63f95a6800fbc8b852719bbf45a7bb30e",
+          "path": "site/src/layouts/BaseLayout.astro"
+        },
+        {
+          "hash": "9e3a4a7bc09511c8bb6f26677fcecd1357a5f7078850c75dc35e903231437521",
+          "path": "site/src/pages/404.astro"
+        },
+        {
+          "hash": "401c42d574f65ae742c3051901060564d20337d10ec9836820ca951863f972c6",
+          "path": "site/src/pages/index.astro"
+        },
+        {
+          "hash": "6088092d472a89f4def6845bb9b050b0235c751152d6abb3b5d646ab4dfbdf2f",
+          "path": "site/src/site-config.ts"
+        },
+        {
+          "hash": "e09355c3ebbfc383202535b9fc660676488d1ba8f2fe00a5f7797e8c3d0a9d15",
+          "path": "site/src/styles/global.css"
+        },
+        {
+          "hash": "9d8dddc46c99a1863e6980810ca6375e764db806f99696446751cbdc5be1a1d9",
+          "path": "site/src/styles/starlight-custom.css"
+        },
+        {
+          "hash": "61fc24492db9aef7ec38eb91cfeebaef96155014bb5f22648fd8ed2327c6cae2",
+          "path": "site/tsconfig.json"
+        }
+      ],
+      "globs": [
+        "site/**"
+      ],
+      "importConfidence": "full",
+      "name": "site",
+      "origin": "authored",
+      "role": "docs",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 5,
+      "dynamicWrites": 3,
+      "entryPoints": [
+        "src/index.ts"
+      ],
+      "externals": 0,
+      "files": [
+        {
+          "exports": [
+            "collectAllMatchRanges",
+            "foldTypographicApostrophes",
+            "unionCharRanges"
+          ],
+          "hash": "ef7fe3bfc0819070f1783ca1956c446f56d67fc62920b89a3c29f8facf637a5d",
+          "path": "src/checks/_text.ts"
+        },
+        {
+          "exports": [
+            "checkAgency"
+          ],
+          "hash": "b6963e59b962813453ab31f77d4e722400fecc13d1b52b29c14f23c76a8399a2",
+          "importsFiles": [
+            "src/checks/_text.ts",
+            "src/types.ts"
+          ],
+          "path": "src/checks/agency.ts"
+        },
+        {
+          "exports": [
+            "checkGroundedUptake"
+          ],
+          "hash": "ae35018524dafc5b220946609bf99c8e3614c0a2ea5c9dd585063b43af59379d",
+          "importsFiles": [
+            "src/checks/_text.ts",
+            "src/checks/agency.ts",
+            "src/checks/lexicons/filler.ts",
+            "src/checks/performative.ts",
+            "src/checks/pivot.ts",
+            "src/checks/reassurance.ts",
+            "src/checks/similarity.ts",
+            "src/types.ts"
+          ],
+          "path": "src/checks/grounded_uptake.ts"
+        },
+        {
+          "hash": "f2de3fc25969d5b1ee7b0f498390d6592744fc5deb1e3be35ec1891faaef53f1",
+          "path": "src/checks/lexicons/concreteness.ts"
+        },
+        {
+          "hash": "edc6c32e625091de0315e77a01e291338745f5832edd6af65b2545773686ba25",
+          "path": "src/checks/lexicons/filler.ts"
+        },
+        {
+          "exports": [
+            "checkPerformativeEmpathy",
+            "stem"
+          ],
+          "hash": "50edaaa16501e0e3534a3ce42d63443fe142795319d54f9bc260b20c1cf03c9f",
+          "importsFiles": [
+            "src/checks/_text.ts",
+            "src/checks/lexicons/concreteness.ts",
+            "src/checks/lexicons/filler.ts",
+            "src/checks/pivot.ts",
+            "src/checks/similarity.ts",
+            "src/types.ts"
+          ],
+          "path": "src/checks/performative.ts"
+        },
+        {
+          "exports": [
+            "checkPivot"
+          ],
+          "hash": "fcb8e495aadf9af1db6cd89da6f41acaba6a510686719a66732bb27b404b794e",
+          "importsFiles": [
+            "src/checks/_text.ts",
+            "src/checks/similarity.ts",
+            "src/types.ts"
+          ],
+          "path": "src/checks/pivot.ts"
+        },
+        {
+          "exports": [
+            "checkReassurance"
+          ],
+          "hash": "02bb95abca8de162a5be606e290fcbe4a81626b99414b7f49924038958c04558",
+          "importsFiles": [
+            "src/checks/_text.ts",
+            "src/types.ts"
+          ],
+          "path": "src/checks/reassurance.ts"
+        },
+        {
+          "exports": [
+            "extractAnchor",
+            "getSimilarity",
+            "normalize",
+            "setEmbeddingAdapter",
+            "tokenCosineSimilarity"
+          ],
+          "hash": "5934a879d79d0d14f34378a02a77c8420febb4d2e5609aa3982727bf607d5762",
+          "path": "src/checks/similarity.ts"
+        },
+        {
+          "exports": [
+            "hasColors",
+            "useAsciiGlyphs"
+          ],
+          "hash": "b80368592bcea8ad55d48efffa629d6af6a33428bb8c1953eff4454ec87d1249",
+          "path": "src/color.ts"
+        },
+        {
+          "hash": "7ead511cc2408d435e99cacc485c4fee2359e3e4fd067809e1a99d885c6b76fe",
+          "importsFiles": [
+            "src/color.ts",
+            "src/load.ts",
+            "src/planted.ts",
+            "src/relational.ts",
+            "src/report.ts",
+            "src/runner.ts",
+            "src/types.ts"
+          ],
+          "path": "src/index.ts"
+        },
+        {
+          "exports": [
+            "loadCases",
+            "validateCase"
+          ],
+          "hash": "14363c75755c9233bcdd8a4af4a071570dbc14ddb4f6123ff62d2d469ca86d74",
+          "importsFiles": [
+            "src/color.ts",
+            "src/types.ts"
+          ],
+          "path": "src/load.ts"
+        },
+        {
+          "exports": [
+            "evaluatePlanted"
+          ],
+          "hash": "e1de4ff0e92ba3862db728e691805fce7beac65eefeeaf9671c733b741372797",
+          "importsFiles": [
+            "src/runner.ts",
+            "src/types.ts"
+          ],
+          "path": "src/planted.ts"
+        },
+        {
+          "exports": [
+            "computeRelationalPosture"
+          ],
+          "hash": "29b9356956e9f0c67f487595cc6d9b999f41d0c7ccb6eddc77775526e59a7422",
+          "importsFiles": [
+            "src/types.ts"
+          ],
+          "path": "src/relational.ts"
+        },
+        {
+          "exports": [
+            "formatArtifact",
+            "printSummary",
+            "summaryBannerWidth",
+            "writeReport"
+          ],
+          "hash": "9e504bfde977e49dc4414c84d281fdcdb03221cdf70091dec3777eae31fdd1bd",
+          "importsFiles": [
+            "src/relational.ts",
+            "src/runner.ts",
+            "src/types.ts"
+          ],
+          "path": "src/report.ts"
+        },
+        {
+          "exports": [
+            "runAllCases",
+            "runCase"
+          ],
+          "hash": "0cca7da61caae730a495ebeab9ca4cba120446156e4543d0872c9c9cbc09cb93",
+          "importsFiles": [
+            "src/checks/agency.ts",
+            "src/checks/grounded_uptake.ts",
+            "src/checks/performative.ts",
+            "src/checks/pivot.ts",
+            "src/checks/reassurance.ts",
+            "src/relational.ts",
+            "src/types.ts"
+          ],
+          "path": "src/runner.ts"
+        },
+        {
+          "hash": "85f21365a9c13634fe45131ed3f7c30cef2db8d592beec3e1a2a02a26d1473a7",
+          "path": "src/types.ts"
+        }
+      ],
+      "globs": [
+        "src/**"
+      ],
+      "importConfidence": "full",
+      "name": "src",
+      "origin": "mixed",
+      "role": "code",
+      "testedBy": 14,
+      "unresolvedSites": 0
+    },
+    {
+      "dynamicReads": 0,
+      "dynamicWrites": 0,
+      "entryPoints": [
+        "tests/index.test.ts"
+      ],
+      "externals": 0,
+      "files": [
+        {
+          "hash": "2f8c4cf490299c9247faaf2933efd70494cd1e36f046346a999f76a6147fe7b3",
+          "importsFiles": [
+            "src/checks/agency.ts"
+          ],
+          "path": "tests/checks.agency.test.ts"
+        },
+        {
+          "hash": "6ea3fc30396ff4c9c342c85b24fd2811ba4498d8efe15b7ac2787bf72320b92a",
+          "importsFiles": [
+            "src/checks/grounded_uptake.ts",
+            "src/checks/performative.ts"
+          ],
+          "path": "tests/checks.grounded_uptake.test.ts"
+        },
+        {
+          "hash": "1731462db85d6e27ca82daba90c70dbb99e8b07fc5ecb113b487d1fb649d7ac3",
+          "importsFiles": [
+            "src/checks/performative.ts"
+          ],
+          "path": "tests/checks.performative.test.ts"
+        },
+        {
+          "hash": "5a395cc44e3e1fbc480882c2da4e6317920b7129e600b7d27739560b4e34c1ff",
+          "importsFiles": [
+            "src/checks/pivot.ts"
+          ],
+          "path": "tests/checks.pivot.test.ts"
+        },
+        {
+          "hash": "c4adc1d1ef2e763ce35d59cccbdb39ac3e1b78a7037f5b88b65b160bea6a346b",
+          "importsFiles": [
+            "src/checks/reassurance.ts"
+          ],
+          "path": "tests/checks.reassurance.test.ts"
+        },
+        {
+          "hash": "5fdbf530cb7ae9202b36b8006eda8ac01244969d79b79f04360df202fcd3c529",
+          "importsFiles": [
+            "src/checks/similarity.ts"
+          ],
+          "path": "tests/checks.similarity.test.ts"
+        },
+        {
+          "hash": "c955dc92244295c84943c7f021551b52b20004c3540bf9630eb9d94e3e0077d2",
+          "importsFiles": [
+            "src/index.ts"
+          ],
+          "path": "tests/exports.test.ts"
+        },
+        {
+          "hash": "9925478bed3e96d5654dcd73aa9fb6d638024ef4bfd367530e908e343fd669f8",
+          "importsFiles": [
+            "src/load.ts",
+            "src/runner.ts",
+            "src/types.ts"
+          ],
+          "path": "tests/fairness.test.ts"
+        },
+        {
+          "hash": "40f4b7573bbe297f21ec0e85368d5144ad6e73ff416598d519414d5ab10869ab",
+          "path": "tests/gold/report.fail.json"
+        },
+        {
+          "hash": "3158c593d7b8aaece181690c98b611cf215ce4f707388fb5a8bc1781c0eaed49",
+          "path": "tests/gold/report.good.json"
+        },
+        {
+          "hash": "b1be05ef92d640dced80e19b5b0b4ff1b959d98ef73a9fe3568f4799101bb996",
+          "importsFiles": [
+            "src/index.ts"
+          ],
+          "path": "tests/index.test.ts"
+        },
+        {
+          "hash": "5e62e90b9af52f5ca4f73da1c80c8f94bf38cffbdade2458a1357c849a012060",
+          "importsFiles": [
+            "src/load.ts"
+          ],
+          "path": "tests/load.test.ts"
+        },
+        {
+          "hash": "fbda8033364ad0db2a4d9dddb3b6ad3e2db98e1fc2902de9f8374914e9e4a882",
+          "importsFiles": [
+            "src/load.ts",
+            "src/runner.ts",
+            "src/types.ts"
+          ],
+          "path": "tests/planted-theater.test.ts"
+        },
+        {
+          "hash": "23355a3b7a9584fd97b5437c960b5fbb56b2b78b106b5fa20d101ed8b1c77b1c",
+          "importsFiles": [
+            "src/relational.ts",
+            "src/runner.ts",
+            "src/types.ts"
+          ],
+          "path": "tests/relational.test.ts"
+        },
+        {
+          "hash": "a54c1eba324b632f1cc21f3176e1088ffe2cc15a3b2ebbeabbd34d6fd2daffe8",
+          "path": "tests/report-schema.test.ts"
+        },
+        {
+          "hash": "f896d5d09d477691c72952cf4e5ccb48056c1f3761c547726fe73ff4d5cd5fd7",
+          "importsFiles": [
+            "src/report.ts",
+            "src/types.ts"
+          ],
+          "path": "tests/report.test.ts"
+        },
+        {
+          "hash": "5b05c66f60ba8b8e24682ac7a5fdbcd7f118450321630dfc847e374d601a32e5",
+          "importsFiles": [
+            "src/runner.ts",
+            "src/types.ts"
+          ],
+          "path": "tests/runner.test.ts"
+        },
+        {
+          "hash": "5bcc760c9e7b2cf18f261df200fd2617849c7bca3c252942fd5ce5a6c6a709aa",
+          "path": "tests/version-alignment.test.ts"
+        }
+      ],
+      "globs": [
+        "tests/**"
+      ],
+      "importConfidence": "full",
+      "name": "tests",
+      "origin": "authored",
+      "role": "test",
+      "testedBy": 0,
+      "unresolvedSites": 0
+    }
+  ],
+  "doors": [
+    {
+      "commands": [
+        {
+          "job": "test",
+          "step": "Atlas check",
+          "text": "npx --yes @dogfood-lab/atlas@1.14.0 check"
+        },
+        {
+          "job": "test",
+          "step": "Install dependencies",
+          "text": "npm ci"
+        },
+        {
+          "job": "test",
+          "step": "Verify (test + build + eval + report schema)",
+          "text": "npm run verify"
+        },
+        {
+          "job": "test",
+          "step": "Check eval_report schema gold instances",
+          "text": "npm run check:report-schema"
+        },
+        {
+          "job": "test",
+          "step": "Eval planted-RED pack",
+          "text": "npm run eval:planted"
+        },
+        {
+          "job": "lint",
+          "step": "Install dependencies",
+          "text": "npm ci"
+        },
+        {
+          "job": "lint",
+          "step": "Check TypeScript compilation",
+          "text": "npm run build"
+        }
+      ],
+      "file": ".github/workflows/ci.yml",
+      "landings": [],
+      "mentions": [
+        {
+          "job": "test",
+          "path": "data/evals.jsonl"
+        },
+        {
+          "job": "test",
+          "path": "schemas/eval_case.schema.json"
+        },
+        {
+          "job": "lint",
+          "path": "tsconfig.json"
+        },
+        {
+          "job": "test",
+          "path": "tsconfig.json"
+        }
+      ],
+      "name": "CI",
+      "permissions": [],
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "scripts",
+          "depth": 0,
+          "files": 2
+        },
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 17
+        },
+        {
+          "boundary": "tests",
+          "depth": 0,
+          "files": 16
+        }
+      ],
+      "readers": [],
+      "runs": [
+        {
+          "job": "test",
+          "path": "scripts/check-report-schema.mjs"
+        },
+        {
+          "job": "test",
+          "path": "scripts/eval-planted.mjs"
+        },
+        {
+          "directory": true,
+          "job": "lint",
+          "matched": true,
+          "path": "src/",
+          "via": "tsc tsconfig.json"
+        },
+        {
+          "directory": true,
+          "job": "test",
+          "matched": true,
+          "path": "src/",
+          "via": "tsc tsconfig.json"
+        },
+        {
+          "directory": true,
+          "job": "test",
+          "matched": true,
+          "path": "tests/",
+          "via": "vitest vitest.config.ts"
+        }
+      ],
+      "runsCount": 4,
+      "secrets": [],
+      "sends": {
+        "deploysPages": false,
+        "dispatchesTo": [],
+        "opensIssues": false,
+        "opensIssuesOnFailure": false,
+        "opensPullRequests": false,
+        "publishes": false,
+        "publishesTo": [],
+        "releases": false
+      },
+      "stages": [],
+      "triggers": [
+        {
+          "branches": [
+            "main"
+          ],
+          "event": "pull_request"
+        },
+        {
+          "branches": [
+            "main"
+          ],
+          "event": "push",
+          "paths": [
+            ".github/workflows/**",
+            "atlas/**",
+            "data/**",
+            "package-lock.json",
+            "package.json",
+            "schemas/**",
+            "scripts/**",
+            "site/astro.config.mjs",
+            "site/package-lock.json",
+            "site/package.json",
+            "src/**",
+            "tests/**",
+            "tsconfig.json"
+          ]
+        },
+        {
+          "event": "workflow_dispatch"
+        }
+      ],
+      "uses": [
+        "actions/checkout",
+        "actions/setup-node"
+      ],
+      "usesWorkflowToken": false
+    },
+    {
+      "commands": [
+        {
+          "job": "build",
+          "step": "Install site dependencies",
+          "text": "npm ci --ignore-scripts"
+        },
+        {
+          "job": "build",
+          "step": "Build site",
+          "text": "npm run build"
+        }
+      ],
+      "file": ".github/workflows/pages.yml",
+      "landings": [],
+      "mentions": [],
+      "name": "Deploy site to GitHub Pages",
+      "permissions": [
+        "contents:read",
+        "id-token:write",
+        "pages:write"
+      ],
+      "pushes": false,
+      "reach": [],
+      "readers": [],
+      "runs": [],
+      "runsCount": 0,
+      "secrets": [],
+      "sends": {
+        "deploysPages": true,
+        "dispatchesTo": [],
+        "opensIssues": false,
+        "opensIssuesOnFailure": false,
+        "opensPullRequests": false,
+        "publishes": false,
+        "publishesTo": [],
+        "releases": false
+      },
+      "stages": [],
+      "triggers": [
+        {
+          "branches": [
+            "main"
+          ],
+          "event": "push",
+          "paths": [
+            ".github/workflows/pages.yml",
+            "site/**"
+          ]
+        },
+        {
+          "event": "workflow_dispatch"
+        }
+      ],
+      "uses": [
+        "actions/checkout",
+        "actions/deploy-pages",
+        "actions/setup-node",
+        "actions/upload-pages-artifact"
+      ],
+      "usesWorkflowToken": false
+    },
+    {
+      "commands": [
+        {
+          "job": "publish",
+          "step": "Upgrade npm for Trusted Publishing",
+          "text": "npm install -g npm@latest"
+        },
+        {
+          "job": "publish",
+          "step": "Install dependencies",
+          "text": "if [ -f package-lock.json ]; then\n  npm ci --ignore-scripts\nelse\n  npm install --ignore-scripts\nfi\n"
+        },
+        {
+          "job": "publish",
+          "step": "Verify (test + build + eval)",
+          "text": "npm run verify"
+        },
+        {
+          "job": "publish",
+          "step": "Assert package version matches GitHub release tag",
+          "text": "set -euo pipefail\nTAG=\"${RELEASE_TAG#v}\"\nPKG=\"$(node -p \"require('./package.json').version\")\"\nif [ \"$PKG\" != \"$TAG\" ]; then\n  echo \"::error::package.json version ($PKG) does not match release tag ($TAG)\"\n  exit 1\nfi\n"
+        },
+        {
+          "job": "publish",
+          "step": "Publish to npm (Trusted Publishing)",
+          "text": "set -euo pipefail\nPKG=\"$(node -p \"require('./package.json').version\")\"\nif [ \"${RELEASE_PRERELEASE}\" = \"true\" ] || [[ \"$PKG\" == *-* ]]; then\n  npm publish --provenance --access public --tag next\nelse\n  npm publish --provenance --access public\nfi\n"
+        }
+      ],
+      "file": ".github/workflows/release.yml",
+      "landings": [],
+      "mentions": [
+        {
+          "job": "publish",
+          "path": "data/evals.jsonl"
+        },
+        {
+          "job": "publish",
+          "path": "package-lock.json"
+        },
+        {
+          "job": "publish",
+          "path": "package.json"
+        },
+        {
+          "job": "publish",
+          "path": "schemas/eval_case.schema.json"
+        },
+        {
+          "job": "publish",
+          "path": "tsconfig.json"
+        }
+      ],
+      "name": "Release (npm via Trusted Publishing)",
+      "permissions": [
+        "contents:read",
+        "id-token:write"
+      ],
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "scripts",
+          "depth": 0,
+          "files": 1
+        },
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 17
+        },
+        {
+          "boundary": "tests",
+          "depth": 0,
+          "files": 16
+        }
+      ],
+      "readers": [],
+      "runs": [
+        {
+          "job": "publish",
+          "path": "scripts/check-report-schema.mjs"
+        },
+        {
+          "directory": true,
+          "job": "publish",
+          "matched": true,
+          "path": "src/",
+          "via": "tsc tsconfig.json"
+        },
+        {
+          "directory": true,
+          "job": "publish",
+          "matched": true,
+          "path": "tests/",
+          "via": "vitest vitest.config.ts"
+        }
+      ],
+      "runsCount": 3,
+      "secrets": [],
+      "sends": {
+        "deploysPages": false,
+        "dispatchesTo": [],
+        "opensIssues": false,
+        "opensIssuesOnFailure": false,
+        "opensPullRequests": false,
+        "publishes": true,
+        "publishesTo": [
+          "npm"
+        ],
+        "releases": false
+      },
+      "stages": [],
+      "triggers": [
+        {
+          "event": "release",
+          "types": [
+            "published"
+          ]
+        },
+        {
+          "event": "workflow_dispatch"
+        }
+      ],
+      "uses": [
+        "actions/checkout",
+        "actions/setup-node"
+      ],
+      "usesWorkflowToken": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "scripts",
+      "kind": "file",
+      "to": "src"
+    },
+    {
+      "from": "tests",
+      "fromTests": true,
+      "kind": "file",
+      "to": "src"
+    }
+  ],
+  "generatedFrom": {
+    "commit": "0128f113ec07175b96609f2a54162c5e6bdc1a93",
+    "tracked": 155
+  },
+  "landings": [
+    {
+      "readers": [
+        {
+          "by": "package.json",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "CHANGELOG.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.es.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.fr.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.hi.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.it.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.ja.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.pt-BR.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.zh.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "package.json",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "LICENSE",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.fr.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.hi.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.it.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.ja.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.pt-BR.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.zh.md",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "README.es.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.es.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.hi.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.it.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.ja.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.pt-BR.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.zh.md",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "README.fr.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.es.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.fr.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.it.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.ja.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.pt-BR.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.zh.md",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "README.hi.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.es.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.fr.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.hi.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.ja.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.pt-BR.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.zh.md",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "README.it.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.es.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.fr.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.hi.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.it.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.pt-BR.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.zh.md",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "README.ja.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.es.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.fr.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.hi.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.it.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.ja.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.pt-BR.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.zh.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "package.json",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "README.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.es.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.fr.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.hi.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.it.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.ja.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.zh.md",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "README.pt-BR.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "README.es.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.fr.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.hi.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.it.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.ja.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "README.pt-BR.md",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "README.zh.md",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": ".github/workflows/ci.yml"
+        },
+        {
+          "by": ".github/workflows/release.yml"
+        },
+        {
+          "by": "scripts/example-run-fixture.mjs",
+          "call": "literal",
+          "confidence": "ast"
+        },
+        {
+          "by": "src/index.ts",
+          "call": "literal",
+          "confidence": "ast"
+        }
+      ],
+      "target": "data/evals.jsonl",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "scripts/eval-planted.mjs",
+          "call": "existsSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "scripts/eval-planted.mjs",
+          "call": "readFileSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "src/planted.ts",
+          "call": "literal",
+          "confidence": "ast"
+        }
+      ],
+      "target": "data/planted-theater.jsonl",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": ".github/workflows/release.yml"
+        }
+      ],
+      "target": "package-lock.json",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": ".github/workflows/release.yml"
+        },
+        {
+          "by": "CHANGELOG.md",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "package-lock.json",
+          "call": "literal",
+          "confidence": "text"
+        },
+        {
+          "by": "package.json",
+          "call": "literal",
+          "confidence": "text"
+        }
+      ],
+      "target": "package.json",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": ".github/workflows/ci.yml"
+        },
+        {
+          "by": ".github/workflows/release.yml"
+        },
+        {
+          "by": "scripts/eval-planted.mjs",
+          "call": "existsSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "scripts/eval-planted.mjs",
+          "call": "readFileSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "scripts/example-run-fixture.mjs",
+          "call": "literal",
+          "confidence": "ast"
+        },
+        {
+          "by": "src/index.ts",
+          "call": "literal",
+          "confidence": "ast"
+        }
+      ],
+      "target": "schemas/eval_case.schema.json",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "scripts/check-report-schema.mjs",
+          "call": "literal",
+          "confidence": "ast"
+        }
+      ],
+      "target": "schemas/eval_report.schema.json",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "scripts/check-report-schema.mjs",
+          "call": "literal",
+          "confidence": "ast"
+        }
+      ],
+      "target": "schemas/report.fail.json",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "scripts/check-report-schema.mjs",
+          "call": "literal",
+          "confidence": "ast"
+        }
+      ],
+      "target": "schemas/report.good.json",
+      "writers": []
+    },
+    {
+      "readers": [],
+      "target": "src/checks/lexicons/concreteness.ts",
+      "writers": [
+        {
+          "by": "scripts/build-concreteness.mjs",
+          "confidence": "ast"
+        }
+      ]
+    },
+    {
+      "readers": [
+        {
+          "by": "src/index.ts",
+          "call": "literal",
+          "confidence": "ast"
+        }
+      ],
+      "target": "src/index.ts",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": ".github/workflows/ci.yml"
+        },
+        {
+          "by": ".github/workflows/release.yml"
+        }
+      ],
+      "target": "tsconfig.json",
+      "writers": []
+    }
+  ],
+  "overlaps": [],
+  "submodules": [],
+  "symlinks": [],
+  "testFiles": 18,
+  "unassigned": []
+}
