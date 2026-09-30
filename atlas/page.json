@@ -12,7 +12,7 @@
   ],
   "breaks": [
     {
-      "doors": 2,
+      "doors": 4,
       "importedBy": [
         "scripts"
       ],
@@ -20,25 +20,106 @@
         "tests"
       ],
       "kind": "part",
-      "name": "src"
+      "name": "src",
+      "partLabel": "src"
     },
     {
       "doors": 2,
       "importedBy": [],
       "importedByTests": [],
       "kind": "part",
-      "name": "scripts"
+      "name": "scripts",
+      "partLabel": "scripts"
     },
     {
       "doors": 2,
       "importedBy": [],
       "importedByTests": [],
       "kind": "part",
-      "name": "tests"
+      "name": "tests",
+      "partLabel": "tests"
     }
   ],
   "changes": {
-    "first": true
+    "fileCounts": {
+      "added": 0,
+      "changed": 153,
+      "moved": 0,
+      "parts": 11,
+      "removed": 0
+    },
+    "items": [
+      {
+        "kind": "door",
+        "sentence": "CI now also runs src/index.ts.",
+        "subjects": [
+          ".github/workflows/ci.yml",
+          "src/index.ts"
+        ]
+      },
+      {
+        "kind": "door",
+        "sentence": "Deploy site to GitHub Pages now also runs site/astro.config.mjs and site/src/.",
+        "subjects": [
+          ".github/workflows/pages.yml",
+          "site/astro.config.mjs",
+          "site/src/"
+        ]
+      },
+      {
+        "kind": "door",
+        "sentence": "Release (npm via Trusted Publishing) now also runs src/index.ts.",
+        "subjects": [
+          ".github/workflows/release.yml",
+          "src/index.ts"
+        ]
+      },
+      {
+        "kind": "door",
+        "sentence": "And 2 more changes to doors.",
+        "subjects": []
+      },
+      {
+        "kind": "landing",
+        "sentence": "CHANGELOG.md is now also read by tests/version-alignment.test.ts.",
+        "subjects": [
+          "CHANGELOG.md",
+          "tests/version-alignment.test.ts"
+        ]
+      },
+      {
+        "kind": "landing",
+        "sentence": "data/DATASHEET.md is now read by tests/fairness.test.ts.",
+        "subjects": [
+          "data/DATASHEET.md",
+          "tests/fairness.test.ts"
+        ]
+      },
+      {
+        "kind": "landing",
+        "sentence": "data/evals.jsonl is now also read by tests/fairness.test.ts and tests/planted-theater.test.ts.",
+        "subjects": [
+          "data/evals.jsonl",
+          "tests/fairness.test.ts",
+          "tests/planted-theater.test.ts"
+        ]
+      },
+      {
+        "kind": "landing",
+        "sentence": "And 13 more new writers and readers of places.",
+        "subjects": []
+      },
+      {
+        "kind": "counts",
+        "sentence": "153 files changed content, across 11 parts.",
+        "subjects": []
+      }
+    ],
+    "since": {
+      "commit": "0128f113ec07175b96609f2a54162c5e6bdc1a93",
+      "generatedAt": "2026-09-23T17:55:02.584Z"
+    },
+    "unchanged": false
   },
   "changesTogether": [
     {
@@ -57,6 +138,21 @@
       "shared": 8
     },
     {
+      "a": "src/report.ts",
+      "b": "src/types.ts",
+      "either": 15,
+      "partLabels": [
+        "src",
+        "src"
+      ],
+      "parts": [
+        "src",
+        "src"
+      ],
+      "relation": "inside",
+      "shared": 9
+    },
+    {
       "a": "src/checks/performative.ts",
       "b": "tests/checks.performative.test.ts",
       "either": 10,
@@ -70,32 +166,26 @@
       ],
       "relation": "b-imports-a",
       "shared": 6
-    },
-    {
-      "a": "src/report.ts",
-      "b": "src/types.ts",
-      "either": 16,
-      "partLabels": [
-        "src",
-        "src"
-      ],
-      "parts": [
-        "src",
-        "src"
-      ],
-      "relation": "inside",
-      "shared": 9
     }
   ],
   "changesTogetherNote": [
-    "Confidence is low: fewer than 20 source files reach 10 revisions in the window.",
-    "Window: 180 days; a pair counts from 3 shared commits."
+    "Confidence is low: fewer than 25 source files reach 10 revisions in the window.",
+    "Window: 180 days; a pair counts from 3 shared commits, since 3 source files reach 10 revisions; the floor rises to 10 when 25 do."
   ],
   "changesTogetherWithTests": 0,
-  "commit": "0128f113ec07175b96609f2a54162c5e6bdc1a93",
+  "commit": "dd0e1de4318d08e23e8da2649dd27df6f7e93548",
+  "defaultBranch": "main",
+  "derived": "12 parts, mostly Markdown (83 files) and JSON data (16); code in TypeScript (36), JavaScript (6), Astro (3) and CSS (2). Work enters through 5 doors; CI and Release (npm via Trusted Publishing) each reach 3 parts, and CI is followed because a pull request goes through it. It publishes to npm. It deploys a site to GitHub Pages. People run synthesis. People import @mcptoolshop/synthesis.",
   "doors": [
     {
+      "builds": [
+        "src/"
+      ],
+      "checks": [],
+      "checksCount": 0,
+      "checksMore": 0,
       "file": ".github/workflows/ci.yml",
+      "id": ".github/workflows/ci.yml",
       "landings": [],
       "name": "CI",
       "pushes": false,
@@ -119,20 +209,28 @@
       "runs": [
         "scripts/check-report-schema.mjs",
         "scripts/eval-planted.mjs",
-        "src/",
+        "src/index.ts",
         "tests/"
       ],
       "runsCount": 4,
+      "runsMore": 16,
       "sends": [],
       "stages": [],
       "triggers": [
-        "on a pull request",
+        "on a pull request to main",
         "on a push to main touching 13 paths",
         "or by hand"
       ]
     },
     {
+      "builds": [
+        "src/"
+      ],
+      "checks": [],
+      "checksCount": 0,
+      "checksMore": 0,
       "file": ".github/workflows/release.yml",
+      "id": ".github/workflows/release.yml",
       "landings": [],
       "name": "Release (npm via Trusted Publishing)",
       "pushes": false,
@@ -155,10 +253,11 @@
       ],
       "runs": [
         "scripts/check-report-schema.mjs",
-        "src/",
+        "src/index.ts",
         "tests/"
       ],
       "runsCount": 3,
+      "runsMore": 0,
       "sends": [
         "publishes to npm"
       ],
@@ -169,13 +268,27 @@
       ]
     },
     {
+      "checks": [],
+      "checksCount": 0,
+      "checksMore": 0,
       "file": ".github/workflows/pages.yml",
+      "id": ".github/workflows/pages.yml",
       "landings": [],
       "name": "Deploy site to GitHub Pages",
       "pushes": false,
-      "reach": [],
-      "runs": [],
-      "runsCount": 0,
+      "reach": [
+        {
+          "boundary": "site",
+          "depth": 0,
+          "files": 7
+        }
+      ],
+      "runs": [
+        "site/astro.config.mjs",
+        "site/src/"
+      ],
+      "runsCount": 2,
+      "runsMore": 0,
       "sends": [
         "deploys the site"
       ],
@@ -184,11 +297,76 @@
         "on a push to main touching 2 paths",
         "or by hand"
       ]
+    },
+    {
+      "checks": [],
+      "checksCount": 0,
+      "checksMore": 0,
+      "file": "package.json",
+      "id": "package.json#@mcptoolshop/synthesis",
+      "kind": "package",
+      "landings": [],
+      "name": "@mcptoolshop/synthesis",
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 17
+        }
+      ],
+      "runs": [
+        "src/index.ts"
+      ],
+      "runsCount": 1,
+      "runsMore": 0,
+      "sends": [],
+      "stages": [],
+      "triggers": []
+    },
+    {
+      "checks": [],
+      "checksCount": 0,
+      "checksMore": 0,
+      "file": "package.json",
+      "id": "package.json#synthesis",
+      "kind": "command",
+      "landings": [],
+      "name": "synthesis",
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 17
+        }
+      ],
+      "runs": [
+        "src/index.ts"
+      ],
+      "runsCount": 1,
+      "runsMore": 0,
+      "sends": [],
+      "stages": [],
+      "triggers": []
     }
   ],
   "duplicates": [],
   "duplicatesLead": null,
   "duplicatesNote": [],
+  "edges": [
+    {
+      "from": "scripts",
+      "fromTests": false,
+      "to": "src"
+    },
+    {
+      "from": "tests",
+      "fromTests": true,
+      "to": "src"
+    }
+  ],
+  "engine": "1.24.0",
   "generated": [
     {
       "place": "src/checks/lexicons/concreteness.ts",
@@ -197,20 +375,155 @@
       ]
     }
   ],
-  "generatedAt": "2026-09-23T17:55:02.584Z",
+  "generatedAt": "2026-09-30T20:13:54.750Z",
   "limits": [
-    "2 import sites could not be resolved.",
-    "3 writes and 8 reads use paths built at run time and are not named here.",
-    "Statistics confidence is low: fewer than 20 source files reach 10 revisions in the window."
+    "1 import site names a path outside this repository, so what it loads is not followed.",
+    "3 writes and 6 reads go to a path their caller passes, not to this repository.",
+    "3 reads go to the directory the command is run in (data/ and schemas/), not to this repository.",
+    "Statistics confidence is low: fewer than 25 source files reach 10 revisions in the window."
   ],
   "mainDoor": ".github/workflows/ci.yml",
+  "partLabels": {
+    ".claude": ".claude",
+    ".github": ".github",
+    "assets": "assets",
+    "data": "data",
+    "docs": "docs",
+    "research": "research",
+    "root": "the repository root",
+    "schemas": "schemas",
+    "scripts": "scripts",
+    "site": "site",
+    "src": "src",
+    "tests": "tests"
+  },
   "parts": 12,
   "readers": [],
   "repo": "mcp-tool-shop-org/synthesis",
-  "sequences": [],
+  "sequences": [
+    {
+      "alternatives": [
+        {
+          "steps": [
+            {
+              "name": "evaluatePlanted",
+              "part": "src",
+              "partLabel": "src",
+              "phrase": "`evaluatePlanted`"
+            }
+          ],
+          "when": "options.planted"
+        },
+        {
+          "steps": [
+            {
+              "name": "printSummary",
+              "part": "src",
+              "partLabel": "src",
+              "phrase": "`printSummary`"
+            }
+          ],
+          "when": "isJsonOutput()"
+        }
+      ],
+      "entry": "main",
+      "file": "src/index.ts",
+      "inner": [
+        {
+          "file": "src/runner.ts",
+          "name": "runAllCases",
+          "part": "src",
+          "partLabel": "src",
+          "phrase": "`runAllCases`",
+          "steps": [
+            {
+              "name": "checkAgency",
+              "part": "src",
+              "partLabel": "src",
+              "phrase": "`checkAgency`"
+            },
+            {
+              "name": "checkReassurance",
+              "part": "src",
+              "partLabel": "src",
+              "phrase": "`checkReassurance`"
+            },
+            {
+              "name": "checkPivot",
+              "part": "src",
+              "partLabel": "src",
+              "phrase": "`checkPivot`"
+            },
+            {
+              "name": "checkPerformativeEmpathy",
+              "part": "src",
+              "partLabel": "src",
+              "phrase": "`checkPerformativeEmpathy`"
+            },
+            {
+              "name": "checkGroundedUptake",
+              "part": "src",
+              "partLabel": "src",
+              "phrase": "`checkGroundedUptake`"
+            },
+            {
+              "name": "computeRelationalPosture",
+              "part": "src",
+              "partLabel": "src",
+              "phrase": "`computeRelationalPosture`"
+            }
+          ]
+        }
+      ],
+      "part": "src",
+      "partLabel": "src",
+      "phrase": "`main`",
+      "steps": [
+        {
+          "name": "loadCases",
+          "part": "src",
+          "partLabel": "src",
+          "phrase": "`loadCases`"
+        },
+        {
+          "name": "runAllCases",
+          "part": "src",
+          "partLabel": "src",
+          "phrase": "`runAllCases`"
+        },
+        {
+          "name": "writeReport",
+          "part": "src",
+          "partLabel": "src",
+          "phrase": "`writeReport`"
+        },
+        {
+          "name": "hasColors",
+          "part": "src",
+          "partLabel": "src",
+          "phrase": "`hasColors`"
+        },
+        {
+          "name": "printSummary",
+          "part": "src",
+          "partLabel": "src",
+          "phrase": "`printSummary`"
+        },
+        {
+          "name": "formatArtifact",
+          "part": "src",
+          "partLabel": "src",
+          "phrase": "`formatArtifact`"
+        }
+      ]
+    }
+  ],
+  "startDoor": ".github/workflows/ci.yml",
   "startHere": [
     ".github/workflows/ci.yml",
-    "src/"
+    "src/index.ts",
+    "src/load.ts",
+    "src/color.ts"
   ],
   "summary": null,
   "summaryFrom": null,
@@ -219,14 +532,9 @@
     "scripts": 0,
     "src": 14
   },
-  "unread": [
-    {
-      "place": "src/checks/lexicons/concreteness.ts",
-      "writers": [
-        "scripts/build-concreteness.mjs"
-      ]
-    }
-  ],
+  "unnamedWrites": 0,
+  "unread": [],
+  "unreadFiles": 0,
   "unreadNote": [],
   "untested": [
     {

@@ -2,220 +2,222 @@
   "boundaries": [
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "d373b6d41d6cde16ca4f0306636ee194e13ac5726b4face758b6bf08472fe842",
+          "hash": "158a6deefff6a3a4089cca4f97ea47273b15f8482efe18850a1e4c2b84fb56dc",
           "path": ".claude/README.md"
         },
         {
-          "hash": "2d964babba705c0b9f6a7296577979efc40775ad06c4112434d5ffa27c4312db",
+          "hash": "05e1f0a90a17d12f4729e50b2ace433c64945ec18ef20507464974411cbd5974",
           "path": ".claude/agents/core/critic-reviewer.md"
         },
         {
-          "hash": "687b2dc77ea8bda372bd00993eab1520abaf0ef656c6580d3a0138a4924eb4c9",
+          "hash": "b5d7b60df2ca77ef7a7908c542899468ac1614f4db3938f19a6ea52c3f24b9ff",
           "path": ".claude/agents/core/orchestrator.md"
         },
         {
-          "hash": "b4b72041103488d8562f24d4e0f41231c1634450df78c138b540336b2447207a",
+          "hash": "6b58823b4ae517cf6e4018ab30cc82c20628c840ebe26df98a059f6ad5c18466",
           "path": ".claude/agents/core/product-strategist.md"
         },
         {
-          "hash": "fb7369b4435914f8878f120c7a08121d443a500f12259a948e0d98f0091ff421",
+          "hash": "ef938c623398d1fbd0bfb9d7e8c80f99915a6122d7e041881a07f36229d41336",
           "path": ".claude/agents/design/brand-guardian.md"
         },
         {
-          "hash": "48b8ba1cf8093e4559d15046e90abbf3b98c0383590dd4e506e6d21276bfdc09",
+          "hash": "8a8682c7ba069c9eecc988dfb533f68d37a47e0df4ad35ceb276de6855b25af5",
           "path": ".claude/agents/design/ui-designer.md"
         },
         {
-          "hash": "62c975ded0f9763ad0b1b6608f11adc9a5107137006dd76a7dae81a2cf21e689",
+          "hash": "adfa35c595d1e24451932c8aa461f24e99ae0f99864b8925f9c599c7d0236a2c",
           "path": ".claude/agents/engineering/backend-engineer.md"
         },
         {
-          "hash": "1e464576cbfc8ba95c7865cc07a9eeba61e88ef5f4950baf665eea515b363be7",
+          "hash": "6a7dee87f0f23c2bdc365190044659828f72a11c759389e23d0f130918ca5d82",
           "path": ".claude/agents/engineering/dependency-auditor.md"
         },
         {
-          "hash": "ef3833837a334baf524bb4df15dbd586d3664376521e98b87d87c412cb0187d9",
+          "hash": "e5a448d0f63a7f4b4687e76522effb140a509d008e23b8343fc6fde802460076",
           "path": ".claude/agents/engineering/frontend-developer.md"
         },
         {
-          "hash": "d8ea5372bd030768d59d4417d5889937003b59a872ef3c89b44bc31f9f333a03",
+          "hash": "756a5ce28d3876bc7f3f2d5a4cb018efc00b9e00cf31f1387cfabd159488565c",
           "path": ".claude/agents/engineering/performance-engineer.md"
         },
         {
-          "hash": "a1a23a9789640d78b136a0c249ee3aacbafb6ef0c774ea50c14bd89a25b6943e",
+          "hash": "4934e5b788900047d041afe4a7df2efb297303991c4ad20191a2985d6bd7cf49",
           "path": ".claude/agents/engineering/refactor-engineer.md"
         },
         {
-          "hash": "d1cfc922932b9686ea3ba9263c9cf3a0e26f783f60eef12c86119d0f05b91999",
+          "hash": "b39c7f41260e17585d70b2030588af7592d71f6e856b52d8db26e766121c5fef",
           "path": ".claude/agents/engineering/security-reviewer.md"
         },
         {
-          "hash": "911d2c78ed9be3c5a831927c8c2a5acbddd6945f206aeecdb435b10ff5f8bda6",
+          "hash": "5654a22c5e4830bf0509f1c9fbe2ef5988369dc79263894df506e464209cd82b",
           "path": ".claude/agents/engineering/test-engineer.md"
         },
         {
-          "hash": "dc08071b0a3322f50ee5fa3049c465cd760289f67bcf497e11020e15a8415465",
+          "hash": "4ceadb3eeef43c85465b4fa8cebdbcbf9020d340dd14e27a78800f0a4c43c514",
           "path": ".claude/agents/growth/community-manager.md"
         },
         {
-          "hash": "ad1d9ba7f5d1e634e9225681077cd384585ef1856a1e9b9f59b0608132ef8d1f",
+          "hash": "9b8e8a756b088be95c3120b9c4b6af132ee2987e77e21cd42da7396a0f5e7509",
           "path": ".claude/agents/growth/content-strategist.md"
         },
         {
-          "hash": "05db0c02db9b053890f163dfa2a950f12b5be185ba61c24cd5a0168a5e41177b",
+          "hash": "c0888c37c4656c7f0ea888f45380462a9454c783718e36d37c6a7526fa1a031f",
           "path": ".claude/agents/growth/launch-strategist.md"
         },
         {
-          "hash": "337f439266a055588e2a0af068b0461b0ec8259932341a19d1cf15044c028a67",
+          "hash": "79dd9e3a6924141a8a36d61271194934dbfe96d091d9d640ff7d3d8737f7e805",
           "path": ".claude/agents/growth/support-triage-lead.md"
         },
         {
-          "hash": "22201daefd5b99ab0992dc432ba7e015771353ccde467e11e35ccf9fcb23ced1",
+          "hash": "f222d010a977088716b08f26953a0f3146781a8d1e89e4c05ddf83867730554c",
           "path": ".claude/agents/marketing/launch-copywriter.md"
         },
         {
-          "hash": "f66c80446da64b3ccf16d50f354bbc73ebff1022b273974f0a95472be643d6c7",
+          "hash": "daf51f6c64ee2d71eb0b1d139533a5a9ef5fc161c372dc0ab01cb67da527a872",
           "path": ".claude/agents/product/feedback-synthesizer.md"
         },
         {
-          "hash": "19b1d905b39ff4e2992fb755cda6f597fd615057052b0b38ad7c38d4858312c5",
+          "hash": "e14f75ef3ea0e04af8a2efd1fc1071740f42528b52345a61eb07c0f375738a3f",
           "path": ".claude/agents/product/information-architect.md"
         },
         {
-          "hash": "d3e7bc0b3b8c45b8c704cd9d4829fe50e1043c18b672854313ff807c2cbb4e42",
+          "hash": "5400c554716df37778f4c34a9a7fe9f369960382bd35daa9390ba0bc49cb9f6d",
           "path": ".claude/agents/product/roadmap-prioritizer.md"
         },
         {
-          "hash": "b2c1626e9c18a1adf09d629234cf56bc18bbd5e13498246da35f86cc22463548",
+          "hash": "f2c59b2402e5599d32a5a887e535c7c47dc243b585d31096ddcaaffcbb376859",
           "path": ".claude/agents/product/spec-writer.md"
         },
         {
-          "hash": "ea0a9b1e28dff6fca5c558e3323954a2dd6505d1213145e98fe6322bf47ea580",
+          "hash": "9b55d050caf98d078888c0c0630fcf14b10c2fbf8ed22328256948807e626763",
           "path": ".claude/agents/research/competitive-analyst.md"
         },
         {
-          "hash": "329fcca3c43be4f1d4458184a927029b8e136dc62b810653c0e132a2c1abdd23",
+          "hash": "1c1ae32dbfdcf09c94c36fce488875d7df268ea6dbe132fda2d2b9b81ae4c25c",
           "path": ".claude/agents/research/trend-researcher.md"
         },
         {
-          "hash": "429c7b361c36d610b30b1acc5793fa24cc1997bd9841297e6a753760f981351a",
+          "hash": "a125d21ad9fb1551850ba00119e6497d514e15ecfb98235dc07ed98cd8c036e8",
           "path": ".claude/agents/research/user-interview-synthesizer.md"
         },
         {
-          "hash": "b7b2a5657a521807bb3c0b953066aea0ac6fd864305cb5bcff6f7dddc992d6d8",
+          "hash": "865d237b66de59ec57c19605701cd9c7d4f3ac4df3e6ec731424ed62ef0d0ad4",
           "path": ".claude/agents/research/ux-researcher.md"
         },
         {
-          "hash": "7a22beaad309c64e6ea14d3107025fa06a5b10bcd2e772c76fdeb6d3b252cdfe",
+          "hash": "c7fa7f242310095eaa31288587f6077b40641254c8d463bc3a3f0a99d4cbeaa9",
           "path": ".claude/agents/treatment/coverage-auditor.md"
         },
         {
-          "hash": "0d73f921bcc9a2fb49933af9551d9dbee85675d71a900627ed6eb2d636bccf2c",
+          "hash": "ef14326ed0d7dd1cec25e19ec1f2f2e245e1db59907768ffaaedba78ff5a31a1",
           "path": ".claude/agents/treatment/deployment-verifier.md"
         },
         {
-          "hash": "1a9a9ff9ea1095aab4688b19cb9e0ec48db2ca59d9f5f5e51e1f858d8d1dff7b",
+          "hash": "366904341a80d44d761dcfc30e79157f6754f1f2fd70ca4c16518369773888b1",
           "path": ".claude/agents/treatment/docs-architect.md"
         },
         {
-          "hash": "bb7a05aec44d58dcac5b36e28b8eb6b4640775eec6e9ebf069c6415e70a44b5a",
+          "hash": "5b9c83dbcb24b984a372b3edd3aac6d65b6d14a7910bd149721bf6aaefaa56a0",
           "path": ".claude/agents/treatment/metadata-curator.md"
         },
         {
-          "hash": "4cc9d0a2b158a057c6c3fc39763f57c2192f9da62e2a811d68fd839f57eaf598",
+          "hash": "e1756416f5d0932f265c139e9cfb3621a18bb714d697dfee9347bb53e0bdab53",
           "path": ".claude/agents/treatment/release-engineer.md"
         },
         {
-          "hash": "d481658d5d6ff403aa4ddc87ab901adfbc3462d0a66935fa1009d15ae983583f",
+          "hash": "26ed181415209aa3e404334290683bb75d682d853512b5b07f0199463fc3b05a",
           "path": ".claude/agents/treatment/repo-researcher.md"
         },
         {
-          "hash": "8cfe4f057b3c99e101689729054a6a2a8970cd0a64cace28eb5e1defbf602dde",
+          "hash": "00428fc7e4c776815099c1160932383c39acc33b8a55f3cf09aaf0d636de7929",
           "path": ".claude/agents/treatment/repo-translator.md"
         },
         {
-          "hash": "5d17bb90708504a9d472354203df30c01f32b21086f2b7ed27a66941d2e1e2dd",
+          "hash": "26753e3d905222968d21db6bffec144a658180f3f680016646b8ab10d20641ff",
           "path": ".claude/context/brand-rules.md"
         },
         {
-          "hash": "cc33e731c61c1c4ca467e54031d6505414e52262a38e1e5eaad4efa9538e5490",
+          "hash": "d3140f918c4fe75905e2b474ee4856dd40a9e03a188c6f6a67af1adf665c6b50",
           "path": ".claude/context/current-priorities.md"
         },
         {
-          "hash": "bd4468e3d038f46807caee557b8e1bd4d71413e6db0e33cf2bcb7423f3c617df",
+          "hash": "5a63f1c545820ef72b93d773150e36e38fff23ff958f7141fe3ddd82b52b5bc8",
           "path": ".claude/context/product-brief.md"
         },
         {
-          "hash": "54b653817fb122cb251850bf6d67a701454d2911433b75807b65db6e9e0c9726",
+          "hash": "13ad87c58125dda77751f12066996c8cf2ef1c07c8e04803fc2dc52be666d871",
           "path": ".claude/context/repo-map.md"
         },
         {
-          "hash": "4ca89e52e89026648cddd1dcebae0ce9cd12290972323e751ca4785fdb78b7a6",
+          "hash": "4b11b65a09d8ac2915f85c8eab1630931ff01fe68eb751fa01e9971ca14b38ca",
           "path": ".claude/examples/feature-packet.md"
         },
         {
-          "hash": "ed14e6a5dc1d77b0ccf88428f90e5ebcf604f9c14e0fa805a6dacf2adb396c2a",
+          "hash": "0350e2bf29256b79863fab5ca28851edaf125c487d64059a26c8a1a6f2336ca4",
           "path": ".claude/examples/identity-packet.md"
         },
         {
-          "hash": "5b1b7ead1a83ed6fb13e8342f64bae5eda5ebdf007516ff176d9fe582def19f7",
+          "hash": "4b51704a87c3c0db31294ccdc992c256e9102c907a572340aac452e275561c29",
           "path": ".claude/examples/integration-packet.md"
         },
         {
-          "hash": "bc22ae44f568aacc8648cc306afa88bf49ef6883c7fa12cccf811ae66986dbe9",
+          "hash": "e82dc44673009b0ccb58721bd5c3e83d5fba5f4d7a05071dff5a8f30e8019625",
           "path": ".claude/handbook.md"
         },
         {
-          "hash": "fa39ec3464d39e01b4f5f2dd15c69d47c8bf6d93b75daa1694eed3cd12be04dc",
+          "hash": "1fd5df3c7ac78a9e816b4c6c89615882542ee0fd223b729303a3ab75604bcd81",
           "path": ".claude/policy/done-definition.md"
         },
         {
-          "hash": "682c931d8ac0745b5b8d9300370775f5d7a43be83a9397b363d560f7329701de",
+          "hash": "3f55fc37123f26446b7346f84e1c999fc7d9cc37c849ff7475f884867e6f9d58",
           "path": ".claude/policy/escalation-rules.md"
         },
         {
-          "hash": "8fe24f7551d6caa66713c98f32effcdc86a6cb4223707e25a7c5772988f83b55",
+          "hash": "2404f9505ed427f41a04df566f872af5b05232274c8b2d487a430e6e686fae1b",
           "path": ".claude/policy/routing-rules.md"
         },
         {
-          "hash": "5d55e6a21f589f1e05117ce7a0c60891a1d2bd0c3ba9f4c5a80c50e5544e7d3e",
+          "hash": "d3beccab15e5f6edb7e08a4a23223a7ae7b67a5fc42051bf56b683312fcbd34b",
           "path": ".claude/policy/tool-permissions.md"
         },
         {
-          "hash": "16f96f8b2fe34b2167ad1a1bd65a90a8f715d170c724545a54e4e2a808f34fe9",
+          "hash": "035499e31539c656b063078a84025b8c32d01d29177d0447e98a937350388d1f",
           "path": ".claude/schemas/handoff.md"
         },
         {
-          "hash": "34ee30f440135cb3c979f036f050faa6f12afe99528db9daafe01d1ac1f434ee",
+          "hash": "4d2320f4714f012170a85eb1d713cd45ee81d0cd820e44566b2e5bbfab236b3a",
           "path": ".claude/schemas/review-verdict.md"
         },
         {
-          "hash": "94fb28a919784c36612906f846800fd5def23da4807c93c45aca2c957baa9c41",
+          "hash": "4e005a5c28cf2afaf71644a8bb72e479af1078c4694dc8a1b17ff2bf95c7d854",
           "path": ".claude/schemas/task-packet.md"
         },
         {
-          "hash": "f85e5c9f734c54c2673e0053e4b2eef8be79ac10b1ec742462af9f18782d82c7",
+          "hash": "1eaec4e9122993393576658d12cd7c5ce23d14d8723c176344dbd35327a3ac59",
           "path": ".claude/workflows/fix-bug.md"
         },
         {
-          "hash": "df359c5ab2c72dafcf89dc7667749c18b7a273c4bdfcfa842cfd402a4adde6e6",
+          "hash": "18d187df95b192da63b71b6e25d6a04609a772b51c79a19ce22769b018fbc754",
           "path": ".claude/workflows/full-treatment.md"
         },
         {
-          "hash": "d0da445a5980afb0e596bb7fbdf2e38e94af4a2a3b69c541a4a75dccd8b1420d",
+          "hash": "24d942d7920f4afacdbf12a4d9c38bf5d0020ae78dd1abde4b3fc93ce6b26444",
           "path": ".claude/workflows/launch-update.md"
         },
         {
-          "hash": "f8eeba2d380be3b42d5b5279459058e605c4f22523d67f2ccfed19979c16ae17",
+          "hash": "02b901a52729090a7e02ec70820283ac1562636ad0c41d35b3e5cf8d496fedc9",
           "path": ".claude/workflows/protect-verdict-truth.md"
         },
         {
-          "hash": "77e6ad26462b2237ea062b63d9f242fae459b6c0ea51ee83888873235a048fa4",
+          "hash": "3077eb58698cbb81d3a998140a5b5b08d1eda2780f784841ce7d605c8d9de319",
           "path": ".claude/workflows/ship-feature.md"
         }
       ],
@@ -231,24 +233,26 @@
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "84eb590b9ca4a640e7bc438ae3994a5ff564d6e41f38f59cfc9371a5eecfbd9c",
+          "hash": "2318fca5cb313d26accffa84067ab537d6ef38600f6db7036425ad76b99b9ea5",
           "path": ".github/dependabot.yml"
         },
         {
-          "hash": "d0772e68a2c84bee22e1063f6a78c78bf0f6643ad9a99b840ce476a3c785db18",
+          "hash": "caf6daf3d49a1cfda12645423635c0b4f7fa4cb1c606a4ff3d7c3c2e5cac4256",
           "path": ".github/workflows/ci.yml"
         },
         {
-          "hash": "50a8e5678eb0b46caba4a4148b94475571c3f798bac8221a1869112710c6f546",
+          "hash": "bcdab5875f725f46836afe1f5928ea551d12695ca9f24dd3392596d4325968e6",
           "path": ".github/workflows/pages.yml"
         },
         {
-          "hash": "6180ab0516ddba01452c56ef4e2fe84f0f40567829ccda6cb54c1ffe7fbd913a",
+          "hash": "2e43c02948e4f13084d2899848245d3a7e1b2c83e956a831ece9ea6a5b639e7b",
           "path": ".github/workflows/release.yml"
         }
       ],
@@ -264,6 +268,8 @@
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
@@ -285,24 +291,26 @@
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "e18d7ec3cec8bccc680997740eac981f47661341e0c9b14b55f21b26d46716f0",
+          "hash": "0d236df524c35fb21bec33fd2a314ad08e7e7e83f0fd95fae9b3ba28f22b1b76",
           "path": "data/DATASHEET.md"
         },
         {
-          "hash": "b0b32ac0ff0c5f21b1e92868bc3e7050b10d5bec8597fe3456589dc0c93b3cc6",
+          "hash": "dde0e2e357792dfb5e99e60580540c21858bf151228bb3f1a1ccd1c4b5b053fe",
           "path": "data/evals.jsonl"
         },
         {
-          "hash": "1a6a523b1bad9f7dfe7190971d4c2054af9fdb806481facabc9c1583576e8ce3",
+          "hash": "4962e36dc8adc4f0e47b3b9750a5e2bb879c3a7418fdd733bd8558b36574eafb",
           "path": "data/fairness.jsonl"
         },
         {
-          "hash": "1f250d6471e862eca60e8225b67e9283b07b5546fadf6789fd5605cc4251476b",
+          "hash": "99be141f6015e245d22f640cbd5cb800331201ecc85699774c3a36ce06915ed6",
           "path": "data/planted-theater.jsonl"
         }
       ],
@@ -318,6 +326,8 @@
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [
         "docs/index.md"
@@ -325,15 +335,15 @@
       "externals": 0,
       "files": [
         {
-          "hash": "87e48cbb910df1d5728c58f5d2c3f70940e26216ec44a4d78dc6597c8e266a2c",
+          "hash": "f4d57745fa205473e7acc0b664a5a0dce6cf8337ea7c5b371e63499d0dfb08da",
           "path": "docs/KNOWN-LIMITATIONS.md"
         },
         {
-          "hash": "bd9a3c33c5069a0be6bc06585939e52fe73dfe869ad5c72bb3fb97bb1982ee30",
+          "hash": "a1d4bb58381ec096b83c09fdc8a929d6e8f77dea5477f742303a6200c65f43ab",
           "path": "docs/index.md"
         },
         {
-          "hash": "cb9d9f1e65c404a2b5cf00e6cec57d70b529ac30709630a986ce4da07a4a20a2",
+          "hash": "167be9c2ae6cdfd70cbe17451943959d64e4f7dfc253e42aa40ff6cc2941e1d3",
           "path": "docs/study-grounding.md"
         }
       ],
@@ -349,28 +359,30 @@
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "53722463d9e19ddfe436f7f579f27a4827c658378779b7fdfc31442da680541b",
+          "hash": "e6b17890b5d340bbb4283eb1f14541260a3ea1cc78565c057ad8257ef3f24997",
           "path": "research/gemini-brief-license-friendly-sources.md"
         },
         {
-          "hash": "0c962c66c87e4948d24a96ccd62c0c99153bce52aff21f9ae5f4899c93898796",
+          "hash": "cd06da577d12b10816f947642869b2a732b71539a4509ddb4362d672135ea2a6",
           "path": "research/grok-consult-brief.md"
         },
         {
-          "hash": "88c59b9ceea08620c52c8d1eccb51f13994aef933db179ba1a3f04d95ae7da43",
+          "hash": "676010ee6253767c6bdd9e03502ad7af754e7ac0ea1d1150684776e4a714a72a",
           "path": "research/sourcing-decision-record.md"
         },
         {
-          "hash": "cbbe8c6f138eee4b7899d688ed6bb5656807196c83557058d06e3747dd86cf8b",
+          "hash": "caa9f8875106399ec3d8edb23318fbba3a8c896e9106b4e93519ff485e4fe6bf",
           "path": "research/template-saturation-result.txt"
         },
         {
-          "hash": "4bad42c31961ad83628cd926a1549a7b224c450cc86b0cd40ef45b152c5792b0",
+          "hash": "8fa553bc21695ba4dec5d1a48e85bc342817f950791e88cde306e5641e80b84f",
           "path": "research/template-saturation-test.cjs"
         }
       ],
@@ -380,90 +392,93 @@
       "importConfidence": "full",
       "name": "research",
       "origin": "authored",
+      "outsideImports": 1,
       "role": "docs",
       "testedBy": 0,
-      "unresolvedSites": 1
+      "unresolvedSites": 0
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "25b5e9fdbd7223c04f2290c8e05fde9045781233912185e6b9fac60076949e6e",
+          "hash": "33bfca2773fd4cec4b3b2f54c005aacf064edfa9b205e1a9f1a4e2f3df387165",
           "path": ".gitignore"
         },
         {
-          "hash": "9291ec051e226273e26cf40793b46edb78c0aad31165817fef239deb8d89c801",
+          "hash": "95447fadcd169ca339cc35134d8304198cbec24b7b741dd1740dc47670b03e70",
           "path": ".polyglot-cache.json"
         },
         {
-          "hash": "69c0f2d512ff20b78a309349362f1ceaea60db16bf794d4affc404c1f204216c",
+          "hash": "b33949333351c7ab60450df472c5c81f71647ffed075971023effdf95b274766",
           "path": "CHANGELOG.md"
         },
         {
-          "hash": "8543ed6be7150d5366d10ca1ed4155fcfc472a20b86df09f6936cc67515a5319",
+          "hash": "2a79aa56c0d232db661f34fc82559658c6191f91e17e02847433b12c77d4d47d",
           "path": "CODER_HANDOFF.md"
         },
         {
-          "hash": "537bec1a428426e2fa0a4c53f46757b5b741e4b5f19096c5bbd3e3f660c546a2",
+          "hash": "b2e59d2d97dd3af6db23a6e408709d1a5b766a0e55a348345c7c88d256293191",
           "path": "CODE_OF_CONDUCT.md"
         },
         {
-          "hash": "e2e3ec722daf5d88cec317d1052fb01a555fb0dd7c50a58abd57759b3c709005",
+          "hash": "17534946b0c466fcbca6c2525a200f24ddc4340fa3600b528a58b17370e54a20",
           "path": "CONTRIBUTING.md"
         },
         {
-          "hash": "5f3af742bbe038267a40f824dc91249b4ecd2bad28b9ba116230727116b474a4",
+          "hash": "70202ed2957acfbbc6b7c441f25234b5223b0c962b8842297ab4ef07fe3fa2a2",
           "path": "HANDBOOK.md"
         },
         {
-          "hash": "5ae6b3c8f446f0a7cb95176e4dadb91b68aaffb16b3be09f64f5de248b6a973a",
+          "hash": "367e5141e4f5884e5791c4021f33a9faa958840a5decf44e1b273a87aad1c459",
           "path": "LICENSE"
         },
         {
-          "hash": "aabee5bcd4b1dd482fd5c84a8e0e7dda8eea031efc29adb32c74fd68711199ad",
+          "hash": "31ce517ef32a39c76a90b46bf816ae86c2bdd345f3a5c150e99c1b8d9ec8bb5b",
           "path": "README.es.md"
         },
         {
-          "hash": "4c7bbad48813e519aa0965b1b01a640d34bc381e06fd6ee38ac5aab359ab9caf",
+          "hash": "e4d5d10c6893e143b3cdfcfb44066c895f397b67a1d92df0069bcdf259c08657",
           "path": "README.fr.md"
         },
         {
-          "hash": "4b7686af9870790ec975ac5589c5f4b4187ce933961e7bf0db48efb28c4119b7",
+          "hash": "dfbb8ba72050b4ee66304c407849c10dbcf3a98d5485111d7a411207f8caef47",
           "path": "README.hi.md"
         },
         {
-          "hash": "2e3d5cd62990d6dd59d62fc6a580fafd135a34450e9150626e21e9dd9d6dac10",
+          "hash": "371bf24ee530efd418814f4d16fbd88871aef03f24851b1d9b687a1548a1309a",
           "path": "README.it.md"
         },
         {
-          "hash": "84ce706f0bea53f70de09bd6cdc9986d82b60beeebcbbe9aac6e5c681d95006e",
+          "hash": "3e2695a4cac873c37ff445fe3d5102fd816dff6764a938a38bd6959f435b4bee",
           "path": "README.ja.md"
         },
         {
-          "hash": "5520729b1b3e7e021e18a9149d6df2f743c089ed25ac3caf7b8f52fd90e1bf09",
+          "hash": "8f60667a4d678206585a7f3e025fe6af0d3c8c8258c789b60255541f1d0f51c6",
           "path": "README.md"
         },
         {
-          "hash": "a794eb52b4a93cb85547a75d1e1a9d2ed2f152255ddc963a5c91feb9427599e3",
+          "hash": "e9a9b1bf383da706c97a60232b222e45416e16db74fad56bc3ef1f16b3fa9732",
           "path": "README.pt-BR.md"
         },
         {
-          "hash": "3f6a9e6b65197d2ccefdfc659170671735842413560a4faa3fb29db66c89b932",
+          "hash": "a163387d6468cae61f16692a1d1e2f755042b3ea1fcf0ac292eb2e8aa279b32d",
           "path": "README.zh.md"
         },
         {
-          "hash": "c43f511a00fcd294f1832ac39061f806d7c3a0fc010c6f72bf7f8e85e0882e61",
+          "hash": "1ce920a17d8b9347d6d217e55746b63429452fcc0a38cbaf320f80d59dcf9ad7",
           "path": "SCORECARD.md"
         },
         {
-          "hash": "e68ca9f44b6cbcff3c4bb8849372493c3d97fdf5ae32c597a0ec937052f25406",
+          "hash": "dc5faafd3650d52a54390d44621b56db4097d22564f93f2835cd49f63a2f0999",
           "path": "SECURITY.md"
         },
         {
-          "hash": "515ad9d825c21fc2ff4faae17dbb856c3d31429a28e8708985de8d946dd5ac6b",
+          "hash": "b81ad2b495728c5818e4759fc606e4ca242a4df855be6a10a0bb8b88bad93eac",
           "path": "SHIP_GATE.md"
         },
         {
@@ -471,19 +486,19 @@
           "path": "logo.png"
         },
         {
-          "hash": "28a83a0f27dbcacc11310711aa47ec560f74661258906106a1bd8c7a43d71582",
+          "hash": "261492db50d725bb61c1e6dda849652b300bebbee51b7ac389f6b6469cb08b4f",
           "path": "package-lock.json"
         },
         {
-          "hash": "8b39024e4bb55089285d57a1a3db9ed31d1e40652ce1755f93fbe81280abff8f",
+          "hash": "91d244829d764cb5c8dc398136ec1f93a3316759c8d4d794ba446fa93dee45e3",
           "path": "package.json"
         },
         {
-          "hash": "f9642a93fd752f602ada1aa4b6c23a093009730dc7c6f47c6aa5658827f71c4b",
+          "hash": "a39185febd47d8f19e932b9fb0ff72ddacc29d5501abae4f890e632dc1523807",
           "path": "tsconfig.json"
         },
         {
-          "hash": "032d04b2790f4cb23f467c1db05058ca51eea42cc04374bf9f391219809e2f5c",
+          "hash": "67c9c62c3f3ecd0c3a3a3550d8ce1d20eb8d40168515f6c3184ee7781b054a35",
           "path": "vitest.config.ts"
         }
       ],
@@ -494,29 +509,32 @@
       "name": "root",
       "origin": "authored",
       "role": "docs",
-      "testedBy": 0,
+      "testedBy": 1,
+      "testedByScript": true,
       "unresolvedSites": 0
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "198186d96579070cda91a8559e5a7b98368ef230e3d7a608b40c57a1ccf83e1f",
+          "hash": "54000946c1a4da80ada30274ad5ef7b4ba2dabb7c36fdd03b5db862410fb298e",
           "path": "schemas/eval_case.schema.json"
         },
         {
-          "hash": "5d93599ab00f1e647f59bbb5f177e2bc90bdc9fa12cdabeb001810c9d8347f97",
+          "hash": "78808b0a77a1637121b5da24527404159ef91ca07f2fa0fcdd336385694978fe",
           "path": "schemas/eval_report.schema.json"
         },
         {
-          "hash": "40f4b7573bbe297f21ec0e85368d5144ad6e73ff416598d519414d5ab10869ab",
+          "hash": "bf4ed7f05cd97acab1a02b32b252c794632e896f5ccc7a3127c1907331ef050f",
           "path": "schemas/report.fail.json"
         },
         {
-          "hash": "3158c593d7b8aaece181690c98b611cf215ce4f707388fb5a8bc1781c0eaed49",
+          "hash": "c542a8e4682ac0cdd59069e84b28493b4d0972301294c760601192be3736ff0b",
           "path": "schemas/report.good.json"
         }
       ],
@@ -531,31 +549,58 @@
       "unresolvedSites": 0
     },
     {
-      "dynamicReads": 3,
+      "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "61314108b2923dc9fde28435aea09c0103e2695ce62719a77f891054d721456b",
+          "hash": "f6581de90cc09193e66ee33c28c5030af90a5363bb94f379440bd866a40fd35a",
           "path": "scripts/build-concreteness.mjs"
         },
         {
           "entry": "loadJson",
           "entryRule": 1,
-          "hash": "70284d64b67c442523d11fa03dbe9311f0dc21850a69f39eebbbf94f44373fcc",
+          "failurePaths": [
+            {
+              "in": "loadJson",
+              "kind": "catch",
+              "line": 28
+            }
+          ],
+          "hash": "5554fad782417812bb8bafaf0a82047cd0c92af6b684e97f7fa7bc373d3c0550",
           "path": "scripts/check-report-schema.mjs",
           "sequences": []
         },
         {
           "entry": "die",
           "entryRule": 1,
-          "hash": "0b272c695ff7fa2b2e21d5d2b8b06d61121b91f1c88af82dedbca522472d02de",
+          "failurePaths": [
+            {
+              "in": "getRunCase",
+              "kind": "catch",
+              "line": 100
+            },
+            {
+              "kind": "catch",
+              "line": 126
+            },
+            {
+              "kind": "catch",
+              "line": 162
+            }
+          ],
+          "hash": "857610e958627f225723cb4f31d8b7ac8b7ea580b47807c3c840781537a81599",
+          "importsFiles": [
+            "src/index.ts"
+          ],
           "path": "scripts/eval-planted.mjs",
           "sequences": []
         },
         {
-          "hash": "696480083b016ad6af6f408f9187982092ac51e07f2caba353251dedb10ffd27",
+          "hash": "148295be66c81ccf156bfced4c5d228b1929ef73b25ccfe6609001577d2ea809",
           "importsFiles": [
             "src/index.ts"
           ],
@@ -568,86 +613,120 @@
       "importConfidence": "full",
       "name": "scripts",
       "origin": "authored",
+      "outsidePlaces": [
+        {
+          "reads": 1,
+          "where": [
+            "caller"
+          ],
+          "writes": 0
+        }
+      ],
+      "outsideReads": 1,
       "role": "code",
       "testedBy": 0,
-      "unresolvedSites": 1
+      "unresolvedSites": 0
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
       "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "b56bfeeecb1d6f9cebe5f2b42b468103e5e6f44b6a317a88e6e23079170eae5c",
+          "hash": "a5f07a4f818edbbe3cb6a182d7fb969920f766e1e898efd1d3e405759953d1cf",
           "path": "site/astro.config.mjs"
         },
         {
-          "hash": "0bb6f32cb7bbac4c93c12815433e6937a138964182311ab3e2e4bf6fb8ee3038",
+          "hash": "d7d5a16e8c119240f1d942fbe033ace3f58361a3822b9b7a92621a0edf4bd772",
           "path": "site/package-lock.json"
         },
         {
-          "hash": "ddc61b3115bd9e4e5ca75c151eea6f232dfe3d62f4e2dd7407a0ae8c13d93082",
+          "hash": "bd664e0f320799cb432290916d7b9c8527d4244ef43e4a300860ba838a865fbe",
           "path": "site/package.json"
         },
         {
-          "hash": "ec030f2e4bf6dc57eaca075d390c228b3212cf29db267e32ef92e110de1acdcc",
+          "constantOnly": true,
+          "hash": "ee756dfba4122d2acc94a39b2555d9f200fff56a87a8c0b10f9cd01df26a8b62",
           "path": "site/src/content.config.ts"
         },
         {
-          "hash": "46e3676defbd547bf994bd3437bd7854f03fda6206ed5fbe9f29ca96987f9fcb",
+          "hash": "a039d1982ad5ebf180fd377005eca6f4ee9de5547d32891984ebae18900c4a1f",
           "path": "site/src/content/docs/handbook/beginners.md"
         },
         {
-          "hash": "d046a6b377ee9b7fc3e7d4b628b2fa61fffa9b0ac95242416e41325dce13d60e",
+          "hash": "58c594970ed1d91cc4ff255c1f5ec2315bdb0269511b6ff1aebe6eefc70dddaa",
           "path": "site/src/content/docs/handbook/checkers.md"
         },
         {
-          "hash": "2f630112b0fe037701667a8814491ce8a62923b2f3de2053c2ab2ef88d6445aa",
+          "hash": "22e518d0627e3c20f8a4b6a68514e256615ac3893a37cf0f29daf67b07a4afd5",
           "path": "site/src/content/docs/handbook/ci.md"
         },
         {
-          "hash": "1ad8b5abb0063d1fc7f10cd13b888e1f886b05e76ea8923125cf8acebcfd8fb4",
+          "hash": "eb24faddc2288f165b8ba108923b7c42d9b9e8304863ac1149d7d662ebc81138",
           "path": "site/src/content/docs/handbook/getting-started.md"
         },
         {
-          "hash": "4185e7bebbbf664c897bde35265b15b2876f63f6d108a2c22fc2e8886853be11",
+          "hash": "c49ff622836f47d7204883a3d5c053d24644bed452d26e286fad4b8ac2e5902e",
           "path": "site/src/content/docs/handbook/index.md"
         },
         {
-          "hash": "7cd28eda01e3abecffe014b1fe96090fee206ae8edf40b587c7e2ee2925d1d56",
+          "hash": "2fe51f1babacf88b83249402b6c3ff4a29af5210eb60883a3a5c76b10da5588d",
           "path": "site/src/content/docs/handbook/reference.md"
         },
         {
-          "hash": "8b713ef1d989919bd2484360b44046ecb5dfaaa67c8836c13b93ccd218e9b7c2",
+          "hash": "0d1519725973c1968712dd0979056513d95c897cf3c1a088247c42226aad6548",
           "path": "site/src/content/docs/handbook/test-cases.md"
         },
         {
-          "hash": "2569a015b74eba3d84f4015e6d3abea63f95a6800fbc8b852719bbf45a7bb30e",
+          "hash": "64c0dd11988df946358675131da995c3043ffbebb99ca164c5dd262e6246c962",
           "path": "site/src/layouts/BaseLayout.astro"
         },
         {
-          "hash": "9e3a4a7bc09511c8bb6f26677fcecd1357a5f7078850c75dc35e903231437521",
+          "hash": "bff0f0589e93562006b8f904d4535fb5f9632d8e45af0498d04ef14746cde58d",
+          "importOrder": [
+            "site/src/styles/global.css",
+            "site/src/layouts/BaseLayout.astro",
+            "site/src/site-config.ts"
+          ],
+          "importsFiles": [
+            "site/src/layouts/BaseLayout.astro",
+            "site/src/site-config.ts",
+            "site/src/styles/global.css"
+          ],
           "path": "site/src/pages/404.astro"
         },
         {
-          "hash": "401c42d574f65ae742c3051901060564d20337d10ec9836820ca951863f972c6",
+          "hash": "776728df772759c1225b33499bfc6e7ce08a2c81d198de6b1e239786d8a298b7",
+          "importOrder": [
+            "site/src/styles/global.css",
+            "site/src/layouts/BaseLayout.astro",
+            "site/src/site-config.ts"
+          ],
+          "importsFiles": [
+            "site/src/layouts/BaseLayout.astro",
+            "site/src/site-config.ts",
+            "site/src/styles/global.css"
+          ],
           "path": "site/src/pages/index.astro"
         },
         {
-          "hash": "6088092d472a89f4def6845bb9b050b0235c751152d6abb3b5d646ab4dfbdf2f",
+          "constantOnly": true,
+          "hash": "2fdacce9f5d0145b7eee0321739c528d9b8038ce0045decc6b2251841000f6bb",
           "path": "site/src/site-config.ts"
         },
         {
-          "hash": "e09355c3ebbfc383202535b9fc660676488d1ba8f2fe00a5f7797e8c3d0a9d15",
+          "hash": "c85789c0c38e7d7ce974c82058b16ce03613a2457f08e6898e5995eb970702e9",
           "path": "site/src/styles/global.css"
         },
         {
-          "hash": "9d8dddc46c99a1863e6980810ca6375e764db806f99696446751cbdc5be1a1d9",
+          "hash": "51d012e49bcba75b105bdc8aa7a6d1a6733a00ace857b24423c75215ebcff631",
           "path": "site/src/styles/starlight-custom.css"
         },
         {
-          "hash": "61fc24492db9aef7ec38eb91cfeebaef96155014bb5f22648fd8ed2327c6cae2",
+          "hash": "b5b0a5b04a14cddd7713c5e1c82e86c79c17c2f86b170e26e9b170b3d5e01cd9",
           "path": "site/tsconfig.json"
         }
       ],
@@ -662,8 +741,10 @@
       "unresolvedSites": 0
     },
     {
-      "dynamicReads": 5,
-      "dynamicWrites": 3,
+      "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
+      "dynamicWrites": 0,
       "entryPoints": [
         "src/index.ts"
       ],
@@ -675,14 +756,18 @@
             "foldTypographicApostrophes",
             "unionCharRanges"
           ],
-          "hash": "ef7fe3bfc0819070f1783ca1956c446f56d67fc62920b89a3c29f8facf637a5d",
+          "hash": "6a5244fd720a64b22e28a5f4fd138e2ec317092faa075fffc788305a9084118b",
           "path": "src/checks/_text.ts"
         },
         {
           "exports": [
             "checkAgency"
           ],
-          "hash": "b6963e59b962813453ab31f77d4e722400fecc13d1b52b29c14f23c76a8399a2",
+          "hash": "d98855a65c08ca48628c87d24e82b662fc70b4956e4a8f818c0fa168ec6c77be",
+          "importOrder": [
+            "src/types.ts",
+            "src/checks/_text.ts"
+          ],
           "importsFiles": [
             "src/checks/_text.ts",
             "src/types.ts"
@@ -693,7 +778,17 @@
           "exports": [
             "checkGroundedUptake"
           ],
-          "hash": "ae35018524dafc5b220946609bf99c8e3614c0a2ea5c9dd585063b43af59379d",
+          "hash": "e7f6e47ec7c99c0d151997af8a05f9c3d95e252daee2aaed8f3899581d569b30",
+          "importOrder": [
+            "src/types.ts",
+            "src/checks/similarity.ts",
+            "src/checks/pivot.ts",
+            "src/checks/lexicons/filler.ts",
+            "src/checks/performative.ts",
+            "src/checks/agency.ts",
+            "src/checks/reassurance.ts",
+            "src/checks/_text.ts"
+          ],
           "importsFiles": [
             "src/checks/_text.ts",
             "src/checks/agency.ts",
@@ -707,11 +802,12 @@
           "path": "src/checks/grounded_uptake.ts"
         },
         {
-          "hash": "f2de3fc25969d5b1ee7b0f498390d6592744fc5deb1e3be35ec1891faaef53f1",
+          "constantOnly": true,
+          "hash": "17cf999ffa898b383e30fc8265a36af19c41b6e4949b03339a891ad42503ae2c",
           "path": "src/checks/lexicons/concreteness.ts"
         },
         {
-          "hash": "edc6c32e625091de0315e77a01e291338745f5832edd6af65b2545773686ba25",
+          "hash": "7d36903921e0e60c8a0885f29b484a1100118211cd74366acd2291cf93b0cd7a",
           "path": "src/checks/lexicons/filler.ts"
         },
         {
@@ -719,7 +815,15 @@
             "checkPerformativeEmpathy",
             "stem"
           ],
-          "hash": "50edaaa16501e0e3534a3ce42d63443fe142795319d54f9bc260b20c1cf03c9f",
+          "hash": "5cfe87f9de04fdd27f351612d22a8695b021ea5e4a76f5ba26a7788ba054bbbc",
+          "importOrder": [
+            "src/types.ts",
+            "src/checks/similarity.ts",
+            "src/checks/pivot.ts",
+            "src/checks/lexicons/filler.ts",
+            "src/checks/lexicons/concreteness.ts",
+            "src/checks/_text.ts"
+          ],
           "importsFiles": [
             "src/checks/_text.ts",
             "src/checks/lexicons/concreteness.ts",
@@ -734,7 +838,12 @@
           "exports": [
             "checkPivot"
           ],
-          "hash": "fcb8e495aadf9af1db6cd89da6f41acaba6a510686719a66732bb27b404b794e",
+          "hash": "3310dc72554f530c387fad8d7241e688fc4a0e2f4bed984a63d2fbc02ff34104",
+          "importOrder": [
+            "src/types.ts",
+            "src/checks/similarity.ts",
+            "src/checks/_text.ts"
+          ],
           "importsFiles": [
             "src/checks/_text.ts",
             "src/checks/similarity.ts",
@@ -746,7 +855,11 @@
           "exports": [
             "checkReassurance"
           ],
-          "hash": "02bb95abca8de162a5be606e290fcbe4a81626b99414b7f49924038958c04558",
+          "hash": "0785550af042774daae0a79d05abfbe13218e064d6e80f4a7c9a30ff9dd1a140",
+          "importOrder": [
+            "src/types.ts",
+            "src/checks/_text.ts"
+          ],
           "importsFiles": [
             "src/checks/_text.ts",
             "src/types.ts"
@@ -761,7 +874,7 @@
             "setEmbeddingAdapter",
             "tokenCosineSimilarity"
           ],
-          "hash": "5934a879d79d0d14f34378a02a77c8420febb4d2e5609aa3982727bf607d5762",
+          "hash": "747c879ed3ddc881187a0b69f9220cecd4d7c45b29dedad53afa9eccd6e60422",
           "path": "src/checks/similarity.ts"
         },
         {
@@ -769,11 +882,45 @@
             "hasColors",
             "useAsciiGlyphs"
           ],
-          "hash": "b80368592bcea8ad55d48efffa629d6af6a33428bb8c1953eff4454ec87d1249",
+          "hash": "25694f888bace3582d705734eb632e740b51bba801f332c88643ea795732e863",
           "path": "src/color.ts"
         },
         {
-          "hash": "7ead511cc2408d435e99cacc485c4fee2359e3e4fd067809e1a99d885c6b76fe",
+          "entry": "main",
+          "entryRule": 1,
+          "failurePaths": [
+            {
+              "in": "realOrResolve",
+              "kind": "catch",
+              "line": 215
+            },
+            {
+              "in": "isDirectRun",
+              "kind": "catch",
+              "line": 236
+            },
+            {
+              "in": "isDirectRun",
+              "kind": "catch",
+              "line": 243
+            },
+            {
+              "in": "runPlantedCli",
+              "kind": "catch",
+              "line": 278
+            },
+            {
+              "in": "main",
+              "kind": "catch",
+              "line": 351
+            },
+            {
+              "in": "main",
+              "kind": "catch",
+              "line": 369
+            }
+          ],
+          "hash": "832e0b46ec2f0df966a37a1d6df44b5e8d8eef39e9d50aa1d0854d2cd44bf60d",
           "importsFiles": [
             "src/color.ts",
             "src/load.ts",
@@ -783,62 +930,379 @@
             "src/runner.ts",
             "src/types.ts"
           ],
-          "path": "src/index.ts"
+          "path": "src/index.ts",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "branch": "isJsonOutput()",
+                  "line": 260,
+                  "name": "printSummary",
+                  "target": {
+                    "file": "src/report.ts"
+                  }
+                },
+                {
+                  "line": 263,
+                  "name": "printSummary",
+                  "target": {
+                    "file": "src/report.ts"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "emitSummary"
+            },
+            {
+              "calls": [
+                {
+                  "line": 277,
+                  "name": "evaluatePlanted",
+                  "target": {
+                    "file": "src/planted.ts"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "runPlantedCli"
+            },
+            {
+              "calls": [
+                {
+                  "branch": "options.planted",
+                  "inner": [
+                    {
+                      "line": 197,
+                      "name": "runCase",
+                      "target": {
+                        "file": "src/runner.ts"
+                      }
+                    }
+                  ],
+                  "line": 277,
+                  "name": "evaluatePlanted",
+                  "target": {
+                    "file": "src/planted.ts"
+                  },
+                  "via": "runPlantedCli"
+                },
+                {
+                  "inner": [
+                    {
+                      "branch": "errors.length > 0",
+                      "line": 61,
+                      "name": "useAsciiGlyphs",
+                      "target": {
+                        "file": "src/color.ts"
+                      }
+                    }
+                  ],
+                  "line": 349,
+                  "name": "loadCases",
+                  "target": {
+                    "file": "src/load.ts"
+                  }
+                },
+                {
+                  "inner": [
+                    {
+                      "line": 243,
+                      "name": "checkAgency",
+                      "target": {
+                        "file": "src/checks/agency.ts"
+                      },
+                      "via": "runCase"
+                    },
+                    {
+                      "line": 252,
+                      "name": "checkReassurance",
+                      "target": {
+                        "file": "src/checks/reassurance.ts"
+                      },
+                      "via": "runCase"
+                    },
+                    {
+                      "line": 261,
+                      "name": "checkPivot",
+                      "target": {
+                        "file": "src/checks/pivot.ts"
+                      },
+                      "via": "runCase"
+                    },
+                    {
+                      "line": 271,
+                      "name": "checkPerformativeEmpathy",
+                      "target": {
+                        "file": "src/checks/performative.ts"
+                      },
+                      "via": "runCase"
+                    },
+                    {
+                      "line": 284,
+                      "name": "checkGroundedUptake",
+                      "target": {
+                        "file": "src/checks/grounded_uptake.ts"
+                      },
+                      "via": "runCase"
+                    },
+                    {
+                      "line": 293,
+                      "name": "computeRelationalPosture",
+                      "target": {
+                        "file": "src/relational.ts"
+                      },
+                      "via": "runCase"
+                    }
+                  ],
+                  "line": 357,
+                  "name": "runAllCases",
+                  "target": {
+                    "file": "src/runner.ts"
+                  }
+                },
+                {
+                  "inner": [
+                    {
+                      "line": 29,
+                      "name": "computeRelationalPosture",
+                      "target": {
+                        "file": "src/relational.ts"
+                      },
+                      "via": "postureForSerialize"
+                    }
+                  ],
+                  "line": 368,
+                  "name": "writeReport",
+                  "target": {
+                    "file": "src/report.ts"
+                  }
+                },
+                {
+                  "line": 375,
+                  "name": "hasColors",
+                  "target": {
+                    "file": "src/color.ts"
+                  }
+                },
+                {
+                  "branch": "isJsonOutput()",
+                  "line": 260,
+                  "name": "printSummary",
+                  "target": {
+                    "file": "src/report.ts"
+                  },
+                  "via": "emitSummary"
+                },
+                {
+                  "line": 263,
+                  "name": "printSummary",
+                  "target": {
+                    "file": "src/report.ts"
+                  },
+                  "via": "emitSummary"
+                },
+                {
+                  "line": 379,
+                  "name": "formatArtifact",
+                  "target": {
+                    "file": "src/report.ts"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": true,
+              "isDefaultExport": false,
+              "name": "main"
+            }
+          ]
         },
         {
+          "entry": "loadCases",
+          "entryRule": 4,
           "exports": [
             "loadCases",
             "validateCase"
           ],
-          "hash": "14363c75755c9233bcdd8a4af4a071570dbc14ddb4f6123ff62d2d469ca86d74",
+          "failurePaths": [
+            {
+              "in": "loadCases",
+              "kind": "catch",
+              "line": 43
+            },
+            {
+              "in": "loadCases",
+              "kind": "throw",
+              "line": 67
+            },
+            {
+              "in": "loadCases",
+              "kind": "throw",
+              "line": 73
+            }
+          ],
+          "hash": "0ff43b681610c4b487afb41db5f458ba29b25ebe44131049411f5383edff2ff6",
           "importsFiles": [
             "src/color.ts",
             "src/types.ts"
           ],
-          "path": "src/load.ts"
+          "path": "src/load.ts",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "branch": "errors.length > 0",
+                  "line": 61,
+                  "name": "useAsciiGlyphs",
+                  "target": {
+                    "file": "src/color.ts"
+                  }
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "loadCases"
+            }
+          ]
         },
         {
+          "entry": "evaluatePlanted",
+          "entryRule": 4,
           "exports": [
             "evaluatePlanted"
           ],
-          "hash": "e1de4ff0e92ba3862db728e691805fce7beac65eefeeaf9671c733b741372797",
+          "failurePaths": [
+            {
+              "in": "evaluatePlanted",
+              "kind": "catch",
+              "line": 124
+            },
+            {
+              "in": "evaluatePlanted",
+              "kind": "catch",
+              "line": 198
+            }
+          ],
+          "hash": "4ec51e4c60d7c92a8d1fcba57eb771b7fa973bdd99aa9040504062bf8a21e48e",
           "importsFiles": [
             "src/runner.ts",
             "src/types.ts"
           ],
-          "path": "src/planted.ts"
+          "path": "src/planted.ts",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "line": 197,
+                  "name": "runCase",
+                  "target": {
+                    "file": "src/runner.ts"
+                  }
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "evaluatePlanted"
+            }
+          ]
         },
         {
           "exports": [
             "computeRelationalPosture"
           ],
-          "hash": "29b9356956e9f0c67f487595cc6d9b999f41d0c7ccb6eddc77775526e59a7422",
+          "hash": "bc6ffca364079e82b861b3c9a2dacb4c5252d0e2c1e29c50934789cc52d8247f",
           "importsFiles": [
             "src/types.ts"
           ],
           "path": "src/relational.ts"
         },
         {
+          "entry": "writeReport",
+          "entryRule": 4,
           "exports": [
             "formatArtifact",
             "printSummary",
             "summaryBannerWidth",
             "writeReport"
           ],
-          "hash": "9e504bfde977e49dc4414c84d281fdcdb03221cdf70091dec3777eae31fdd1bd",
+          "failurePaths": [
+            {
+              "in": "writeReport",
+              "kind": "catch",
+              "line": 52
+            },
+            {
+              "in": "writeReport",
+              "kind": "catch",
+              "line": 55
+            },
+            {
+              "in": "writeReport",
+              "kind": "throw",
+              "line": 59
+            }
+          ],
+          "hash": "9a76e8a3f2ac59afd950f1291943d556043852c51ee1672ecace8032fb0fc0e5",
           "importsFiles": [
             "src/relational.ts",
             "src/runner.ts",
             "src/types.ts"
           ],
-          "path": "src/report.ts"
+          "path": "src/report.ts",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "line": 29,
+                  "name": "computeRelationalPosture",
+                  "target": {
+                    "file": "src/relational.ts"
+                  }
+                }
+              ],
+              "exported": false,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "postureForSerialize"
+            },
+            {
+              "calls": [
+                {
+                  "line": 29,
+                  "name": "computeRelationalPosture",
+                  "target": {
+                    "file": "src/relational.ts"
+                  },
+                  "via": "postureForSerialize"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "writeReport"
+            }
+          ]
         },
         {
+          "entry": "runCase",
+          "entryRule": 4,
           "exports": [
             "runAllCases",
             "runCase"
           ],
-          "hash": "0cca7da61caae730a495ebeab9ca4cba120446156e4543d0872c9c9cbc09cb93",
+          "failurePaths": [
+            {
+              "in": "runAllCases",
+              "kind": "throw",
+              "line": 554
+            }
+          ],
+          "hash": "2dd73fb92c1f76951a7f6da49732a416e231070f0a7387f62c211985a6fbb9c0",
           "importsFiles": [
             "src/checks/agency.ts",
             "src/checks/grounded_uptake.ts",
@@ -848,10 +1312,118 @@
             "src/relational.ts",
             "src/types.ts"
           ],
-          "path": "src/runner.ts"
+          "path": "src/runner.ts",
+          "sequences": [
+            {
+              "calls": [
+                {
+                  "line": 243,
+                  "name": "checkAgency",
+                  "target": {
+                    "file": "src/checks/agency.ts"
+                  }
+                },
+                {
+                  "line": 252,
+                  "name": "checkReassurance",
+                  "target": {
+                    "file": "src/checks/reassurance.ts"
+                  }
+                },
+                {
+                  "line": 261,
+                  "name": "checkPivot",
+                  "target": {
+                    "file": "src/checks/pivot.ts"
+                  }
+                },
+                {
+                  "line": 271,
+                  "name": "checkPerformativeEmpathy",
+                  "target": {
+                    "file": "src/checks/performative.ts"
+                  }
+                },
+                {
+                  "line": 284,
+                  "name": "checkGroundedUptake",
+                  "target": {
+                    "file": "src/checks/grounded_uptake.ts"
+                  }
+                },
+                {
+                  "line": 293,
+                  "name": "computeRelationalPosture",
+                  "target": {
+                    "file": "src/relational.ts"
+                  }
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "runCase"
+            },
+            {
+              "calls": [
+                {
+                  "line": 243,
+                  "name": "checkAgency",
+                  "target": {
+                    "file": "src/checks/agency.ts"
+                  },
+                  "via": "runCase"
+                },
+                {
+                  "line": 252,
+                  "name": "checkReassurance",
+                  "target": {
+                    "file": "src/checks/reassurance.ts"
+                  },
+                  "via": "runCase"
+                },
+                {
+                  "line": 261,
+                  "name": "checkPivot",
+                  "target": {
+                    "file": "src/checks/pivot.ts"
+                  },
+                  "via": "runCase"
+                },
+                {
+                  "line": 271,
+                  "name": "checkPerformativeEmpathy",
+                  "target": {
+                    "file": "src/checks/performative.ts"
+                  },
+                  "via": "runCase"
+                },
+                {
+                  "line": 284,
+                  "name": "checkGroundedUptake",
+                  "target": {
+                    "file": "src/checks/grounded_uptake.ts"
+                  },
+                  "via": "runCase"
+                },
+                {
+                  "line": 293,
+                  "name": "computeRelationalPosture",
+                  "target": {
+                    "file": "src/relational.ts"
+                  },
+                  "via": "runCase"
+                }
+              ],
+              "exported": true,
+              "invokedAtTopLevel": false,
+              "isDefaultExport": false,
+              "name": "runAllCases"
+            }
+          ]
         },
         {
-          "hash": "85f21365a9c13634fe45131ed3f7c30cef2db8d592beec3e1a2a02a26d1473a7",
+          "hash": "c1fed082ee4b930d861dc131412d9f2dd9672bcafe805abe69b94947a02024ab",
           "path": "src/types.ts"
         }
       ],
@@ -861,140 +1433,192 @@
       "importConfidence": "full",
       "name": "src",
       "origin": "mixed",
+      "outsidePlaces": [
+        {
+          "reads": 5,
+          "where": [
+            "caller"
+          ],
+          "writes": 3
+        },
+        {
+          "reads": 2,
+          "where": [
+            "cwd:data/"
+          ],
+          "writes": 0
+        },
+        {
+          "reads": 1,
+          "where": [
+            "cwd:schemas/"
+          ],
+          "writes": 0
+        }
+      ],
+      "outsideReads": 8,
+      "outsideWrites": 3,
       "role": "code",
+      "testRunners": [
+        "vitest"
+      ],
       "testedBy": 14,
       "unresolvedSites": 0
     },
     {
       "dynamicReads": 0,
+      "dynamicSpawns": 0,
+      "dynamicSpawnsInTests": 0,
       "dynamicWrites": 0,
-      "entryPoints": [
-        "tests/index.test.ts"
-      ],
+      "entryPoints": [],
       "externals": 0,
       "files": [
         {
-          "hash": "2f8c4cf490299c9247faaf2933efd70494cd1e36f046346a999f76a6147fe7b3",
+          "hash": "a48a2dcda722a4ccfdb0d868284518fa8eaa859977f0739b64fefb0d816854b5",
           "importsFiles": [
             "src/checks/agency.ts"
           ],
-          "path": "tests/checks.agency.test.ts"
+          "path": "tests/checks.agency.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "6ea3fc30396ff4c9c342c85b24fd2811ba4498d8efe15b7ac2787bf72320b92a",
+          "hash": "6d9aa758d7078c300285ca534be0b8a24039e39493b8af1079ff9176ef6bba8f",
           "importsFiles": [
             "src/checks/grounded_uptake.ts",
             "src/checks/performative.ts"
           ],
-          "path": "tests/checks.grounded_uptake.test.ts"
+          "path": "tests/checks.grounded_uptake.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "1731462db85d6e27ca82daba90c70dbb99e8b07fc5ecb113b487d1fb649d7ac3",
+          "hash": "5a15799a9afa21a4d631cab16ef48e9cf313abb66db265146aad194f6b39132a",
           "importsFiles": [
             "src/checks/performative.ts"
           ],
-          "path": "tests/checks.performative.test.ts"
+          "path": "tests/checks.performative.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "5a395cc44e3e1fbc480882c2da4e6317920b7129e600b7d27739560b4e34c1ff",
+          "hash": "982350d94d6966e9febc55f3dc9d513c6baf56c241a1de23a49b8f6c6d1d56d0",
           "importsFiles": [
             "src/checks/pivot.ts"
           ],
-          "path": "tests/checks.pivot.test.ts"
+          "path": "tests/checks.pivot.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "c4adc1d1ef2e763ce35d59cccbdb39ac3e1b78a7037f5b88b65b160bea6a346b",
+          "hash": "c97d4148095e7104a4462c8b01be5c59b0f06f7d19c6c4acaad472708c7a1fb1",
           "importsFiles": [
             "src/checks/reassurance.ts"
           ],
-          "path": "tests/checks.reassurance.test.ts"
+          "path": "tests/checks.reassurance.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "5fdbf530cb7ae9202b36b8006eda8ac01244969d79b79f04360df202fcd3c529",
+          "hash": "cbc284748fe68cdb1da2966e7c84abf7fb99288eb1eab71a425b759a3782eada",
           "importsFiles": [
             "src/checks/similarity.ts"
           ],
-          "path": "tests/checks.similarity.test.ts"
+          "path": "tests/checks.similarity.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "c955dc92244295c84943c7f021551b52b20004c3540bf9630eb9d94e3e0077d2",
+          "hash": "3bc8b40f94618d5cbf53fe077e1e0fdc7ed4f701294ff31bccbe03d071ad5f4e",
           "importsFiles": [
             "src/index.ts"
           ],
-          "path": "tests/exports.test.ts"
+          "path": "tests/exports.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "9925478bed3e96d5654dcd73aa9fb6d638024ef4bfd367530e908e343fd669f8",
+          "hash": "ff2ab66a74d46d70f3245667e167dc0b79f06f5810ba4010f381646ba8a60492",
           "importsFiles": [
             "src/load.ts",
             "src/runner.ts",
             "src/types.ts"
           ],
-          "path": "tests/fairness.test.ts"
+          "path": "tests/fairness.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "40f4b7573bbe297f21ec0e85368d5144ad6e73ff416598d519414d5ab10869ab",
+          "hash": "bf4ed7f05cd97acab1a02b32b252c794632e896f5ccc7a3127c1907331ef050f",
           "path": "tests/gold/report.fail.json"
         },
         {
-          "hash": "3158c593d7b8aaece181690c98b611cf215ce4f707388fb5a8bc1781c0eaed49",
+          "hash": "c542a8e4682ac0cdd59069e84b28493b4d0972301294c760601192be3736ff0b",
           "path": "tests/gold/report.good.json"
         },
         {
-          "hash": "b1be05ef92d640dced80e19b5b0b4ff1b959d98ef73a9fe3568f4799101bb996",
+          "hash": "cbd187e9f07437fcb1daeea8410d2453f18f1d3ab06e8aca10813e285a4eca95",
           "importsFiles": [
             "src/index.ts"
           ],
-          "path": "tests/index.test.ts"
+          "path": "tests/index.test.ts",
+          "spawns": [
+            "src/index.ts"
+          ],
+          "testFramework": "vitest"
         },
         {
-          "hash": "5e62e90b9af52f5ca4f73da1c80c8f94bf38cffbdade2458a1357c849a012060",
+          "hash": "f5236250fc66cb721d058b9d3d803c3e71b66ee22105d6c4cfa16b420c0a664d",
           "importsFiles": [
             "src/load.ts"
           ],
-          "path": "tests/load.test.ts"
+          "path": "tests/load.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "fbda8033364ad0db2a4d9dddb3b6ad3e2db98e1fc2902de9f8374914e9e4a882",
+          "hash": "303edcdfdd2e6b8833e02d792e5d5259a02784db660c602a138855570a5a005a",
           "importsFiles": [
             "src/load.ts",
             "src/runner.ts",
             "src/types.ts"
           ],
-          "path": "tests/planted-theater.test.ts"
+          "path": "tests/planted-theater.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "23355a3b7a9584fd97b5437c960b5fbb56b2b78b106b5fa20d101ed8b1c77b1c",
+          "hash": "1a1575f48375d383963b3433139e83695e2385fa2e8d6354bd7139774bc9ee1a",
+          "importOrder": [
+            "src/runner.ts",
+            "src/relational.ts",
+            "src/types.ts"
+          ],
           "importsFiles": [
             "src/relational.ts",
             "src/runner.ts",
             "src/types.ts"
           ],
-          "path": "tests/relational.test.ts"
+          "path": "tests/relational.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "a54c1eba324b632f1cc21f3176e1088ffe2cc15a3b2ebbeabbd34d6fd2daffe8",
-          "path": "tests/report-schema.test.ts"
+          "hash": "23d8f613372660aca9aa2586e8647aa0892493199a5006d426f6461941ea9757",
+          "path": "tests/report-schema.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "f896d5d09d477691c72952cf4e5ccb48056c1f3761c547726fe73ff4d5cd5fd7",
+          "hash": "e95c7e38372e1959bad0c129ba5255799f8de8bcacf9de8ac11833abbf0d801b",
           "importsFiles": [
             "src/report.ts",
             "src/types.ts"
           ],
-          "path": "tests/report.test.ts"
+          "path": "tests/report.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "5b05c66f60ba8b8e24682ac7a5fdbcd7f118450321630dfc847e374d601a32e5",
+          "hash": "f467a5efbd8b8593bc5d492f1dfe33d105589560ec0674b87d36b02d978ca849",
           "importsFiles": [
             "src/runner.ts",
             "src/types.ts"
           ],
-          "path": "tests/runner.test.ts"
+          "path": "tests/runner.test.ts",
+          "testFramework": "vitest"
         },
         {
-          "hash": "5bcc760c9e7b2cf18f261df200fd2617849c7bca3c252942fd5ce5a6c6a709aa",
-          "path": "tests/version-alignment.test.ts"
+          "hash": "271cc024bc1d0000de18678434d23f28f62a10ba1c18ab2659e9d74647d6e609",
+          "path": "tests/version-alignment.test.ts",
+          "testFramework": "vitest"
         }
       ],
       "globs": [
@@ -1004,50 +1628,140 @@
       "name": "tests",
       "origin": "authored",
       "role": "test",
+      "testRunners": [
+        "vitest"
+      ],
       "testedBy": 0,
       "unresolvedSites": 0
     }
   ],
   "doors": [
     {
+      "checksCount": 0,
       "commands": [
         {
+          "dir": "",
           "job": "test",
-          "step": "Atlas check",
-          "text": "npx --yes @dogfood-lab/atlas@1.14.0 check"
+          "programs": [
+            "npx"
+          ],
+          "step": "Atlas check"
         },
         {
+          "dir": "",
           "job": "test",
-          "step": "Install dependencies",
-          "text": "npm ci"
+          "programs": [
+            "npm"
+          ],
+          "step": "Install dependencies"
         },
         {
+          "dir": "",
           "job": "test",
-          "step": "Verify (test + build + eval + report schema)",
-          "text": "npm run verify"
+          "programs": [
+            "npm"
+          ],
+          "step": "Verify (test + build + eval + report schema)"
         },
         {
+          "dir": "",
           "job": "test",
-          "step": "Check eval_report schema gold instances",
-          "text": "npm run check:report-schema"
+          "programs": [
+            "npm"
+          ],
+          "step": "Check eval_report schema gold instances"
         },
         {
+          "dir": "",
           "job": "test",
-          "step": "Eval planted-RED pack",
-          "text": "npm run eval:planted"
+          "programs": [
+            "npm"
+          ],
+          "step": "Eval planted-RED pack"
         },
         {
+          "dir": "",
           "job": "lint",
-          "step": "Install dependencies",
-          "text": "npm ci"
+          "programs": [
+            "npm"
+          ],
+          "step": "Install dependencies"
         },
         {
+          "dir": "",
           "job": "lint",
-          "step": "Check TypeScript compilation",
-          "text": "npm run build"
+          "programs": [
+            "npm"
+          ],
+          "step": "Check TypeScript compilation"
         }
       ],
+      "elsewhere": [],
       "file": ".github/workflows/ci.yml",
+      "jobs": [
+        {
+          "basis": "declared",
+          "name": "test",
+          "runsOn": [
+            {
+              "labels": [
+                "ubuntu-latest"
+              ],
+              "platform": {
+                "cpu": "x64",
+                "libc": "glibc",
+                "os": "linux"
+              }
+            }
+          ],
+          "setup": [
+            {
+              "ranges": [
+                {
+                  "from": "22.x",
+                  "range": ">=22.0.0 <23.0.0-0"
+                },
+                {
+                  "from": "24.x",
+                  "range": ">=24.0.0 <25.0.0-0"
+                }
+              ],
+              "step": "Use Node.js ${{ matrix.node-version }}",
+              "uses": "actions/setup-node",
+              "version": "${{ matrix.node-version }}"
+            }
+          ]
+        },
+        {
+          "basis": "declared",
+          "name": "lint",
+          "runsOn": [
+            {
+              "labels": [
+                "ubuntu-latest"
+              ],
+              "platform": {
+                "cpu": "x64",
+                "libc": "glibc",
+                "os": "linux"
+              }
+            }
+          ],
+          "setup": [
+            {
+              "ranges": [
+                {
+                  "from": "22.x",
+                  "range": ">=22.0.0 <23.0.0-0"
+                }
+              ],
+              "step": "Use Node.js",
+              "uses": "actions/setup-node",
+              "version": "22.x"
+            }
+          ]
+        }
+      ],
       "landings": [],
       "mentions": [
         {
@@ -1091,35 +1805,47 @@
       "runs": [
         {
           "job": "test",
-          "path": "scripts/check-report-schema.mjs"
+          "path": "scripts/check-report-schema.mjs",
+          "runKind": "executes"
         },
         {
           "job": "test",
-          "path": "scripts/eval-planted.mjs"
+          "path": "scripts/eval-planted.mjs",
+          "runKind": "executes"
         },
         {
+          "built": true,
           "directory": true,
           "job": "lint",
           "matched": true,
           "path": "src/",
+          "runKind": "executes",
           "via": "tsc tsconfig.json"
         },
         {
+          "built": true,
           "directory": true,
           "job": "test",
           "matched": true,
           "path": "src/",
+          "runKind": "executes",
           "via": "tsc tsconfig.json"
+        },
+        {
+          "job": "test",
+          "path": "src/index.ts",
+          "runKind": "executes"
         },
         {
           "directory": true,
           "job": "test",
           "matched": true,
           "path": "tests/",
+          "runKind": "executes",
           "via": "vitest vitest.config.ts"
         }
       ],
-      "runsCount": 4,
+      "runsCount": 5,
       "secrets": [],
       "sends": {
         "deploysPages": false,
@@ -1132,6 +1858,19 @@
         "releases": false
       },
       "stages": [],
+      "tests": [
+        {
+          "config": "vitest.config.ts",
+          "files": 16,
+          "job": "test",
+          "runner": "vitest",
+          "step": "Verify (test + build + eval + report schema)",
+          "through": [
+            "npm run verify",
+            "npm test"
+          ]
+        }
+      ],
       "triggers": [
         {
           "branches": [
@@ -1171,19 +1910,77 @@
       "usesWorkflowToken": false
     },
     {
+      "checksCount": 0,
       "commands": [
         {
+          "dir": "site",
           "job": "build",
-          "step": "Install site dependencies",
-          "text": "npm ci --ignore-scripts"
+          "programs": [
+            "npm"
+          ],
+          "step": "Install site dependencies"
         },
         {
+          "dir": "site",
           "job": "build",
-          "step": "Build site",
-          "text": "npm run build"
+          "programs": [
+            "npm"
+          ],
+          "step": "Build site"
         }
       ],
+      "elsewhere": [],
       "file": ".github/workflows/pages.yml",
+      "jobs": [
+        {
+          "basis": "declared",
+          "name": "build",
+          "runsOn": [
+            {
+              "labels": [
+                "ubuntu-latest"
+              ],
+              "platform": {
+                "cpu": "x64",
+                "libc": "glibc",
+                "os": "linux"
+              }
+            }
+          ],
+          "setup": [
+            {
+              "ranges": [
+                {
+                  "from": "22",
+                  "range": ">=22.0.0 <23.0.0-0"
+                }
+              ],
+              "step": "1",
+              "uses": "actions/setup-node",
+              "version": "22"
+            }
+          ]
+        },
+        {
+          "basis": "declared",
+          "environment": {
+            "name": "github-pages"
+          },
+          "name": "deploy",
+          "runsOn": [
+            {
+              "labels": [
+                "ubuntu-latest"
+              ],
+              "platform": {
+                "cpu": "x64",
+                "libc": "glibc",
+                "os": "linux"
+              }
+            }
+          ]
+        }
+      ],
       "landings": [],
       "mentions": [],
       "name": "Deploy site to GitHub Pages",
@@ -1193,10 +1990,32 @@
         "pages:write"
       ],
       "pushes": false,
-      "reach": [],
+      "reach": [
+        {
+          "boundary": "site",
+          "depth": 0,
+          "files": 7
+        }
+      ],
       "readers": [],
-      "runs": [],
-      "runsCount": 0,
+      "runs": [
+        {
+          "job": "build",
+          "matched": true,
+          "path": "site/astro.config.mjs",
+          "runKind": "executes",
+          "via": "astro build"
+        },
+        {
+          "directory": true,
+          "job": "build",
+          "matched": true,
+          "path": "site/src/",
+          "runKind": "executes",
+          "via": "astro build"
+        }
+      ],
+      "runsCount": 2,
       "secrets": [],
       "sends": {
         "deploysPages": true,
@@ -1233,34 +2052,84 @@
       "usesWorkflowToken": false
     },
     {
+      "checksCount": 0,
       "commands": [
         {
+          "dir": "",
           "job": "publish",
-          "step": "Upgrade npm for Trusted Publishing",
-          "text": "npm install -g npm@latest"
+          "programs": [
+            "npm"
+          ],
+          "step": "Upgrade npm for Trusted Publishing"
         },
         {
+          "dir": "",
           "job": "publish",
-          "step": "Install dependencies",
-          "text": "if [ -f package-lock.json ]; then\n  npm ci --ignore-scripts\nelse\n  npm install --ignore-scripts\nfi\n"
+          "programs": [
+            "npm"
+          ],
+          "step": "Install dependencies"
         },
         {
+          "dir": "",
           "job": "publish",
-          "step": "Verify (test + build + eval)",
-          "text": "npm run verify"
+          "programs": [
+            "npm"
+          ],
+          "step": "Verify (test + build + eval)"
         },
         {
+          "dir": "",
           "job": "publish",
-          "step": "Assert package version matches GitHub release tag",
-          "text": "set -euo pipefail\nTAG=\"${RELEASE_TAG#v}\"\nPKG=\"$(node -p \"require('./package.json').version\")\"\nif [ \"$PKG\" != \"$TAG\" ]; then\n  echo \"::error::package.json version ($PKG) does not match release tag ($TAG)\"\n  exit 1\nfi\n"
+          "programs": [
+            "echo",
+            "node"
+          ],
+          "step": "Assert package version matches GitHub release tag"
         },
         {
+          "dir": "",
           "job": "publish",
-          "step": "Publish to npm (Trusted Publishing)",
-          "text": "set -euo pipefail\nPKG=\"$(node -p \"require('./package.json').version\")\"\nif [ \"${RELEASE_PRERELEASE}\" = \"true\" ] || [[ \"$PKG\" == *-* ]]; then\n  npm publish --provenance --access public --tag next\nelse\n  npm publish --provenance --access public\nfi\n"
+          "programs": [
+            "node",
+            "npm"
+          ],
+          "step": "Publish to npm (Trusted Publishing)"
         }
       ],
+      "elsewhere": [],
       "file": ".github/workflows/release.yml",
+      "jobs": [
+        {
+          "basis": "declared",
+          "name": "publish",
+          "runsOn": [
+            {
+              "labels": [
+                "ubuntu-latest"
+              ],
+              "platform": {
+                "cpu": "x64",
+                "libc": "glibc",
+                "os": "linux"
+              }
+            }
+          ],
+          "setup": [
+            {
+              "ranges": [
+                {
+                  "from": "22",
+                  "range": ">=22.0.0 <23.0.0-0"
+                }
+              ],
+              "step": "1",
+              "uses": "actions/setup-node",
+              "version": "22"
+            }
+          ]
+        }
+      ],
       "landings": [],
       "mentions": [
         {
@@ -1311,24 +2180,33 @@
       "runs": [
         {
           "job": "publish",
-          "path": "scripts/check-report-schema.mjs"
+          "path": "scripts/check-report-schema.mjs",
+          "runKind": "executes"
         },
         {
+          "built": true,
           "directory": true,
           "job": "publish",
           "matched": true,
           "path": "src/",
+          "runKind": "executes",
           "via": "tsc tsconfig.json"
+        },
+        {
+          "job": "publish",
+          "path": "src/index.ts",
+          "runKind": "executes"
         },
         {
           "directory": true,
           "job": "publish",
           "matched": true,
           "path": "tests/",
+          "runKind": "executes",
           "via": "vitest vitest.config.ts"
         }
       ],
-      "runsCount": 3,
+      "runsCount": 4,
       "secrets": [],
       "sends": {
         "deploysPages": false,
@@ -1336,6 +2214,13 @@
         "opensIssues": false,
         "opensIssuesOnFailure": false,
         "opensPullRequests": false,
+        "packages": [
+          {
+            "dir": "",
+            "name": "@mcptoolshop/synthesis",
+            "registry": "npm"
+          }
+        ],
         "publishes": true,
         "publishesTo": [
           "npm"
@@ -1343,6 +2228,19 @@
         "releases": false
       },
       "stages": [],
+      "tests": [
+        {
+          "config": "vitest.config.ts",
+          "files": 16,
+          "job": "publish",
+          "runner": "vitest",
+          "step": "Verify (test + build + eval)",
+          "through": [
+            "npm run verify",
+            "npm test"
+          ]
+        }
+      ],
       "triggers": [
         {
           "event": "release",
@@ -1359,6 +2257,91 @@
         "actions/setup-node"
       ],
       "usesWorkflowToken": false
+    },
+    {
+      "checksCount": 0,
+      "commands": [],
+      "elsewhere": [],
+      "entry": "src/index.ts",
+      "file": "package.json",
+      "kind": "package",
+      "landings": [],
+      "mentions": [],
+      "name": "@mcptoolshop/synthesis",
+      "permissions": [],
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 17
+        }
+      ],
+      "readers": [],
+      "runs": [
+        {
+          "path": "src/index.ts",
+          "runKind": "executes"
+        }
+      ],
+      "runsCount": 1,
+      "secrets": [],
+      "sends": {
+        "deploysPages": false,
+        "dispatchesTo": [],
+        "opensIssues": false,
+        "opensIssuesOnFailure": false,
+        "opensPullRequests": false,
+        "publishes": false,
+        "publishesTo": [],
+        "releases": false
+      },
+      "stages": [],
+      "triggers": [],
+      "uses": [],
+      "usesWorkflowToken": false
+    },
+    {
+      "checksCount": 0,
+      "commands": [],
+      "elsewhere": [],
+      "file": "package.json",
+      "kind": "command",
+      "landings": [],
+      "mentions": [],
+      "name": "synthesis",
+      "permissions": [],
+      "pushes": false,
+      "reach": [
+        {
+          "boundary": "src",
+          "depth": 0,
+          "files": 17
+        }
+      ],
+      "readers": [],
+      "runs": [
+        {
+          "path": "src/index.ts",
+          "runKind": "executes"
+        }
+      ],
+      "runsCount": 1,
+      "secrets": [],
+      "sends": {
+        "deploysPages": false,
+        "dispatchesTo": [],
+        "opensIssues": false,
+        "opensIssuesOnFailure": false,
+        "opensPullRequests": false,
+        "publishes": false,
+        "publishesTo": [],
+        "releases": false
+      },
+      "stages": [],
+      "triggers": [],
+      "uses": [],
+      "usesWorkflowToken": false
     }
   ],
   "edges": [
@@ -1374,17 +2357,19 @@
       "to": "src"
     }
   ],
+  "engine": "1.24.0",
   "generatedFrom": {
-    "commit": "0128f113ec07175b96609f2a54162c5e6bdc1a93",
+    "commit": "dd0e1de4318d08e23e8da2649dd27df6f7e93548",
     "tracked": 155
   },
   "landings": [
     {
       "readers": [
         {
-          "by": "package.json",
-          "call": "literal",
-          "confidence": "text"
+          "by": "tests/version-alignment.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "CHANGELOG.md",
@@ -1393,399 +2378,24 @@
     {
       "readers": [
         {
-          "by": "README.es.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.fr.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.hi.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.it.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.ja.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.pt-BR.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.zh.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "package.json",
-          "call": "literal",
-          "confidence": "text"
+          "by": "tests/fairness.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
-      "target": "LICENSE",
+      "target": "data/DATASHEET.md",
       "writers": []
     },
     {
       "readers": [
         {
-          "by": "README.fr.md",
-          "call": "literal",
-          "confidence": "text"
+          "by": ".github/workflows/ci.yml",
+          "confidence": "config"
         },
         {
-          "by": "README.hi.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.it.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.ja.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.pt-BR.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.zh.md",
-          "call": "literal",
-          "confidence": "text"
-        }
-      ],
-      "target": "README.es.md",
-      "writers": []
-    },
-    {
-      "readers": [
-        {
-          "by": "README.es.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.hi.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.it.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.ja.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.pt-BR.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.zh.md",
-          "call": "literal",
-          "confidence": "text"
-        }
-      ],
-      "target": "README.fr.md",
-      "writers": []
-    },
-    {
-      "readers": [
-        {
-          "by": "README.es.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.fr.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.it.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.ja.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.pt-BR.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.zh.md",
-          "call": "literal",
-          "confidence": "text"
-        }
-      ],
-      "target": "README.hi.md",
-      "writers": []
-    },
-    {
-      "readers": [
-        {
-          "by": "README.es.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.fr.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.hi.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.ja.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.pt-BR.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.zh.md",
-          "call": "literal",
-          "confidence": "text"
-        }
-      ],
-      "target": "README.it.md",
-      "writers": []
-    },
-    {
-      "readers": [
-        {
-          "by": "README.es.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.fr.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.hi.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.it.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.pt-BR.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.zh.md",
-          "call": "literal",
-          "confidence": "text"
-        }
-      ],
-      "target": "README.ja.md",
-      "writers": []
-    },
-    {
-      "readers": [
-        {
-          "by": "README.es.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.fr.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.hi.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.it.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.ja.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.pt-BR.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.zh.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "package.json",
-          "call": "literal",
-          "confidence": "text"
-        }
-      ],
-      "target": "README.md",
-      "writers": []
-    },
-    {
-      "readers": [
-        {
-          "by": "README.es.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.fr.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.hi.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.it.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.ja.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.zh.md",
-          "call": "literal",
-          "confidence": "text"
-        }
-      ],
-      "target": "README.pt-BR.md",
-      "writers": []
-    },
-    {
-      "readers": [
-        {
-          "by": "README.es.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.fr.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.hi.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.it.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.ja.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.md",
-          "call": "literal",
-          "confidence": "text"
-        },
-        {
-          "by": "README.pt-BR.md",
-          "call": "literal",
-          "confidence": "text"
-        }
-      ],
-      "target": "README.zh.md",
-      "writers": []
-    },
-    {
-      "readers": [
-        {
-          "by": ".github/workflows/ci.yml"
-        },
-        {
-          "by": ".github/workflows/release.yml"
+          "by": ".github/workflows/release.yml",
+          "confidence": "config"
         },
         {
           "by": "scripts/example-run-fixture.mjs",
@@ -1793,9 +2403,16 @@
           "confidence": "ast"
         },
         {
-          "by": "src/index.ts",
-          "call": "literal",
-          "confidence": "ast"
+          "by": "tests/fairness.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/planted-theater.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "data/evals.jsonl",
@@ -1804,6 +2421,24 @@
     {
       "readers": [
         {
+          "by": "tests/fairness.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/planted-theater.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
+        }
+      ],
+      "target": "data/fairness.jsonl",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
           "by": "scripts/eval-planted.mjs",
           "call": "existsSync",
           "confidence": "ast"
@@ -1814,9 +2449,16 @@
           "confidence": "ast"
         },
         {
-          "by": "src/planted.ts",
+          "by": "tests/planted-theater.test.ts",
           "call": "literal",
-          "confidence": "ast"
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/planted-theater.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "data/planted-theater.jsonl",
@@ -1825,7 +2467,8 @@
     {
       "readers": [
         {
-          "by": ".github/workflows/release.yml"
+          "by": ".github/workflows/release.yml",
+          "confidence": "config"
         }
       ],
       "target": "package-lock.json",
@@ -1834,12 +2477,8 @@
     {
       "readers": [
         {
-          "by": ".github/workflows/release.yml"
-        },
-        {
-          "by": "CHANGELOG.md",
-          "call": "literal",
-          "confidence": "text"
+          "by": ".github/workflows/release.yml",
+          "confidence": "config"
         },
         {
           "by": "package-lock.json",
@@ -1847,9 +2486,10 @@
           "confidence": "text"
         },
         {
-          "by": "package.json",
-          "call": "literal",
-          "confidence": "text"
+          "by": "tests/version-alignment.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "package.json",
@@ -1858,10 +2498,12 @@
     {
       "readers": [
         {
-          "by": ".github/workflows/ci.yml"
+          "by": ".github/workflows/ci.yml",
+          "confidence": "config"
         },
         {
-          "by": ".github/workflows/release.yml"
+          "by": ".github/workflows/release.yml",
+          "confidence": "config"
         },
         {
           "by": "scripts/eval-planted.mjs",
@@ -1879,9 +2521,40 @@
           "confidence": "ast"
         },
         {
-          "by": "src/index.ts",
+          "by": "tests/fairness.test.ts",
           "call": "literal",
-          "confidence": "ast"
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/index.test.ts",
+          "call": "existsSync",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/index.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/load.test.ts",
+          "call": "existsSync",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/load.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/planted-theater.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "schemas/eval_case.schema.json",
@@ -1891,8 +2564,30 @@
       "readers": [
         {
           "by": "scripts/check-report-schema.mjs",
+          "call": "existsSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "scripts/check-report-schema.mjs",
           "call": "literal",
           "confidence": "ast"
+        },
+        {
+          "by": "scripts/check-report-schema.mjs",
+          "call": "readFileSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "tests/report-schema.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/report-schema.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "schemas/eval_report.schema.json",
@@ -1902,8 +2597,30 @@
       "readers": [
         {
           "by": "scripts/check-report-schema.mjs",
+          "call": "existsSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "scripts/check-report-schema.mjs",
           "call": "literal",
           "confidence": "ast"
+        },
+        {
+          "by": "scripts/check-report-schema.mjs",
+          "call": "readFileSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "tests/report-schema.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/report-schema.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "schemas/report.fail.json",
@@ -1913,15 +2630,65 @@
       "readers": [
         {
           "by": "scripts/check-report-schema.mjs",
+          "call": "existsSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "scripts/check-report-schema.mjs",
           "call": "literal",
           "confidence": "ast"
+        },
+        {
+          "by": "scripts/check-report-schema.mjs",
+          "call": "readFileSync",
+          "confidence": "ast"
+        },
+        {
+          "by": "tests/report-schema.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/report-schema.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "schemas/report.good.json",
       "writers": []
     },
     {
-      "readers": [],
+      "readers": [
+        {
+          "by": "site/astro.config.mjs",
+          "call": "content-collection",
+          "confidence": "ast"
+        }
+      ],
+      "target": "site/src/content/docs",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "site/astro.config.mjs",
+          "call": "autogenerate",
+          "confidence": "ast"
+        }
+      ],
+      "target": "site/src/content/docs/handbook",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "src/checks/performative.ts",
+          "call": "import",
+          "confidence": "ast"
+        }
+      ],
       "target": "src/checks/lexicons/concreteness.ts",
       "writers": [
         {
@@ -1933,9 +2700,16 @@
     {
       "readers": [
         {
-          "by": "src/index.ts",
+          "by": "tests/index.test.ts",
+          "call": "existsSync",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/index.test.ts",
           "call": "literal",
-          "confidence": "ast"
+          "confidence": "ast",
+          "fromTests": true
         }
       ],
       "target": "src/index.ts",
@@ -1944,10 +2718,48 @@
     {
       "readers": [
         {
-          "by": ".github/workflows/ci.yml"
+          "by": "tests/report-schema.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
         },
         {
-          "by": ".github/workflows/release.yml"
+          "by": "tests/report-schema.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
+        }
+      ],
+      "target": "tests/gold/report.fail.json",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": "tests/report-schema.test.ts",
+          "call": "literal",
+          "confidence": "ast",
+          "fromTests": true
+        },
+        {
+          "by": "tests/report-schema.test.ts",
+          "call": "readFileSync",
+          "confidence": "ast",
+          "fromTests": true
+        }
+      ],
+      "target": "tests/gold/report.good.json",
+      "writers": []
+    },
+    {
+      "readers": [
+        {
+          "by": ".github/workflows/ci.yml",
+          "confidence": "config"
+        },
+        {
+          "by": ".github/workflows/release.yml",
+          "confidence": "config"
         }
       ],
       "target": "tsconfig.json",
