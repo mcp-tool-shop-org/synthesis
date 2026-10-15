@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.3.3] - 2026-10-15
+
+### Security
+
+- **Dependency updates; no code changed.** `npm audit fix` within the declared ranges, plus `vitest` and `@vitest/ui` raised to `^3.2.7`: `fast-uri` 3.1.8 (a runtime dependency, eight advisories), `postcss` 8.5.30, `nanoid` 3.3.20, `fflate` 0.8.3, `source-map-js` 1.2.2, and `vitest` 3.2.7 (a critical dev-time advisory), which also moves `vite` to 7.3.7 and `esbuild` to 0.28.2. Two moderate dev-only advisories in `vitest` and `@vitest/mocker` (a path traversal through the mock redirect) stay open: their fix, 4.1.11, needs vitest 4, which cannot be installed in this tree today (npm fails with an `edgesOut` error), and nothing in the published package depends on it.
+
 ## [1.3.2] - 2026-09-15
 
 Documentation-only release. **No checker logic changed — behavior is byte-identical to 1.3.1.**
