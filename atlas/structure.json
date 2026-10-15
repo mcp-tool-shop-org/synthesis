@@ -414,7 +414,7 @@
           "path": ".polyglot-cache.json"
         },
         {
-          "hash": "a2b1d213d10653196e22692f6b49f63c5ff0de4deb1905824735a7d1f4b84595",
+          "hash": "71bc7b8747a8c869409568cfbcd51bfa0d18ab7a53a00e3add7033d09118c5ee",
           "path": "CHANGELOG.md"
         },
         {
@@ -486,11 +486,11 @@
           "path": "logo.png"
         },
         {
-          "hash": "16edcd5eddbf34a08d061eaa527eaff21a4b074b11812cf83670264167647f26",
+          "hash": "dc8c1122cc0d832f5fa50df0c00960e587d7f8247e1de64e3fe0c3a1346bf6d0",
           "path": "package-lock.json"
         },
         {
-          "hash": "5dfe5b65c78905e03322c88b142747a18f83f7e4e8efd6c63e4b9bab2dbfb636",
+          "hash": "d729f070e03a255158c3031e751c878dc9b8e1c85cb47e952c0de154aac45f1d",
           "path": "package.json"
         },
         {
@@ -2359,7 +2359,7 @@
   ],
   "engine": "1.24.0",
   "generatedFrom": {
-    "commit": "6abbaaef9b6b19a104064a571e08d3d8cb743035",
+    "commit": "50a6c3554b40c71f458471bbc4617c4fa08078fd",
     "tracked": 155
   },
   "landings": [
