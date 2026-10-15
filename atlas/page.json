@@ -43,7 +43,7 @@
   "changes": {
     "fileCounts": {
       "added": 0,
-      "changed": 4,
+      "changed": 2,
       "moved": 0,
       "parts": 2,
       "removed": 0
@@ -51,13 +51,13 @@
     "items": [
       {
         "kind": "counts",
-        "sentence": "Nothing structural changed since 2026-09-30; 4 files changed content.",
+        "sentence": "Nothing structural changed since 2026-10-15; 2 files changed content.",
         "subjects": []
       }
     ],
     "since": {
-      "commit": "dd0e1de4318d08e23e8da2649dd27df6f7e93548",
-      "generatedAt": "2026-09-30T20:13:54.750Z"
+      "commit": "50a6c3554b40c71f458471bbc4617c4fa08078fd",
+      "generatedAt": "2026-10-15T03:08:26.011Z"
     },
     "unchanged": true
   },
@@ -109,11 +109,11 @@
     }
   ],
   "changesTogetherNote": [
-    "Confidence is low: fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions.",
-    "Window: 180 days; a pair counts from 3 shared commits, since the window holds fewer than 30 qualifying commits."
+    "Confidence is low: fewer than 25 source files reach 10 revisions in the window.",
+    "Window: 180 days; a pair counts from 3 shared commits, since 1 source file reaches 10 revisions; the floor rises to 10 when 25 do."
   ],
   "changesTogetherWithTests": 0,
-  "commit": "6abbaaef9b6b19a104064a571e08d3d8cb743035",
+  "commit": "481a0bc8db768e89cefacd60799e354663d7dcc3",
   "defaultBranch": "main",
   "derived": "12 parts, mostly Markdown (83 files) and JSON data (16); code in TypeScript (36), JavaScript (6), Astro (3) and CSS (2). Work enters through 5 doors; CI and Release (npm via Trusted Publishing) each reach 3 parts, and CI is followed because a pull request goes through it. It publishes to npm. It deploys a site to GitHub Pages. People run synthesis. People import @mcptoolshop/synthesis.",
   "doors": [
@@ -315,12 +315,12 @@
       ]
     }
   ],
-  "generatedAt": "2026-10-15T02:27:24.255Z",
+  "generatedAt": "2026-10-15T03:21:19.368Z",
   "limits": [
     "1 import site names a path outside this repository, so what it loads is not followed.",
     "3 writes and 6 reads go to a path their caller passes, not to this repository.",
     "3 reads go to the directory the command is run in (data/ and schemas/), not to this repository.",
-    "Statistics confidence is low: fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions."
+    "Statistics confidence is low: fewer than 25 source files reach 10 revisions in the window."
   ],
   "mainDoor": ".github/workflows/ci.yml",
   "partLabels": {

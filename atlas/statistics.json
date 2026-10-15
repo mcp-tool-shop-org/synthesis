@@ -499,8 +499,8 @@
         "path": ".polyglot-cache.json"
       },
       {
-        "commits": 5,
-        "lines": 225,
+        "commits": 7,
+        "lines": 237,
         "path": "CHANGELOG.md"
       },
       {
@@ -529,28 +529,28 @@
         "path": "LICENSE"
       },
       {
-        "commits": 6,
-        "lines": 812,
+        "commits": 5,
+        "lines": 634,
         "path": "README.es.md"
       },
       {
-        "commits": 6,
-        "lines": 984,
+        "commits": 5,
+        "lines": 798,
         "path": "README.fr.md"
       },
       {
-        "commits": 6,
-        "lines": 804,
+        "commits": 5,
+        "lines": 628,
         "path": "README.hi.md"
       },
       {
-        "commits": 6,
-        "lines": 946,
+        "commits": 5,
+        "lines": 762,
         "path": "README.it.md"
       },
       {
-        "commits": 6,
-        "lines": 976,
+        "commits": 5,
+        "lines": 786,
         "path": "README.ja.md"
       },
       {
@@ -559,13 +559,13 @@
         "path": "README.md"
       },
       {
-        "commits": 6,
-        "lines": 836,
+        "commits": 5,
+        "lines": 648,
         "path": "README.pt-BR.md"
       },
       {
-        "commits": 6,
-        "lines": 824,
+        "commits": 5,
+        "lines": 642,
         "path": "README.zh.md"
       },
       {
@@ -584,13 +584,13 @@
         "path": "SHIP_GATE.md"
       },
       {
-        "commits": 2,
+        "commits": 1,
         "lines": 0,
         "path": "assets/logo-synthesis.png"
       },
       {
-        "commits": 4,
-        "lines": 276,
+        "commits": 6,
+        "lines": 308,
         "path": "atlas/README.md"
       },
       {
@@ -599,18 +599,18 @@
         "path": "atlas/boundaries.yaml"
       },
       {
-        "commits": 4,
-        "lines": 1264,
+        "commits": 6,
+        "lines": 1380,
         "path": "atlas/page.json"
       },
       {
-        "commits": 4,
-        "lines": 3284,
+        "commits": 6,
+        "lines": 4159,
         "path": "atlas/statistics.json"
       },
       {
-        "commits": 4,
-        "lines": 7888,
+        "commits": 6,
+        "lines": 7911,
         "path": "atlas/structure.json"
       },
       {
@@ -649,18 +649,18 @@
         "path": "docs/study-grounding.md"
       },
       {
-        "commits": 2,
+        "commits": 1,
         "lines": 0,
         "path": "logo.png"
       },
       {
-        "commits": 3,
-        "lines": 2291,
+        "commits": 5,
+        "lines": 4499,
         "path": "package-lock.json"
       },
       {
-        "commits": 8,
-        "lines": 89,
+        "commits": 10,
+        "lines": 101,
         "path": "package.json"
       },
       {
@@ -1007,152 +1007,33 @@
   },
   "confidence": {
     "level": "low",
-    "reason": "fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions"
+    "reason": "fewer than 25 source files reach 10 revisions in the window"
   },
-  "generatedAt": "2026-10-15T02:27:24.255Z",
+  "generatedAt": "2026-10-15T03:21:19.368Z",
   "generatedFrom": {
-    "commit": "6abbaaef9b6b19a104064a571e08d3d8cb743035"
+    "commit": "481a0bc8db768e89cefacd60799e354663d7dcc3"
   },
   "pairs": [
     {
-      "a": "README.es.md",
-      "b": "README.fr.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
+      "a": "CHANGELOG.md",
+      "b": "README.md",
+      "either": 7,
+      "shared": 4,
+      "strength": 0.571429
     },
     {
-      "a": "README.es.md",
-      "b": "README.hi.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
+      "a": "CHANGELOG.md",
+      "b": "SCORECARD.md",
+      "either": 7,
+      "shared": 4,
+      "strength": 0.571429
     },
     {
-      "a": "README.es.md",
-      "b": "README.it.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.es.md",
-      "b": "README.ja.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.es.md",
-      "b": "README.pt-BR.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.es.md",
-      "b": "README.zh.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.fr.md",
-      "b": "README.hi.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.fr.md",
-      "b": "README.it.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.fr.md",
-      "b": "README.ja.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.fr.md",
-      "b": "README.pt-BR.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.fr.md",
-      "b": "README.zh.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.hi.md",
-      "b": "README.it.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.hi.md",
-      "b": "README.ja.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.hi.md",
-      "b": "README.pt-BR.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.hi.md",
-      "b": "README.zh.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.it.md",
-      "b": "README.ja.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.it.md",
-      "b": "README.pt-BR.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.it.md",
-      "b": "README.zh.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.ja.md",
-      "b": "README.pt-BR.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "README.ja.md",
-      "b": "README.zh.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
+      "a": "CHANGELOG.md",
+      "b": "package.json",
+      "either": 9,
+      "shared": 6,
+      "strength": 0.666667
     },
     {
       "a": "README.md",
@@ -1160,27 +1041,6 @@
       "either": 5,
       "shared": 5,
       "strength": 1
-    },
-    {
-      "a": "README.md",
-      "b": "package.json",
-      "either": 8,
-      "shared": 4,
-      "strength": 0.5
-    },
-    {
-      "a": "README.pt-BR.md",
-      "b": "README.zh.md",
-      "either": 5,
-      "shared": 5,
-      "strength": 1
-    },
-    {
-      "a": "SCORECARD.md",
-      "b": "package.json",
-      "either": 8,
-      "shared": 4,
-      "strength": 0.5
     },
     {
       "a": "src/report.ts",
@@ -1213,17 +1073,17 @@
     "fallenShared": 3,
     "floor": "fallen",
     "floorHeld": false,
-    "floorTrigger": "both",
-    "headDate": "2026-10-01T13:35:42-07:00",
+    "floorTrigger": "revision-depth",
+    "headDate": "2026-10-14T23:08:28-04:00",
     "inScopeFiles": 160,
     "pinnedStart": null,
     "priorFloor": "fallen",
-    "qualifyingCommits": 29,
+    "qualifyingCommits": 30,
     "qualifyingMinimum": 30,
     "revisions": 5,
     "shared": 10,
     "sharedFloorUsed": 3,
-    "since": "2026-04-04T20:35:42.000Z",
+    "since": "2026-04-18T03:08:28.000Z",
     "sourceExtensions": [
       ".js",
       ".mjs",
