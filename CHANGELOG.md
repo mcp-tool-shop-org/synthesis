@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Security
 
-- **Dev-only dependency update; no code changed and nothing in the published package moves.** `vitest` and `@vitest/ui` are raised from `^3.2.7` to `^4.1.11`, which clears the last two moderate advisories in `vitest` and `@vitest/mocker` (a path traversal through the mock redirect) that 1.3.3 had to leave open; npm 11 installs this tree where npm 10 failed with an `edgesOut` error. `vite` moves to 8.3.4. `npm audit` now reports 0 vulnerabilities; build and the 198 tests pass on vitest 4.1.11.
+- **Dev-only dependency update; no code changed and nothing in the published package moves.** `vitest` and `@vitest/ui` are raised from `^3.2.7` to `^4.1.11`, which clears the last two moderate advisories in `vitest` and `@vitest/mocker` (a path traversal through the mock redirect) that 1.3.3 had to leave open; npm 11 installs this tree where npm 10 failed with an `edgesOut` error. The documentation site's lockfile (`site/`, not part of the published package) is updated too: `sharp` 0.35.5, `source-map-js` 1.2.2, `http-cache-semantics` 4.3.0 and `smol-toml` 1.9.1. `vite` moves to 8.3.4. `npm audit` now reports 0 vulnerabilities; build and the 198 tests pass on vitest 4.1.11.
 
 ## [1.3.3] - 2026-10-15
 

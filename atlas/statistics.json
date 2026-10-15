@@ -499,8 +499,8 @@
         "path": ".polyglot-cache.json"
       },
       {
-        "commits": 6,
-        "lines": 231,
+        "commits": 7,
+        "lines": 237,
         "path": "CHANGELOG.md"
       },
       {
@@ -589,8 +589,8 @@
         "path": "assets/logo-synthesis.png"
       },
       {
-        "commits": 5,
-        "lines": 302,
+        "commits": 6,
+        "lines": 308,
         "path": "atlas/README.md"
       },
       {
@@ -599,18 +599,18 @@
         "path": "atlas/boundaries.yaml"
       },
       {
-        "commits": 5,
-        "lines": 1366,
+        "commits": 6,
+        "lines": 1380,
         "path": "atlas/page.json"
       },
       {
-        "commits": 5,
-        "lines": 3923,
+        "commits": 6,
+        "lines": 4159,
         "path": "atlas/statistics.json"
       },
       {
-        "commits": 5,
-        "lines": 7903,
+        "commits": 6,
+        "lines": 7911,
         "path": "atlas/structure.json"
       },
       {
@@ -654,13 +654,13 @@
         "path": "logo.png"
       },
       {
-        "commits": 4,
-        "lines": 3398,
+        "commits": 5,
+        "lines": 4499,
         "path": "package-lock.json"
       },
       {
-        "commits": 9,
-        "lines": 95,
+        "commits": 10,
+        "lines": 101,
         "path": "package.json"
       },
       {
@@ -1007,33 +1007,33 @@
   },
   "confidence": {
     "level": "low",
-    "reason": "fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions"
+    "reason": "fewer than 25 source files reach 10 revisions in the window"
   },
-  "generatedAt": "2026-10-15T03:08:26.011Z",
+  "generatedAt": "2026-10-15T03:21:19.368Z",
   "generatedFrom": {
-    "commit": "50a6c3554b40c71f458471bbc4617c4fa08078fd"
+    "commit": "481a0bc8db768e89cefacd60799e354663d7dcc3"
   },
   "pairs": [
     {
       "a": "CHANGELOG.md",
       "b": "README.md",
-      "either": 6,
+      "either": 7,
       "shared": 4,
-      "strength": 0.666667
+      "strength": 0.571429
     },
     {
       "a": "CHANGELOG.md",
       "b": "SCORECARD.md",
-      "either": 6,
+      "either": 7,
       "shared": 4,
-      "strength": 0.666667
+      "strength": 0.571429
     },
     {
       "a": "CHANGELOG.md",
       "b": "package.json",
-      "either": 8,
-      "shared": 5,
-      "strength": 0.625
+      "either": 9,
+      "shared": 6,
+      "strength": 0.666667
     },
     {
       "a": "README.md",
@@ -1073,17 +1073,17 @@
     "fallenShared": 3,
     "floor": "fallen",
     "floorHeld": false,
-    "floorTrigger": "both",
-    "headDate": "2026-10-14T19:35:27-07:00",
+    "floorTrigger": "revision-depth",
+    "headDate": "2026-10-14T23:08:28-04:00",
     "inScopeFiles": 160,
     "pinnedStart": null,
     "priorFloor": "fallen",
-    "qualifyingCommits": 29,
+    "qualifyingCommits": 30,
     "qualifyingMinimum": 30,
     "revisions": 5,
     "shared": 10,
     "sharedFloorUsed": 3,
-    "since": "2026-04-18T02:35:27.000Z",
+    "since": "2026-04-18T03:08:28.000Z",
     "sourceExtensions": [
       ".js",
       ".mjs",

@@ -414,7 +414,7 @@
           "path": ".polyglot-cache.json"
         },
         {
-          "hash": "71bc7b8747a8c869409568cfbcd51bfa0d18ab7a53a00e3add7033d09118c5ee",
+          "hash": "9bfc71cd317127f5302568cec60bfa362a0a33c9982fe715935c89bec4c32518",
           "path": "CHANGELOG.md"
         },
         {
@@ -640,7 +640,7 @@
           "path": "site/astro.config.mjs"
         },
         {
-          "hash": "a129dad7cadc4e48914a605be507377d05367605fd0e36b766b6718fffdf3866",
+          "hash": "028dd214fa31c0ab88afae044d7933fa08f11094b9b8759d4c60321be94e257a",
           "path": "site/package-lock.json"
         },
         {
@@ -2359,7 +2359,7 @@
   ],
   "engine": "1.24.0",
   "generatedFrom": {
-    "commit": "50a6c3554b40c71f458471bbc4617c4fa08078fd",
+    "commit": "481a0bc8db768e89cefacd60799e354663d7dcc3",
     "tracked": 155
   },
   "landings": [

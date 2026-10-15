@@ -1,14 +1,14 @@
 # synthesis: how it works
 
-Mapped at 2026-10-15 from commit 50a6c35 by Atlas 1.24.0.
+Mapped at 2026-10-15 from commit 481a0bc by Atlas 1.24.0.
 
 ## What this is
 
 12 parts, mostly Markdown (83 files) and JSON data (16); code in TypeScript (36), JavaScript (6), Astro (3) and CSS (2). Work enters through 5 doors; CI and Release (npm via Trusted Publishing) each reach 3 parts, and CI is followed because a pull request goes through it. It publishes to npm. It deploys a site to GitHub Pages. People run synthesis. People import @mcptoolshop/synthesis.
 
-## What changed since 2026-10-15 (6abbaae)
+## What changed since 2026-10-15 (50a6c35)
 
-Nothing structural changed since 2026-10-15; 3 files changed content.
+Nothing structural changed since 2026-10-15; 2 files changed content.
 
 ## What comes in
 
@@ -52,9 +52,9 @@ CI writes nothing this map can see.
 - **src/report.ts** and **src/types.ts** changed together in 8 of 12 commits, inside the src part.
 - **src/runner.ts** and **src/types.ts** changed together in 6 of 12 commits, inside the src part.
 
-Confidence is low: fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions.
+Confidence is low: fewer than 25 source files reach 10 revisions in the window.
 
-Window: 180 days; a pair counts from 3 shared commits, since the window holds fewer than 30 qualifying commits.
+Window: 180 days; a pair counts from 3 shared commits, since 1 source file reaches 10 revisions; the floor rises to 10 when 25 do.
 
 ## What no test touches
 
@@ -87,6 +87,6 @@ Read those in order to follow one pull request end to end.
 - 1 import site names a path outside this repository, so what it loads is not followed.
 - 3 writes and 6 reads go to a path their caller passes, not to this repository.
 - 3 reads go to the directory the command is run in (data/ and schemas/), not to this repository.
-- Statistics confidence is low: fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions.
+- Statistics confidence is low: fewer than 25 source files reach 10 revisions in the window.
 
 Regenerate with `npx --yes @dogfood-lab/atlas map`.
