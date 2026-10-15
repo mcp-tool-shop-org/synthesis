@@ -1,22 +1,14 @@
 # synthesis: how it works
 
-Mapped at 2026-09-30 from commit dd0e1de by Atlas 1.24.0.
+Mapped at 2026-10-15 from commit 6abbaae by Atlas 1.24.0.
 
 ## What this is
 
 12 parts, mostly Markdown (83 files) and JSON data (16); code in TypeScript (36), JavaScript (6), Astro (3) and CSS (2). Work enters through 5 doors; CI and Release (npm via Trusted Publishing) each reach 3 parts, and CI is followed because a pull request goes through it. It publishes to npm. It deploys a site to GitHub Pages. People run synthesis. People import @mcptoolshop/synthesis.
 
-## What changed since 2026-09-23 (0128f11)
+## What changed since 2026-09-30 (dd0e1de)
 
-- CI now also runs src/index.ts.
-- Deploy site to GitHub Pages now also runs site/astro.config.mjs and site/src/.
-- Release (npm via Trusted Publishing) now also runs src/index.ts.
-- And 2 more changes to doors.
-- CHANGELOG.md is now also read by tests/version-alignment.test.ts.
-- data/DATASHEET.md is now read by tests/fairness.test.ts.
-- data/evals.jsonl is now also read by tests/fairness.test.ts and tests/planted-theater.test.ts.
-- And 13 more new writers and readers of places.
-- 153 files changed content, across 11 parts.
+Nothing structural changed since 2026-09-30; 4 files changed content.
 
 ## What comes in
 
@@ -56,13 +48,13 @@ CI writes nothing this map can see.
 
 ## What tends to change together
 
-- **src/report.ts** and **src/runner.ts** changed together in 8 of 10 commits, inside the src part.
-- **src/report.ts** and **src/types.ts** changed together in 9 of 15 commits, inside the src part.
-- **src/checks/performative.ts** and **tests/checks.performative.test.ts** changed together in 6 of 10 commits, and the tests part imports the src part.
+- **src/report.ts** and **src/runner.ts** changed together in 6 of 8 commits, inside the src part.
+- **src/report.ts** and **src/types.ts** changed together in 8 of 12 commits, inside the src part.
+- **src/runner.ts** and **src/types.ts** changed together in 6 of 12 commits, inside the src part.
 
-Confidence is low: fewer than 25 source files reach 10 revisions in the window.
+Confidence is low: fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions.
 
-Window: 180 days; a pair counts from 3 shared commits, since 3 source files reach 10 revisions; the floor rises to 10 when 25 do.
+Window: 180 days; a pair counts from 3 shared commits, since the window holds fewer than 30 qualifying commits.
 
 ## What no test touches
 
@@ -95,6 +87,6 @@ Read those in order to follow one pull request end to end.
 - 1 import site names a path outside this repository, so what it loads is not followed.
 - 3 writes and 6 reads go to a path their caller passes, not to this repository.
 - 3 reads go to the directory the command is run in (data/ and schemas/), not to this repository.
-- Statistics confidence is low: fewer than 25 source files reach 10 revisions in the window.
+- Statistics confidence is low: fewer than 30 qualifying commits in the window, and fewer than 25 source files reach 10 revisions.
 
 Regenerate with `npx --yes @dogfood-lab/atlas map`.

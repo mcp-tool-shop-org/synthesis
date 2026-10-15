@@ -414,7 +414,7 @@
           "path": ".polyglot-cache.json"
         },
         {
-          "hash": "b33949333351c7ab60450df472c5c81f71647ffed075971023effdf95b274766",
+          "hash": "a2b1d213d10653196e22692f6b49f63c5ff0de4deb1905824735a7d1f4b84595",
           "path": "CHANGELOG.md"
         },
         {
@@ -486,11 +486,11 @@
           "path": "logo.png"
         },
         {
-          "hash": "261492db50d725bb61c1e6dda849652b300bebbee51b7ac389f6b6469cb08b4f",
+          "hash": "16edcd5eddbf34a08d061eaa527eaff21a4b074b11812cf83670264167647f26",
           "path": "package-lock.json"
         },
         {
-          "hash": "91d244829d764cb5c8dc398136ec1f93a3316759c8d4d794ba446fa93dee45e3",
+          "hash": "5dfe5b65c78905e03322c88b142747a18f83f7e4e8efd6c63e4b9bab2dbfb636",
           "path": "package.json"
         },
         {
@@ -640,7 +640,7 @@
           "path": "site/astro.config.mjs"
         },
         {
-          "hash": "d7d5a16e8c119240f1d942fbe033ace3f58361a3822b9b7a92621a0edf4bd772",
+          "hash": "a129dad7cadc4e48914a605be507377d05367605fd0e36b766b6718fffdf3866",
           "path": "site/package-lock.json"
         },
         {
@@ -2359,7 +2359,7 @@
   ],
   "engine": "1.24.0",
   "generatedFrom": {
-    "commit": "dd0e1de4318d08e23e8da2649dd27df6f7e93548",
+    "commit": "6abbaaef9b6b19a104064a571e08d3d8cb743035",
     "tracked": 155
   },
   "landings": [
@@ -2479,11 +2479,6 @@
         {
           "by": ".github/workflows/release.yml",
           "confidence": "config"
-        },
-        {
-          "by": "package-lock.json",
-          "call": "literal",
-          "confidence": "text"
         },
         {
           "by": "tests/version-alignment.test.ts",
