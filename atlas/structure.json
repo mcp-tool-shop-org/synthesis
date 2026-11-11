@@ -244,7 +244,7 @@
           "path": ".github/dependabot.yml"
         },
         {
-          "hash": "caf6daf3d49a1cfda12645423635c0b4f7fa4cb1c606a4ff3d7c3c2e5cac4256",
+          "hash": "4c83467c3311824ccc9c37a88f776be200ec6e3acb921209705c372625c03f2b",
           "path": ".github/workflows/ci.yml"
         },
         {
@@ -486,11 +486,11 @@
           "path": "logo.png"
         },
         {
-          "hash": "dc8c1122cc0d832f5fa50df0c00960e587d7f8247e1de64e3fe0c3a1346bf6d0",
+          "hash": "a36e49c299cd11531475c280fcaa75e375164c38c06e99220e24ebe75c8483ea",
           "path": "package-lock.json"
         },
         {
-          "hash": "d729f070e03a255158c3031e751c878dc9b8e1c85cb47e952c0de154aac45f1d",
+          "hash": "718ed3a74e8e178ca23e4fae289e76e918854287dd7610f506d98f7b19bba92b",
           "path": "package.json"
         },
         {
@@ -640,11 +640,11 @@
           "path": "site/astro.config.mjs"
         },
         {
-          "hash": "028dd214fa31c0ab88afae044d7933fa08f11094b9b8759d4c60321be94e257a",
+          "hash": "fe0292e69cae3d75865be9dec723d9399c43918b71c064b9358c35cca8214509",
           "path": "site/package-lock.json"
         },
         {
-          "hash": "bd664e0f320799cb432290916d7b9c8527d4244ef43e4a300860ba838a865fbe",
+          "hash": "e4aa9098f8956adb9531fe0ed12d3080cab56f37f1373a822ec16fd8512e163b",
           "path": "site/package.json"
         },
         {
@@ -2357,9 +2357,9 @@
       "to": "src"
     }
   ],
-  "engine": "1.24.0",
+  "engine": "1.26.0",
   "generatedFrom": {
-    "commit": "481a0bc8db768e89cefacd60799e354663d7dcc3",
+    "commit": "02864f0d0f1f5a2ff166d3afaabc7eb82809041d",
     "tracked": 155
   },
   "landings": [
